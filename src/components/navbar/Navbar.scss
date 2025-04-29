@@ -1,11 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #1f1f1f;
+    background-color: transparent;
     padding: 15px 150px;
     color: #fff;
-    font-family: 'Arial', sans-serif;
+    font-family:"Poppins", sans-serif;
+    font-weight: 800;
+    font-style: normal;
   
     &__logo {
       font-size: 1.5em;
@@ -27,6 +31,39 @@
           color: #ff6b00;
         }
       }
+
+      &__dropdown {
+        position: relative;
+        display: inline-block;
+
+        a {
+          cursor: pointer;
+        }
+
+        &:hover &__dropdown-content {
+          display: block;
+        }
+
+        &__dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: white;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+          z-index: 1;
+
+          a {
+            color: black;
+            padding: 10px 14px;
+            text-decoration: none;
+            display: block;
+
+            &:hover {
+              background-color: #1f1f1f;
+            }
+          }
+        }
+      }
     }
     &__containerButton {
         display: flex;
@@ -38,12 +75,41 @@
             font-family: 'Courier New', Courier, monospace;
             margin-right: 10px;
         }
-        .button {
-            width: 195px;
-            height: 45px;
-            margin-left: 10px;
-            background-color: #f8f8f8;
-            border-radius: 10px;
+        .container{
+          width: 200px;
+          height: 45px;
+          margin-left: 10px;
+          background-color: #f8f8f8;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content:end;
+          padding: 5px;
+
+          p {
+            color: #000000;
+            font-size: 16px;
+            font-family:'Times New Roman', Times, serif;
+            margin:0px;
+            
+          }
+
+          .button {
+            width: 50px;
+            height: 43px;
+            background-color: #000000;
+            border-radius: 10px;  
+            margin-left:20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+
+            .icon {
+              font-size: 25px;
+              display: flex;
+              align-items:center;
+            }
+          }
         }
     }
   }
