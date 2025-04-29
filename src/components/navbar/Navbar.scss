@@ -10,6 +10,11 @@
     font-family:"Poppins", sans-serif;
     font-weight: 800;
     font-style: normal;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
   
     &__logo {
       font-size: 1.5em;
