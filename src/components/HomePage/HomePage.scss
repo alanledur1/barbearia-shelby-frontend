@@ -1,0 +1,33 @@
+.HomePage {
+    width: 100%;
+    height: 100vh;
+    background-image: url(../../fundo/Fundo.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+
+    .button {
+        width: 185;
+        height: 57;
+        top: 685px;
+        left: 151px;
+        border-radius: 12px;
+        border: 0px;
+        padding-top: 20px;
+        padding-right: 40px;
+        padding-bottom: 20px;
+        padding-left: 40px;
+        gap: 10px;
+        background: linear-gradient(90deg, #FF7070 0%, #994343 100%);
+        margin-top: 250px;
+        margin-left: -435px;
+    }
+
+    .h1{
+        margin-top: -100px;
+        margin-left: 150px;
+        font-size: 74px;
+    }
+}
