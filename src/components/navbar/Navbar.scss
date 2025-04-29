@@ -1,0 +1,50 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1f1f1f;
+    padding: 15px 150px;
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+  
+    &__logo {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #f8f8f8;
+    }
+  
+    &__links {
+      display: flex;
+      list-style: none;
+      gap: 20px;
+  
+      a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1em;
+  
+        &:hover {
+          color: #ff6b00;
+        }
+      }
+    }
+    &__containerButton {
+        display: flex;
+        direction: ltr;
+        justify-content: center;
+        align-items: center;
+
+        p {
+            font-family: 'Courier New', Courier, monospace;
+            margin-right: 10px;
+        }
+        .button {
+            width: 195px;
+            height: 45px;
+            margin-left: 10px;
+            background-color: #f8f8f8;
+            border-radius: 10px;
+        }
+    }
+  }
+  
