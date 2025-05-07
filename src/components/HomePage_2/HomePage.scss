@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+.HomePage_2 {
+    background-blend-mode: overlay;
+    background: #000000;
+    background: linear-gradient(182.73deg, #121212 9.89%, rgba(108, 60, 60, 0.651058) 75.27%, #221B15 92.31%);
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+
+    .red {
+        color: #F67366;
+    }
+
+    .title-1 {
+        font-family: 'Poppins';
+        font-weight: 500;
+        font-size: 35px;
+        line-height: 150%;
+        vertical-align: middle;
+        text-transform: capitalize;
+        margin-left: 80px;
+        margin-top: -220px;
+    }
+
+    .title-2 {
+        font-family: 'Poppins';
+        font-weight: 500;
+        font-size: 35px;
+        line-height: 150%;
+        letter-spacing: 0%;
+        vertical-align: middle;
+        text-transform: capitalize;
+        margin-left: 670px;
+        margin-top: 400px;
+    }
+
+    .description{
+        margin-top: -35px;
+        margin-left: 0px;
+        color: #D2D2D2;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 150%;
+        letter-spacing: 0%;
+        vertical-align: middle;
+        text-transform: capitalize;
+
+    }
+}

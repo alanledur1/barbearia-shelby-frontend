@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500;700&display=swap');
+
+
+.SobreNos {
+    width: 100%;
+    height: 110vh;
+    background-image: url(../../images/Fundo-Sobre_Nos.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    .title {
+        font-family: 'Martian Mono';
+        font-weight: 600;
+        font-size: 62px;
+        line-height: 100%;
+        letter-spacing: 0%;
+        text-align: center;
+        vertical-align: middle;
+        text-transform: capitalize;
+        margin-top: 60px;
+        margin-left: 1200px;
+    }
+
+    .sobre-nos {
+        display: flex;
+        gap: 80px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+  
+      .card {
+        padding: 50px 40px;
+        width: 360px;
+        height: 240px;
+        border-radius: 30px;
+        text-align: center;
+        background-color: #6C6C6CBF;
+      }
+  
+      .card h3 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+  
+      .card p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+      }
+
+      .text-bottom {
+        color: #E4824E;
+        font-family: 'Poppins';
+        font-weight: 600;
+        font-size: 48px;
+        margin-top: 0px;
+        margin-right: 40px;
+        line-height: 100%;
+        letter-spacing: 0.3em;
+        vertical-align: middle;
+        text-align: center;
+        text-shadow: 1px 1px 2px #000000;
+      }
+}
