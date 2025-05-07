@@ -5,11 +5,14 @@ import { FaArrowRight } from "react-icons/fa6";
 export const Navbar = () => {
   return (
     <nav className="navbar">
-      <div className="navbar__logo">SHELBY</div>
+      <div className="navbar__logo">
+        <img src="/images/logo.png" alt='Logo Shelby' className='navbar__logo-img' />
+        SHELBY
+      </div>
       <ul className="navbar__links">
         <li className="navbar__links__dropdown">
           <a href="#servicos">Serviços ▾</a>
-          <div className="navbar__links__dropdown__dropdown-content">
+          <div className="navbar__links__dropdown-content">
             <a href="#barba">Barba</a>
             <a href="#corte">Corte de cabelo</a>
             <a href="#luzes">Luzes</a>
