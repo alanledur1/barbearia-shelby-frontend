@@ -64,12 +64,15 @@
       }
 
       &-content {
-        display: none;
+        display: block;
+        opacity: 0;
+        visibility: hidden;
         position: absolute;
         background-color: white;
         min-width: 160px;
         box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
         z-index: 1;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
 
         a {
           color: black;
@@ -82,6 +85,10 @@
           }
         }
       }
+      &:hover &-content {
+        opacity: 1;
+        visibility: visible;
+      }
     }
   }
 
@@ -93,12 +100,33 @@
     align-items: center;
     
 
-    p {
-      font-family: "Poppins", Courier, monospace;
-      margin-right: 10px;
+    button {
+      background: none;
+      border: none;
+      font-size: 15px;
       cursor: pointer;
+    
       &:hover {
         color: #ec5f49;
+      }
+    
+      &.navbar__login {
+        color: #fff;
+        margin-right: 10px;
+        font-family: "Poppins";
+        font-weight: 500;
+        &:hover {
+          color: #ec5f49;
+        }
+      }
+    
+      &.navbar__signup {
+        color: #000;
+        font-family: "Poppins";
+        font-weight: 500;
+        &:hover {
+          color: #ec5f49;
+        }
       }
     }
 
@@ -113,18 +141,6 @@
       justify-content: end;
       padding: 5px;
 
-
-      p {
-        color: #000000;
-        font-size: 15px;
-        font-family: "Poppins", Times, serif;
-        margin: 0;
-        cursor: pointer;
-        &:hover {
-          color: #ec5f49;
-        }
-      }
-
       .button {
         width: 50px;
         height: 43px;
@@ -135,17 +151,47 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        
+        transition: background-color 0.3s ease; // suaviza a transição
+      
         &:hover {
-          color: #ec5f49;;
+          background-color: #ec5f49; // cor de fundo ao passar o mouse
         }
-
+      
         .icon {
           font-size: 25px;
-          &:hover{
-            color: #583630;
+          color: #fff; // garante visibilidade do ícone no fundo escuro
+      
+          &:hover {
+            color: #f8f8f8; // cor do ícone no hover (opcional)
           }
         }
+      }
+      
+    }
+  }
+}
+
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 15px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+
+    &__links {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    &__containerButton {
+      margin-top: 10px;
+      flex-direction: column;
+      align-items: flex-start;
+
+      .container {
+        width: 100%;
+        justify-content: space-between;
+        margin-left: 0;
       }
     }
   }
