@@ -1,10 +1,9 @@
 import React from 'react';
-import './HomePage.scss'; // importe o arquivo SCSS
-import { Span } from 'next/dist/trace';
+import './HomePage.scss'; // importa o arquivo SCSS
 
 export const HomePage_2 = () => {
   return (
-    <div className="HomePage_2"> 
+    <div className="HomePage_2">
         <div className="title-1">
             Seja O <span className='red'>Protagonista</span> Da <br/> Sua Própria <span className='red'>História</span>.
             <br/> <br/>
