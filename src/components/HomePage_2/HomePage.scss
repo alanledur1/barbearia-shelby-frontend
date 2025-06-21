@@ -1,51 +1,152 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 .HomePage_2 {
-    background-blend-mode: overlay;
-    background: #000000;
-    background: linear-gradient(182.73deg, #121212 9.89%, rgba(108, 60, 60, 0.651058) 75.27%, #221B15 92.31%);
     width: 100%;
     height: 100vh;
     display: flex;
+    flex-wrap: wrap; // alinhamento vertical
+    justify-content: center;
     align-items: center;
+    gap: 60px; // mais espaçamento entre os blocos
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+
+    .background-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100vw;
+        object-fit: cover;
+        z-index: -1; // abaixo da overlay
+    }
+
+    .background-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        background: linear-gradient(to bottom,
+                rgba(0, 0, 0, 0.6) 0%,
+                rgba(0, 0, 0, 0.4) 40%,
+                rgba(0, 0, 0, 0.3) 70%,
+                rgba(0, 0, 0, 0.7) 100%);
+        z-index: 0;
+    }
+
 
     .red {
         color: #F67366;
     }
 
-    .title-1 {
-        font-family: 'Poppins';
+    .title-1,
+    .title-2 {
+        font-family: 'Poppins', sans-serif;
         font-weight: 500;
         font-size: 35px;
-        line-height: 150%;
-        vertical-align: middle;
+        line-height: 1.4;
+        text-align: center;
         text-transform: capitalize;
-        margin-left: 80px;
-        margin-top: -220px;
+        max-width: 700px; // mais espaço antes de quebrar
+        width: 100%;
+        margin: 0 auto; // centraliza horizontalmente
+        position: relative; // para garantir que fiquem acima do vídeo
+        z-index: 2;
+        color: white; // para garantir visibilidade sobre o vídeo
     }
 
     .title-2 {
-        font-family: 'Poppins';
-        font-weight: 500;
-        font-size: 35px;
-        line-height: 150%;
-        letter-spacing: 0%;
-        vertical-align: middle;
-        text-transform: capitalize;
-        margin-left: 670px;
-        margin-top: 400px;
+        opacity: 0;
+        transform: translateX(100px);
     }
 
-    .description{
-        margin-top: -35px;
-        margin-left: 0px;
+    .description {
+        margin-top: 20px;
         color: #D2D2D2;
         font-weight: 600;
-        font-size: 14px;
-        line-height: 150%;
-        letter-spacing: 0%;
-        vertical-align: middle;
+        font-size: 15px;
+        line-height: 1.6;
         text-transform: capitalize;
-
+        text-align: center;
     }
+}
+
+@media (max-width: 480px) {
+
+    .HomePage_2 .title-1,
+    .HomePage_2 .title-2 {
+        font-size: 24px;
+    }
+
+    .HomePage_2 .description {
+        font-size: 13px;
+    }
+  .btn-agendar {
+    margin: 40px auto 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(90deg, #FF7070 0%, #994343 100%);
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 16px 32px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+    z-index: 5;
+    transition: background 0.3s ease;
+
+    &:hover {
+      background: linear-gradient(90deg, #ff8a8a 0%, #b35e5e 100%);
+    }
+
+    .icon-arrow {
+      font-size: 20px;
+      animation: bounceArrow 2s infinite;
+      position: relative;
+      top: 0;
+    }
+  }
+
+  @keyframes bounceArrow {
+    0%, 100% {
+      top: 0;
+    }
+    50% {
+      top: -6px;
+    }
+  }
+
+  .scroll-down-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 3rem;
+    color: #fff;
+    opacity: 0.7;
+    cursor: pointer;
+    user-select: none;
+    animation: bounceScroll 2s infinite;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  @keyframes bounceScroll {
+    0%, 100% {
+      transform: translateX(-50%) translateY(0);
+    }
+    50% {
+      transform: translateX(-50%) translateY(15px);
+    }
+  }
 }

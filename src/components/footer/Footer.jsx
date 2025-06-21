@@ -74,10 +74,6 @@ export const Footer = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-  
-  
-  
-  
 
   return (
     <footer className='footer' ref={footerRef}>
