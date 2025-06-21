@@ -6,28 +6,129 @@
     background-repeat: no-repeat;
     background-size: cover;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0 150px;
+    box-sizing: border-box;
+    position: relative;
 
     .button {
-        width: 185;
-        height: 57;
-        top: 685px;
-        left: 151px;
+        width: 185px;
+        height: 57px;
         border-radius: 12px;
-        border: 0px;
-        padding-top: 20px;
-        padding-right: 40px;
-        padding-bottom: 20px;
-        padding-left: 40px;
+        border: 0;
+        padding: 20px 40px;
         gap: 10px;
         background: linear-gradient(90deg, #FF7070 0%, #994343 100%);
-        margin-top: 250px;
-        margin-left: -435px;
+        color: white;
+        font-weight: 600;
+        font-size: 16px;
+        margin-top: 30px;
+        cursor: pointer;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        user-select: none;
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+        &:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(250, 186, 186, 0.6);
+        }
     }
 
-    .h1{
-        margin-top: -100px;
-        margin-left: 150px;
+    .h1 {
         font-size: 74px;
+        color: white;
+    }
+
+    .scroll-down-indicator {
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 3rem;
+        color: #fff;
+        opacity: 0.7;
+        cursor: pointer;
+        user-select: none;
+        animation: bounceScroll 2s infinite;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    @keyframes bounceScroll {
+
+        0%,
+        100% {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        50% {
+            transform: translateX(-50%) translateY(15px);
+        }
+    }
+
+    .info-box {
+        position: absolute;
+        top: 50%;
+        right: 150px;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.65);
+        padding: 20px;
+        border-radius: 12px;
+        color: #fff;
+        max-width: 220px;
+        font-family: 'Segoe UI', sans-serif;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        z-index: 10;
+
+        h4 {
+            margin: 10px 0 4px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        p {
+            margin: 0 0 12px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        a {
+            font-size: 14px;
+            color: #ff7675;
+            text-decoration: underline;
+            transition: color 0.2s;
+
+            &:hover {
+                color: #fab1a0;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: 2rem;
+
+        .info-box {
+            position: static;
+            transform: none;
+            margin: 20px auto;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.85);
+        }
+
+        .h1 {
+            font-size: 48px;
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 14px;
+        }
     }
 }
