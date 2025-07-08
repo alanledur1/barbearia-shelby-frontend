@@ -1,5 +1,8 @@
 import React from 'react';
 import './contato.scss'; // importe o arquivo SCSS
+import { FaPhone } from "react-icons/fa6";
+import { SlEnvolopeLetter } from "react-icons/sl";
+import { TbMapShare } from "react-icons/tb";
 
 export const Contato = () => {
   return (
@@ -7,16 +10,16 @@ export const Contato = () => {
       <div className='title'>CONTATO</div>
       <div className='container'>
         <div className="card">
-          <h3>(51) 99817-7919</h3>
-          <p>lean phone ajsudi sahdasj adajsdas skask  skal kaks laslals  kasksks laksslad.</p>
+          <h3><FaPhone className='icon'/> (51) 99817-7919</h3>
+          <p>Atendimento rápido e sem enrolação. Agende agora pelo WhatsApp.</p>
         </div>
         <div className='card'>
-          <h3>mail@gmail.com</h3>
-          <p>lean phone ajsudi sahdasj adajsdas skask  skal kaks laslals  kasksks laksslad.</p>
+          <h3><SlEnvolopeLetter className='icon'/> borgeselias876@gmail.com</h3>
+          <p>Envie dúvidas, sugestões ou propostas comerciais.</p>
         </div>
         <div className='card'>
-          <h3>Rua Esperanto 203</h3>
-          <p>lean phone ajsudi sahdasj adajsdas skask  skal kaks laslals  kasksks laksslad.</p>
+          <h3><TbMapShare className='icon'/> Rua Esperanto 203</h3>
+          <p>Chega junto pra renovar o corte com estilo!</p>
         </div>
       </div>
 
