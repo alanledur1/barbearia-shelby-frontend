@@ -103,10 +103,19 @@ export const Footer = () => {
         <div className='footer__column'>
           <h4>Social Media</h4>
           <div className='footer__social-icons'>
-            <FaFacebookF className='icon' />
-            <FaTwitter className='icon' />
-            <FaWhatsapp className='icon' />
-            <FaInstagram className='icon' />
+            <a href=''>
+              <FaFacebookF className='icon' />
+            </a>
+            <a href=''>
+              <FaTwitter className='icon' />
+            </a>
+            <a href="https://wa.me/+555198177919?text=Olá,%20gostaria%20de%20agendar%20um%20horário" target="_blank" rel="noopener noreferrer">
+              <FaWhatsapp className='icon' />
+            </a>
+            <a href="https://www.instagram.com/shelby_barbearia22/" target="_blank" rel="noopener noreferrer">
+              <FaInstagram className='icon' />
+            </a>
+
           </div>
         </div>
       </div>
