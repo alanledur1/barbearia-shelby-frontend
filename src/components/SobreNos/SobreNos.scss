@@ -3,8 +3,7 @@
 
 .SobreNos {
   width: 100%;
-  height: 100vh;
-  background-image: url(../../images/Fundo-Sobre_Nos.jpg);
+  height: 60vh;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -43,6 +42,7 @@
     border-radius: 30px;
     text-align: center;
     background-color: #6C6C6CBF;
+    will-change: transform, opacity;
   }
 
   .card h3 {
@@ -65,22 +65,6 @@
     text-align: center;
     text-shadow: 1px 1px 2px #000000;
     margin-bottom: 30px;
-  }
-
-  .card.animate-bottom {
-    opacity: 0;
-    transform: translateY(60px);
-  }
-
-  .card.animate-bottom,
-  .text-bottom.animate-aguardamos {
     will-change: transform, opacity;
   }
-
-}
-
-.title.animate-title {
-  opacity: 0;
-  transform: translateX(100px);
-  will-change: transform, opacity;
 }

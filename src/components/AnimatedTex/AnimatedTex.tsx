@@ -1,45 +1,68 @@
 'use client';
-import React, { useRef, useEffect, useState } from 'react';
-import SplitType from 'split-type';
-import { gsap } from 'gsap';
+import { motion } from 'framer-motion';
 
 export const AnimatedText = () => {
-  const textRef = useRef<HTMLDivElement>(null);
-  const [hasAnimated, setHasAnimated] = useState(false);
+  const text = "Seja O Protagonista Da Sua Própria História.";
+  const destaquePalavras = ['Protagonista', 'História'];
 
-  useEffect(() => {
-    if (!textRef.current || hasAnimated) return;
+  // Geração de spans com destaque nas palavras definidas
+  const renderSpans = () => {
+    const spans = [];
+    let currentWord = '';
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (entry.isIntersecting) {
-          const split = new SplitType(textRef.current!, { types: 'chars' });
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      currentWord += char;
 
-          gsap.from(split.chars, {
-            y: 50,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.03,
-            ease: 'power3.out',
-          });
+      // Verifica se chegou ao fim de uma palavra (espaço ou pontuação)
+      const isEndOfWord = char === ' ' || i === text.length - 1 || /[.,!?;]/.test(char);
 
-          setHasAnimated(true); // evita reanimação
-          observer.disconnect();
+      if (isEndOfWord) {
+        // Remove pontuação temporariamente para checar
+        const cleanWord = currentWord.trim().replace(/[.,!?;]/g, '');
+
+        const isHighlighted = destaquePalavras.includes(cleanWord);
+
+        for (let j = 0; j < currentWord.length; j++) {
+          const letter = currentWord[j];
+          spans.push(
+            <motion.span
+              key={`${i}-${j}`}
+              variants={{
+                hidden: { y: 50, opacity: 0 },
+                visible: { y: 0, opacity: 1 },
+              }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              style={{ display: 'inline-block' }}
+              className={isHighlighted ? 'red' : ''}
+            >
+              {letter === ' ' ? '\u00A0' : letter}
+            </motion.span>
+          );
         }
-      },
-      { threshold: 0.5 } // ativa quando 50% estiver visível
-    );
 
-    observer.observe(textRef.current);
+        currentWord = '';
+      }
+    }
 
-    return () => observer.disconnect();
-  }, [hasAnimated]);
+    return spans;
+  };
 
   return (
-
-    <div ref={textRef} className="animated-title">
-        Seja O <span className="red">Protagonista</span> Da Sua Própria <span className="red">História</span>.
-    </div>
+    <motion.div
+      className="animated-title"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.5 }}
+      variants={{
+        visible: {
+          transition: {
+            staggerChildren: 0.03,
+          },
+        },
+      }}
+    >
+      {renderSpans()}
+    </motion.div>
   );
 };
