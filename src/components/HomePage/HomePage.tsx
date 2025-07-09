@@ -7,7 +7,7 @@ import './HomePage.scss';
 import { FaClock, FaMapMarkerAlt, FaExternalLinkAlt } from 'react-icons/fa';
 
 export const HomePage = () => {
-  const homeRef = useRef(null);
+  const homeRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const scrollToNextSection = () => {
     window.scrollBy({
@@ -16,8 +16,12 @@ export const HomePage = () => {
     });
   };
 
+  const hasAnimated = useRef(false);
+
   useEffect(() => {
-    if (!loading) {
+    if (!loading && !hasAnimated.current) {
+      hasAnimated.current = true;
+
       const elements = document.querySelectorAll('.animate-left');
       gsap.fromTo(
         elements,
@@ -30,7 +34,7 @@ export const HomePage = () => {
   return (
     <>
       {loading && <Preloader onComplete={() => setLoading(false)} />}
-      <div className="HomePage" ref={homeRef} style={{ opacity: loading ? 0 : 1 }}>
+      <div className={`HomePage ${loading ? 'hidden' : 'visible'}`} ref={homeRef}>
         <h1 className="h1 animate-left">SHELBY<br />BARBEARIA</h1>
         <button className="button animate-left">Agendar Horário</button>
 

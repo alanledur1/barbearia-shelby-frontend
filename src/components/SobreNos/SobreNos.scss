@@ -2,72 +2,85 @@
 
 
 .SobreNos {
+  width: 100%;
+  height: 100vh;
+  background-image: url(../../images/Fundo-Sobre_Nos.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0 150px;
+
+  .title {
     width: 100%;
-    height: 110vh;
-    background-image: url(../../images/Fundo-Sobre_Nos.jpg);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    height: auto;
+    justify-content: end;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    padding: 0 150px;
+    font-family: 'Martian Mono';
+    font-weight: 600;
+    font-size: 64px;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+  }
 
-    .title {
-      width: 100%;
-      justify-content: end;
-      display: flex;
-      font-family: 'Martian Mono';
-      font-weight: 600;
-      font-size: 64px;
-      line-height: 100%;
-      letter-spacing: 0%;
-      text-align: center;
-      margin-top: 30px;
-      margin-bottom: 10px;
-      vertical-align: middle;
-      text-transform: capitalize;
-    }
+  .container {
+    display: flex;
+    gap: 85px;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    padding-top: 15px;
+  }
 
-    .container {
-      display: flex;
-      gap: 85px; /* Ajuste o espaço entre os cards para 85px */
-      justify-content: space-between;
-      flex-wrap: nowrap;
-      padding-top: 15px;
-    }
-  
-    .card {
-      padding: 30px 40px;
-      width: 450px;
-      height: 253px;
-      border-radius: 30px;
-      text-align: center;
-      background-color: #6C6C6CBF;
-    }
+  .card {
+    padding: 30px 40px;
+    width: 450px;
+    height: 253px;
+    border-radius: 30px;
+    text-align: center;
+    background-color: #6C6C6CBF;
+  }
 
-    .card h3 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
+  .card h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
 
-    .card p {
-      font-size: 0.9rem;
-      line-height: 1.4;
-    }
+  .card p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
 
-    .text-bottom {
-      color: #ffffff;
-      font-family: 'Poppins';
-      font-weight: 600;
-      font-size: 48px;
-      line-height: 100%;
-      letter-spacing: 0.3em;
-      vertical-align: middle;
-      text-align: center;
-      text-shadow: 1px 1px 2px #000000;
-      margin-bottom: 30px;
-    }
+  .text-bottom {
+    color: #ffffff;
+    font-family: 'Poppins';
+    font-weight: 600;
+    font-size: 48px;
+    letter-spacing: 0.3em;
+    text-align: center;
+    text-shadow: 1px 1px 2px #000000;
+    margin-bottom: 30px;
+  }
+
+  .card.animate-bottom {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+
+  .card.animate-bottom,
+  .text-bottom.animate-aguardamos {
+    will-change: transform, opacity;
+  }
+
+}
+
+.title.animate-title {
+  opacity: 0;
+  transform: translateX(100px);
+  will-change: transform, opacity;
 }

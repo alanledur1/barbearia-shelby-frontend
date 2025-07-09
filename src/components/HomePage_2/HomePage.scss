@@ -60,6 +60,7 @@
 
     .title-2 {
         opacity: 0;
+        visibility: hidden;
         transform: translateX(100px);
     }
 
@@ -84,36 +85,6 @@
     .HomePage_2 .description {
         font-size: 13px;
     }
-  .btn-agendar {
-    margin: 40px auto 0;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: linear-gradient(90deg, #FF7070 0%, #994343 100%);
-    color: white;
-    font-weight: 700;
-    font-size: 18px;
-    padding: 16px 32px;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    user-select: none;
-    position: relative;
-    overflow: hidden;
-    z-index: 5;
-    transition: background 0.3s ease;
-
-    &:hover {
-      background: linear-gradient(90deg, #ff8a8a 0%, #b35e5e 100%);
-    }
-
-    .icon-arrow {
-      font-size: 20px;
-      animation: bounceArrow 2s infinite;
-      position: relative;
-      top: 0;
-    }
-  }
 
   @keyframes bounceArrow {
     0%, 100% {
