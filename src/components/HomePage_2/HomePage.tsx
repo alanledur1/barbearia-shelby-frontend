@@ -7,6 +7,7 @@ import { AnimatedText } from '@/components/AnimatedTex/AnimatedTex';
 export const HomePage_2 = () => {
   const container = useRef<HTMLDivElement>(null);
   const title2Ref = useRef<HTMLDivElement>(null);
+  const hasAnimatedTitle2 = useRef(false);
 
   useEffect(() => {
     // Animação inicial dos títulos
@@ -20,31 +21,32 @@ export const HomePage_2 = () => {
       });
     }
 
-    // Animação com scroll da title-2
+
+    // Animação com scroll do title-2
     if (title2Ref.current) {
-      const observer = new IntersectionObserver(
-        (entries, observerInstance) => {
-          const [entry] = entries;
-          if (entry.isIntersecting) {
-            gsap.fromTo(
-              title2Ref.current,
-              { x: 100, opacity: 0 },
-              {
-                x: 0,
-                opacity: 1,
-                duration: 1.5,
-                ease: 'power3.out',
-              }
-            );
-            observerInstance.disconnect(); // remove o observer após animar
-          }
-        },
+      const element = title2Ref.current;
+      const observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting && !hasAnimatedTitle2.current) {
+          hasAnimatedTitle2.current = true;
+          gsap.fromTo(
+            element,
+            { x: 100, autoAlpha: 0 },
+            {
+              x: 0,
+              autoAlpha: 1,
+              duration: 1.5,
+              ease: 'power3.out',
+            }
+          );
+          observer.disconnect(); // remove o observer após animar
+        }
+      },
         { threshold: 0.4 } // dispara quando 40% do elemento estiver visível
       );
 
-      observer.observe(title2Ref.current);
+      observer.observe(element);
 
-      return () => observer.disconnect();
+      return () => observer.unobserve(element);
     }
   }, []);
 
@@ -54,7 +56,6 @@ export const HomePage_2 = () => {
         <source src="/videos/barbearia.mp4" type="video/mp4" />
       </video>
       <div className="background-overlay" />
-      {/* 🔹 CONTEÚDO */}
       <div className="title-1 title-anim">
         <AnimatedText />
         <br /> <br />

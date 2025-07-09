@@ -58,6 +58,7 @@
 
         &:hover {
             opacity: 1;
+            transition: opacity 0.3s ease;
         }
     }
 
@@ -109,6 +110,7 @@
                 color: #fab1a0;
             }
         }
+
     }
 
     @media (max-width: 768px) {
@@ -131,4 +133,20 @@
             font-size: 14px;
         }
     }
+}
+
+.HomePage.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.HomePage.visible {
+    opacity: 1;
+    transition: opacity 0.6s ease;
+}
+
+.animate-left {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
 }

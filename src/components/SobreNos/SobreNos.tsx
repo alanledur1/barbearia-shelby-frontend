@@ -1,70 +1,95 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './SobreNos.scss';
 
 export default function SobreNos() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const container = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
+  const textFinalRef = useRef<HTMLDivElement>(null);
 
-    useLayoutEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+  const hasAnimatedCards = useRef(false);
+  const hasAnimatedTitle = useRef(false);
+  const hasAnimatedText = useRef(false);
 
-    const animateOnScroll = (
-      selector: string,
-      fromVars: gsap.TweenVars,
-      triggerOptions: Partial<ScrollTrigger> = {}
-    ) => {
-      const elements = gsap.utils.toArray(selector);
-      elements.forEach((el) => {
-        gsap.from(el, {
-          ...fromVars,
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 95%',
-            toggleActions: 'play none none none',
-            ...triggerOptions,
-          },
-        });
-      });
+  const cardsObserver = useRef<IntersectionObserver>();
+  const textObserver = useRef<IntersectionObserver>();
+
+  useEffect(() => {
+    const animateCards = () => {
+      if (!container.current) return;
+      const cards = container.current.querySelectorAll('.card.animate-bottom');
+      if (cards.length === 0) return;
+
+      cardsObserver.current = new IntersectionObserver(([entry], observerInstance) => {
+        if (entry.isIntersecting && !hasAnimatedCards.current) {
+          hasAnimatedCards.current = true;
+          gsap.fromTo(cards,
+            { y: 60, autoAlpha: 0 },
+            { y: 0, autoAlpha: 1, duration: 1.2, ease: 'power3.out', stagger: 0.2 }
+          );
+          observerInstance.disconnect();
+        }
+      }, { threshold: 0.3 });
+
+      cardsObserver.current.observe(container.current);
     };
 
-    const ctx = gsap.context(() => {
-      animateOnScroll('.animate-bottom', {
-        y: 120,
-        autoAlpha: 0,
-        duration: 1.2,
-        ease: 'power2.out',
-      });
+    const animateTextFinal = () => {
+      if (!textFinalRef.current) return;
 
-      animateOnScroll('.animate-aguardamos', {
-        y: 80,
-        autoAlpha: 0,
-        duration: 1.2,
-        ease: 'power2.out',
-      }, {
-        start: 'top 100%',
-      });
+      textObserver.current = new IntersectionObserver(([entry], obs) => {
+        if (entry.isIntersecting && !hasAnimatedText.current) {
+          hasAnimatedText.current = true;
+          gsap.fromTo(textFinalRef.current,
+            { y: 60, autoAlpha: 0 },
+            { y: 0, autoAlpha: 1, duration: 1.2, delay: 0.8, ease: 'power3.out' }
+          );
+          obs.disconnect();
+        }
+      }, { threshold: 0.4 });
 
-      animateOnScroll('.animate-title', {
-        x: 50,
-        autoAlpha: 0,
-        duration: 1,
-        ease: 'power2.out',
-      }, {
-        start: 'top 90%',
-      });
+      textObserver.current.observe(textFinalRef.current);
+    };
 
-    }, sectionRef);
+    const animateTitleWithScroll = () => {
+      if (!titleRef.current) return;
 
-    return () => ctx.revert();
+      const observer = new IntersectionObserver(([entry], obs) => {
+        if (entry.isIntersecting && !hasAnimatedTitle.current) {
+          hasAnimatedTitle.current = true;
+          gsap.fromTo(
+            titleRef.current,
+            { x: 100, autoAlpha: 0 },
+            {
+              x: 0,
+              autoAlpha: 1,
+              duration: 1.2,
+              ease: 'power4.out',
+            }
+          );
+          obs.disconnect();
+        }
+      }, { threshold: 0.4 });
+
+      observer.observe(titleRef.current);
+    };
+
+
+    animateTitleWithScroll();
+    animateCards();
+    animateTextFinal();
+
+    return () => {
+      cardsObserver.current?.disconnect();
+      textObserver.current?.disconnect();
+    };
   }, []);
 
-
   return (
-    <div className="SobreNos" ref={sectionRef}>
-      <div className="title animate-title">SOBRE NÓS</div>
+    <div className="SobreNos" ref={container}>
+      <div className="title animate-title" ref={titleRef}>SOBRE NÓS</div>
       <div className="container">
         <div className="card animate-bottom">
           <h3>Nossa História</h3>
@@ -93,7 +118,7 @@ export default function SobreNos() {
         </div>
       </div>
 
-      <div className="text-bottom animate-aguardamos">Aguardamos você !!!</div>
+      <div className="text-bottom animate-aguardamos" ref={textFinalRef}>Aguardamos você !!!</div>
     </div>
   );
 }
