@@ -5,6 +5,7 @@ import { gsap } from 'gsap';
 import { Preloader } from '../Preloader/Preloader';
 import './HomePage.scss';
 import { FaClock, FaMapMarkerAlt, FaExternalLinkAlt } from 'react-icons/fa';
+import Link from 'next/link'; 
 
 export const HomePage = () => {
   const homeRef = useRef<HTMLDivElement>(null);
@@ -36,7 +37,9 @@ export const HomePage = () => {
       {loading && <Preloader onComplete={() => setLoading(false)} />}
       <div className={`HomePage ${loading ? 'hidden' : 'visible'}`} ref={homeRef}>
         <h1 className="h1 animate-left">SHELBY<br />BARBEARIA</h1>
-        <button className="button animate-left">Agendar Horário</button>
+        <Link href="/agendamento">
+          <button className="button animate-left">Agendar Horário</button>
+        </Link>
 
         {/* Info Box adicionada aqui */}
         <div className="info-box animate-left">

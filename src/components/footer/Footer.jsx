@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import './Footer.scss';
 import { FaFacebookF, FaTwitter, FaWhatsapp, FaInstagram } from 'react-icons/fa';
+import { motion } from 'framer-motion'; // Importar o motion
 import { gsap } from 'gsap';
 
 export const Footer = () => {
@@ -10,11 +11,8 @@ export const Footer = () => {
 
   useEffect(() => {
     const footerElement = footerRef.current;
-    let lastScrollY = window.scrollY;
-    let ticking = false;
-  
     const columns = document.querySelectorAll('.footer__column');
-  
+
     const showColumns = () => {
       gsap.to(columns, {
         autoAlpha: 1,
@@ -24,54 +22,20 @@ export const Footer = () => {
         ease: 'power2.out',
       });
     };
-  
-    const hideColumns = () => {
-      gsap.to(columns, {
-        autoAlpha: 0,
-        y: 50,
-        duration: 0.9,
-        stagger: 0.1,
-        ease: 'elastic.out'
-      });
-    };
-  
+
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            showColumns();
-          }
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) showColumns();
         });
       },
       { threshold: 0.3 }
     );
-  
+
     if (footerElement) observer.observe(footerElement);
-  
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-  
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const scrollingUp = currentScrollY < lastScrollY;
-  
-          if (scrollingUp) {
-            hideColumns();
-          }
-  
-          lastScrollY = currentScrollY;
-          ticking = false;
-        });
-  
-        ticking = true;
-      }
-    };
-  
-    window.addEventListener('scroll', handleScroll);
-  
+
     return () => {
       if (footerElement) observer.unobserve(footerElement);
-      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -84,6 +48,7 @@ export const Footer = () => {
             engaged people working in an agile culture, and a global footprint.
           </p>
         </div>
+
         <div className='footer__column'>
           <h4>Explore</h4>
           <ul>
@@ -93,6 +58,7 @@ export const Footer = () => {
             <li>Contato</li>
           </ul>
         </div>
+
         <div className='footer__column'>
           <h4>Legal</h4>
           <ul>
@@ -100,25 +66,49 @@ export const Footer = () => {
             <li>Privacy</li>
           </ul>
         </div>
+
         <div className='footer__column'>
           <h4>Social Media</h4>
           <div className='footer__social-icons'>
-            <a href=''>
+            <motion.a
+              href=''
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+            >
               <FaFacebookF className='icon' />
-            </a>
-            <a href=''>
-              <FaTwitter className='icon' />
-            </a>
-            <a href="https://wa.me/+555198177919?text=Olá,%20gostaria%20de%20agendar%20um%20horário" target="_blank" rel="noopener noreferrer">
-              <FaWhatsapp className='icon' />
-            </a>
-            <a href="https://www.instagram.com/shelby_barbearia22/" target="_blank" rel="noopener noreferrer">
-              <FaInstagram className='icon' />
-            </a>
+            </motion.a>
 
+            <motion.a
+              href=''
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <FaTwitter className='icon' />
+            </motion.a>
+
+            <motion.a
+              href="https://wa.me/+555198177919?text=Olá,%20gostaria%20de%20agendar%20um%20horário"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <FaWhatsapp className='icon' />
+            </motion.a>
+
+            <motion.a
+              href="https://www.instagram.com/shelby_barbearia22/"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <FaInstagram className='icon' />
+            </motion.a>
           </div>
         </div>
       </div>
+
       <div className='footer__bottom'>© ShelbyBarbearia 2025</div>
     </footer>
   );
