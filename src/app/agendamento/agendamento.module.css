@@ -1,0 +1,95 @@
+/* src/app/agendamento/agendamento.module.css */
+
+/* Container principal da página com fundo claro */
+.container {
+  max-width: 800px;
+  margin: 6rem auto;
+  padding: 2rem;
+  font-family: sans-serif;
+  background-color: #ebebeb; /* Fundo branco para máxima legibilidade */
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12); /* Sombra suave para destacar */
+}
+
+/* Título principal com cor escura */
+.titulo {
+  text-align: center;
+  color: #282c30; /* Cor de texto bem escura */
+  margin-bottom: 2rem;
+}
+
+/* Container do calendário */
+.calendarContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #11100fa2; /* Fundo muito leve para o container do calendário */
+  border-radius: 8px;
+}
+
+/* Título secundário (Ex: '1. Escolha um dia') */
+.calendarContainer h2 {
+  color: #16181a; /* Garante que o título secundário também seja legível */
+}
+
+
+/* --- Estilos dos cards de horário (mantém o que já tínhamos) --- */
+.timeSlotsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.timeCard {
+  padding: 1rem;
+  border-radius: 8px;
+  border: 2px solid;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.timeCard:hover:not(:disabled) {
+  transform: translateY(-5px);
+}
+
+.available {
+  border-color: #28a745;
+  color: #28a745;
+  background-color: #fff;
+}
+
+.available:hover {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.unavailable {
+  border-color: #dc3545;
+  color: #dc3545;
+  background-color: #f8d7da;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.confirmationSection {
+  padding: 2rem;
+  background-color: #000000;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.backButton {
+  margin-top: 1rem;
+  background: none;
+  border: 1px solid #6c757d;
+  color: #f8f8f8;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
