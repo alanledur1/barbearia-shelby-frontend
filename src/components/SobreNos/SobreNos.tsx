@@ -21,7 +21,7 @@ export default function SobreNos() {
         {[
           {
             title: 'Nossa História',
-            text: 'A Shelby Barbearia foi criada em 2021 para atender um público exigente, que busca estilo, conforto e atitude. Com um ambiente pensado para o homem moderno, unimos música, conversa boa e técnicas afiadas para entregar mais do que um corte: entregamos identidade. Aqui, cada cliente encontra seu próprio estilo — Shelby é mais que uma barbearia, é uma experiência.',
+            text: 'A Shelby Barbearia foi criada em 2022 para atender um público exigente, que busca estilo, conforto e atitude. Com um ambiente pensado para o homem moderno, unimos música, conversa boa e técnicas afiadas para entregar mais do que um corte: entregamos identidade. Aqui, cada cliente encontra seu próprio estilo — Shelby é mais que uma barbearia, é uma experiência.',
             delay: 0 
           },
           {
