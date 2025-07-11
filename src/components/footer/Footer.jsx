@@ -5,6 +5,7 @@ import './Footer.scss';
 import { FaFacebookF, FaTwitter, FaWhatsapp, FaInstagram } from 'react-icons/fa';
 import { motion } from 'framer-motion'; // Importar o motion
 import { gsap } from 'gsap';
+import { BsTiktok } from 'react-icons/bs';
 
 export const Footer = () => {
   const footerRef = useRef(null);
@@ -71,19 +72,11 @@ export const Footer = () => {
           <h4>Social Media</h4>
           <div className='footer__social-icons'>
             <motion.a
-              href=''
+              href='https://www.tiktok.com/@borgeselias8'
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}
             >
-              <FaFacebookF className='icon' />
-            </motion.a>
-
-            <motion.a
-              href=''
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <FaTwitter className='icon' />
+              <BsTiktok className='icon' />
             </motion.a>
 
             <motion.a
