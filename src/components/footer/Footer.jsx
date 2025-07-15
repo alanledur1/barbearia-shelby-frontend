@@ -44,19 +44,11 @@ export const Footer = () => {
     <footer className='footer' ref={footerRef}>
       <div className='footer__content'>
         <div className='footer__column'>
-          <p>
-            ShipUp delivers an unparalleled customer service through dedicated customer teams,
-            engaged people working in an agile culture, and a global footprint.
-          </p>
-        </div>
-
-        <div className='footer__column'>
           <h4>Explore</h4>
           <ul>
-            <li>Sobre nós</li>
-            <li>Nossos serviços</li>
-            <li>Blog</li>
-            <li>Contato</li>
+            <li><a href='#sobre'>Sobre nós</a></li>
+            <li><a href='#servicos'>Nossos serviços</a></li>
+            <li><a href='#contato'>Contato</a></li>
           </ul>
         </div>
 

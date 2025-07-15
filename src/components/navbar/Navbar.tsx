@@ -7,18 +7,13 @@ export const Navbar = () => {
     <header>
       <nav className="navbar" role="navigation" aria-label="Menu principal">
         <div className="navbar__logo">
-          <img src="/images/logo.png" alt='Logo Shelby' className='navbar__logo-img' />
-          SHELBY
+          <a href="/">
+            <img src="/images/logo.png" alt="Logo Shelby" className="navbar__logo-img" />
+            <span>SHELBY</span>
+          </a>  
         </div>
         <ul className="navbar__links">
-          <li className="navbar__links__dropdown">
-            <a href="#servicos">Serviços ▾</a>
-            <div className="navbar__links__dropdown-content">
-              <a href="#barba">Barba</a>
-              <a href="#corte">Corte de cabelo</a>
-              <a href="#luzes">Luzes</a>
-            </div>
-          </li>
+          <li><a href="#servicos">Serviços</a></li>
           <li><a href="#sobre">Sobre Nós</a></li>
           <li><a href="#contato">Contato</a></li>
         </ul>

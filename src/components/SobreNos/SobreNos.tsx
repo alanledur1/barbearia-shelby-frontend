@@ -5,7 +5,7 @@ import './SobreNos.scss';
 
 export default function SobreNos() {
   return (
-    <div className="SobreNos">
+    <div className="SobreNos" id='sobre'>
       <motion.div
         layout
         className='title animate-title'

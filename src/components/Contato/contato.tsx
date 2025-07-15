@@ -9,7 +9,7 @@ import { TbMapShare } from "react-icons/tb";
 
 export const Contato = () => {
   return (
-    <div className='contato'>
+    <div className='contato' id='contato'>
       <motion.div
         className='title animate-title'
         initial={{ x: 100, opacity: 0 }}
