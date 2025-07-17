@@ -49,7 +49,7 @@ export const HomePage = () => {
           <h4><FaMapMarkerAlt style={{ marginRight: '8px' }} />Localização</h4>
           <p>Rua Esperanto, 203 - Quilombo</p>
 
-          <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.google.com/maps/place/29%C2%B035'41.4%22S+51%C2%B022'19.9%22W/@-29.5948367,-51.3722015,19z/data=!4m4!3m3!8m2!3d-29.5948333!4d-51.3721944?hl=pt-BR&entry=ttu&g_ep=EgoyMDI1MDcwOS4wIKXMDSoASAFQAw%3D%3D">
             Ver no mapa <FaExternalLinkAlt style={{ marginLeft: '6px' }} />
           </a>
         </div>
