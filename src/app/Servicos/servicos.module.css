@@ -1,0 +1,12 @@
+.servicos-container{
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: url(../../images/Fundo-Sobre_Nos.jpg) no-repeat center center;
+    background-size: cover;
+}
