@@ -53,7 +53,7 @@ export default function Servicos() {
             initial={{ y: 60, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             whileHover={{ scale: 1.05, y: -10 }}
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0 }}
             transition={{ duration: 1.2, ease: 'easeOut', delay }}
           >
             <div className={styles.imageWrapper}>
