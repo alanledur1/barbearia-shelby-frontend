@@ -5,8 +5,9 @@ import SobreNos from "@/components/SobreNos/SobreNos";
 
 export default function Home() {
   return (
-    <div>
+    <div>      
       <HomePage />
+      <div id="topo"/>
       <HomePage_2 />
       <SobreNos />
       <Contato />
