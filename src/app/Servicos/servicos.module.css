@@ -4,9 +4,12 @@
     position: relative;
     display: flex;
     flex-direction: column; 
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    padding: 20px;
-    background: url(../../images/Fundo-Sobre_Nos.jpg) no-repeat center center;
+    padding: 0 150px;
+    background-image: url(../../images/fundo-servicos.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
     background-size: cover;
+    box-sizing: border-box;
 }

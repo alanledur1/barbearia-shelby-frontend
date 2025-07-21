@@ -25,25 +25,25 @@ export default function Servicos() {
             title: 'Corte de Cabelo',
             text: 'Corte de cabelo, lavado com shampoo, secagem e modelagem com pomada ou cera. O corte é feito com tesoura, navalha ou máquina, dependendo do estilo desejado.',
             delay: 0,
-            image: '/images/logo.png'
+            image: '/images/corte.webp'
           },
           {
             title: 'Corte + Barba',
             text: 'Corte de cabelo e barba, com lavagem, secagem e modelagem. O corte é feito com tesoura, navalha ou máquina, dependendo do estilo desejado.',
             delay: 0.2,
-            image: '/images/logo.png'
+            image: '/images/barba.jpeg'
           },
           {
             title: 'Corte + Barba + Sobrancelha',
             text: 'Corte de cabelo, barba e sobrancelha, com lavagem, secagem e modelagem. O corte é feito com tesoura, navalha ou máquina, dependendo do estilo desejado.',
             delay: 0.4,
-            image: '/images/logo.png'
+            image: '/images/sobrancelha.jpg'
           },
           {
             title: 'Corte + Sobrancelha',
             text: 'Corte de cabelo e sobrancelha, com lavagem, secagem e modelagem. O corte é feito com tesoura, navalha ou máquina, dependendo do estilo desejado.',
             delay: 0.6,
-            image: '/images/logo.png'
+            image: '/images/corte-2.jpg'
           },
         ].map(({ title, text, delay, image }) => (
           <motion.div
