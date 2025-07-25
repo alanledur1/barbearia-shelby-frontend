@@ -1,15 +1,46 @@
-.servicos-container{
-    width: 100%;
-    height: 100vh;
-    position: relative;
-    display: flex;
-    flex-direction: column; 
-    align-items: flex-start;
-    justify-content: center;
-    padding: 0 150px;
-    background-image: url(../../images/fundo-servicos.jpg);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    box-sizing: border-box;
+.servicos-container {
+  width: 100%;
+  overflow-x: hidden;
+  background-image: url('../../images/utilitarios.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Seção com imagem de fundo */
+.servicos-header {
+  width: 100vw;                /* Ocupa toda a viewport */
+  height: 40vh;                /* Ajuste a altura conforme desejar */
+  background-image: url('../../images/foto-shelby.webp');
+  background-position: left center; /* Foco na esquerda */
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 5rem;
+}
+
+/* Filtro escuro por cima da imagem */
+.servicos-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.servicos-title {
+  font-size: 74px;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  z-index: 2;
+  color: white;
+  text-align: center;
 }

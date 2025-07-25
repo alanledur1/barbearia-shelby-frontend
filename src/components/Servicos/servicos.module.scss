@@ -1,90 +1,111 @@
-
 .SobreNos {
+  width: 85%;
+  padding: 5rem;
+  margin: 0 auto;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 3rem;
+  justify-content: center;
+}
+
+/* FLIP CARD */
+.flipCard {
+  perspective: 1200px;
   width: 100%;
-  height: 100vh;
-  background-position: center;
-  background-repeat: no-repeat;
+  aspect-ratio: 3 / 3;
+  cursor: pointer;
+  position: relative;
+
+  &:hover .flipInner {
+    transform: rotateX(180deg); // <- Efeito de flip
+  }
+
+  &:hover .image {
+    filter: brightness(0.2);
+  }
+
+  &:hover .flipBack .icon,
+  &:hover .flipBack .title,
+  &:hover .flipBack .text {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.flipInner {
+  width: 100%;
+  height: 100%;
+  transition-delay: 0.2s;
+  transition-duration: 1.2s;
+  transition-property: transform;
+  transition-timing-function: ease;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+.flipFront,
+.flipBack {
+  background-image: url('../../images/OIF.webp');
   background-size: cover;
+  background-position: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 2rem;
+  backface-visibility: hidden;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: initial;
-  margin-top: 10px;
-  flex-wrap: wrap;
-  padding: 40px;
-  font-family: 'Poppins', sans-serif;
-  
-  .title {
-    color: #ffffff;
-    font-size: 74px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: -50px;
-  }
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
 
-  .container {
-    display: flex;
-    gap: 70px;
-    justify-content: space-between;
-    flex-wrap: nowrap;
-    padding-top: 15px;
-    flex-direction: row;
-  }
+.flipFront {
+  background-color: #000;
+  z-index: 2;
+}
 
-  .card {
-    border-radius: 12px;
-    overflow: hidden;
-    padding: 50px 50px;
-    text-align: center;
-    background-color: #6C6C6CBF;
-    will-change: transform, opacity;
-  }
+.image {
+  max-width: 80px;
+  max-height: 80px;
+  margin-bottom: 1rem;
+}
 
-  .imageWrapper {
-    width: 100%;
-    height: 250px;
-    overflow: hidden;
-    border-radius: 10px;
-    margin-bottom: 1rem;
-  }
+.flipBack {
+  background-color: #111;
+  transform: rotateX(180deg); // <- Inversão vertical
+  z-index: 1;
 
-  .image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-
+  .icon,
+  .title,
   .text {
-    font-size: 1rem;
-    color: #ccc;
-    line-height: 1.6;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: all 0.4s ease-in-out;
   }
+}
 
-  .card:hover .image {
-    transform: scale(1.05);
-  }
+.icon {
+  font-size: 2.5rem;
+  color: #F67366;
+  margin-bottom: 0.8rem;
+}
 
-  .card h3 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 20px;
-  }
+.title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
 
-  .card p {
-    font-size: 0.9rem;
-    line-height: 1.4;
-  }
-
-  .text-bottom {
-    color: #ffffff;
-    font-family: 'Poppins';
-    font-weight: 600;
-    font-size: 48px;
-    letter-spacing: 0.3em;
-    text-align: center;
-    text-shadow: 1px 1px 2px #000000;
-    margin-bottom: 30px;
-    will-change: transform, opacity;
-  }
+.text {
+  font-size: 0.95rem;
+  color: #ccc;
+  line-height: 1.4;
 }
