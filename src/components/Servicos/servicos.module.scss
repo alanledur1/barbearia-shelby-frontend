@@ -20,7 +20,7 @@
   position: relative;
 
   &:hover .flipInner {
-    transform: rotateX(180deg); // <- Efeito de flip
+    transform: rotateY(180deg); // <- Efeito de flip
   }
 
   &:hover .image {
@@ -48,13 +48,13 @@
 
 .flipFront,
 .flipBack {
-  background-image: url('../../images/OIF.webp');
+  background-image: url('../../images/OIF.PNG');
   background-size: cover;
   background-position: center;
   position: absolute;
   width: 100%;
   height: 100%;
-  border-radius: 2rem;
+  border-radius: 20px;
   backface-visibility: hidden;
   overflow: hidden;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
@@ -77,9 +77,10 @@
   margin-bottom: 1rem;
 }
 
+
 .flipBack {
   background-color: #111;
-  transform: rotateX(180deg); // <- Inversão vertical
+  transform: rotateY(180deg);
   z-index: 1;
 
   .icon,
