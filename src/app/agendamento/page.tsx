@@ -46,7 +46,7 @@ export default function PaginaAgendamento() {
 
     setTimeSlots(slotsWithAvailability);
   };
-  
+
   // Função chamada quando o usuário seleciona uma data no calendário
   const handleDateSelect = (date: Date | undefined) => {
     if (!date) return;
@@ -72,7 +72,7 @@ export default function PaginaAgendamento() {
 
     console.log("NOVO AGENDAMENTO:", newBooking);
     alert(`Horário agendado com sucesso para ${data.cliente} no dia ${newBooking.data} às ${newBooking.hora}!`);
-    
+
     // Resetar o fluxo
     setSelectedDate(undefined);
     setTimeSlots([]);
@@ -80,57 +80,59 @@ export default function PaginaAgendamento() {
   };
 
   return (
-    <main className={styles.container}>
-      <h1 className={styles.titulo}>Agende seu Horário</h1>
+    <main className={styles.pageBackground}>
+      <div className={styles.container}>
+        <h1 className={styles.titulo}>Agende seu Horário</h1>
 
-      {!selectedSlot ? (
-        <>
-          {/* Parte 1: Calendário */}
-          <div className={styles.calendarContainer}>
-            <h2>{selectedDate ? '2. Escolha um horário' : '1. Escolha um dia'}</h2>
-            <DayPicker
-              mode="single"
-              selected={selectedDate}
-              onSelect={handleDateSelect}
-              locale={ptBR}
-              fromDate={new Date()} // Impede seleção de dias passados
-              styles={{
-                head_cell: { width: '40px' },
-                caption_label: { fontSize: '1.2rem' }
-              }}
-            />
-          </div>
-
-          {/* Parte 2: Cards de Horário */}
-          {selectedDate && (
-            <div className={styles.timeSlotsContainer}>
-              {timeSlots.map((slot) => (
-                <button
-                  key={slot.time}
-                  className={`${styles.timeCard} ${slot.available ? styles.available : styles.unavailable}`}
-                  disabled={!slot.available}
-                  onClick={() => handleSlotSelect(slot.time)}
-                >
-                  {slot.time}
-                </button>
-              ))}
+        {!selectedSlot ? (
+          <>
+            {/* Parte 1: Calendário */}
+            <div className={styles.calendarContainer}>
+              <h2>{selectedDate ? '2. Escolha um horário' : '1. Escolha um dia'}</h2>
+              <DayPicker
+                mode="single"
+                selected={selectedDate}
+                onSelect={handleDateSelect}
+                locale={ptBR}
+                fromDate={new Date()} // Impede seleção de dias passados
+                styles={{
+                  head_cell: { width: '40px' },
+                  caption_label: { fontSize: '1.2rem' }
+                }}
+              />
             </div>
-          )}
-        </>
-      ) : (
-        /* Parte 3: Formulário de Confirmação */
-        <div className={styles.confirmationSection}>
-           <h2>3. Confirme seus dados</h2>
-           <p>Você selecionou o dia <strong>{selectedDate?.toLocaleDateString('pt-BR')}</strong> às <strong>{selectedSlot}</strong>.</p>
-           <AgendamentoForm 
-             // Modificamos o onSubmit para se adequar ao novo fluxo
-             onBookingSubmit={handleBookingSubmit} 
-           />
-           <button onClick={() => setSelectedSlot(null)} className={styles.backButton}>
-             Voltar para os horários
-           </button>
-        </div>
-      )}
+
+            {/* Parte 2: Cards de Horário */}
+            {selectedDate && (
+              <div className={styles.timeSlotsContainer}>
+                {timeSlots.map((slot) => (
+                  <button
+                    key={slot.time}
+                    className={`${styles.timeCard} ${slot.available ? styles.available : styles.unavailable}`}
+                    disabled={!slot.available}
+                    onClick={() => handleSlotSelect(slot.time)}
+                  >
+                    {slot.time}
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          /* Parte 3: Formulário de Confirmação */
+          <div className={styles.confirmationSection}>
+            <h2>3. Confirme seus dados</h2>
+            <p>Você selecionou o dia <strong>{selectedDate?.toLocaleDateString('pt-BR')}</strong> às <strong>{selectedSlot}</strong>.</p>
+            <AgendamentoForm
+              // Modificamos o onSubmit para se adequar ao novo fluxo
+              onBookingSubmit={handleBookingSubmit}
+            />
+            <button onClick={() => setSelectedSlot(null)} className={styles.backButton}>
+              Voltar para os horários
+            </button>
+          </div>
+        )}
+      </div>
     </main>
   );
 }
