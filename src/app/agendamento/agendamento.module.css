@@ -17,7 +17,7 @@
   margin: 6rem auto;
   padding: 2rem;
   font-family: sans-serif;
-  background-color: #ebebeb; /* Fundo branco para máxima legibilidade */
+  background-color: #9b9797; /* Fundo branco para máxima legibilidade */
   border-radius: 12px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12); /* Sombra suave para destacar */
 }
@@ -25,7 +25,8 @@
 /* Título principal com cor escura */
 .titulo {
   text-align: center;
-  color: #282c30; /* Cor de texto bem escura */
+  border-radius: 12px;
+  color: #ffffff; /* Cor de texto bem escura */
   margin-bottom: 2rem;
 }
 
@@ -36,13 +37,13 @@
   align-items: center;
   margin-bottom: 2rem;
   padding: 1rem;
-  background-color: #11100fa2; /* Fundo muito leve para o container do calendário */
+  background-color: #ffffffa2; /* Fundo muito leve para o container do calendário */
   border-radius: 8px;
 }
 
 /* Título secundário (Ex: '1. Escolha um dia') */
 .calendarContainer h2 {
-  color: #16181a; /* Garante que o título secundário também seja legível */
+  color: #ffffff; /* Garante que o título secundário também seja legível */
 }
 
 
@@ -89,17 +90,18 @@
 }
 
 .confirmationSection {
+  color: #fff;
   padding: 2rem;
-  background-color: #000000;
+  background-color: #ffffffa2;
   border-radius: 8px;
-  text-align: center;
+  text-align: center;;
 }
 
 .backButton {
   margin-top: 1rem;
   background: none;
-  border: 1px solid #6c757d;
-  color: #f8f8f8;
+  border: 1px solid #a52f2f;
+  color: #a52f2f;
   padding: 8px 16px;
   border-radius: 5px;
   cursor: pointer;

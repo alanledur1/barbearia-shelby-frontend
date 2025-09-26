@@ -122,7 +122,7 @@ export default function PaginaAgendamento() {
           /* Parte 3: Formulário de Confirmação */
           <div className={styles.confirmationSection}>
             <h2>3. Confirme seus dados</h2>
-            <p>Você selecionou o dia <strong>{selectedDate?.toLocaleDateString('pt-BR')}</strong> às <strong>{selectedSlot}</strong>.</p>
+            <p>Você selecionou o dia <strong>{selectedDate?.toLocaleDateString('pt-BR')}</strong> às <strong>{selectedSlot}</strong>.</p><br></br>
             <AgendamentoForm
               // Modificamos o onSubmit para se adequar ao novo fluxo
               onBookingSubmit={handleBookingSubmit}
