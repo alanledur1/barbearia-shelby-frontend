@@ -79,9 +79,10 @@ export const Navbar = () => {
           </li>
         </ul>
         <div className="navbar__containerButton">
-          <button className="navbar__login">Entrar</button>
+          <a href="/Login" className="navbar__login">Entrar</a>
+          
           <div className="container">
-            <button className="navbar__signup">Crie uma conta</button>
+            <a href='/CriarConta' className="navbar__signup">Crie uma conta</a>
             <button className="button">
               <span className="icon"><FaArrowRight /></span>
             </button>

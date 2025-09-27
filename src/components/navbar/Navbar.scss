@@ -59,25 +59,27 @@
       }
     }
 
-    // Estilo para o link ativo
     li.active a {
       color: #F67366;
       font-weight: bold;
     }
   }
 
-  // Botão
+  // Botão / Links de ação
   &__containerButton {
     display: flex;
     direction: ltr;
     justify-content: center;
     align-items: center;
 
-    button {
+    // Agora estiliza <button> **e** <a>
+    button,
+    a {
       background: none;
       border: none;
       font-size: 15px;
       cursor: pointer;
+      text-decoration: none; // importante para <a>
 
       &:hover {
         color: #ec5f49;
@@ -140,32 +142,6 @@
             color: #f8f8f8;
           }
         }
-      }
-    }
-  }
-}
-
-// Responsivo
-@media (max-width: 768px) {
-  .navbar {
-    padding: 15px 20px;
-    flex-direction: column;
-    align-items: flex-start;
-
-    &__links {
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    &__containerButton {
-      margin-top: 10px;
-      flex-direction: column;
-      align-items: flex-start;
-
-      .container {
-        width: 100%;
-        justify-content: space-between;
-        margin-left: 0;
       }
     }
   }

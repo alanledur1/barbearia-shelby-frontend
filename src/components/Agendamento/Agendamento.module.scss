@@ -3,11 +3,11 @@
 // --- Variáveis de Estilo (fácil de customizar depois) ---
 $primary-color: #007bff;
 $primary-hover-color: #0056b3;
-$text-color: #333;
+$text-color: #b39393;
 $border-color: #ccc;
 $focus-glow-color: rgba(0, 123, 255, 0.25);
-$background-color: #fff;
-$label-color: #555;
+$background-color: #ffffff48;
+$label-color: #ffffff;
 
 // --- Estilos do Formulário ---
 .form {
@@ -15,10 +15,9 @@ $label-color: #555;
   flex-direction: column;
   gap: 1.5rem; // Espaçamento entre os elementos do formulário
   background-color: $background-color;
-  padding: 1.5rem;
+  padding: 2rem;
   border-radius: 8px;
   width: 100%;
-
 }
 
 .inputGroup {
