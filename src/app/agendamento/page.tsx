@@ -93,14 +93,6 @@ export default function PaginaAgendamento() {
       setIsLoading(false);
     }
   };
-  
-  const handleServiceSelect = (serviceId: string) => {
-    const service = services.find(s => s.id === parseInt(serviceId));
-    setSelectedService(service);
-    setSelectedDate(undefined);
-    setTimeSlots([]);
-    setSelectedSlot(null);
-  };
 
   const handleDateSelect = (date: Date | undefined) => {
     if (!date || !selectedService) return;
@@ -113,40 +105,7 @@ export default function PaginaAgendamento() {
     setSelectedSlot(time);
   };
 
-  const handleBookingSubmit = async (data: { cliente: string; email: string; phone: string }) => {
-    if (!selectedDate || !selectedSlot || !selectedService) return;
 
-    setIsLoading(true);
-    setError(null);
-
-    const [hours, minutes] = selectedSlot.split(':').map(Number);
-    const appointmentDateTime = new Date(selectedDate);
-    appointmentDateTime.setHours(hours, minutes, 0, 0);
-
-    try {
-      const clientResponse = await api.post('/clients', {
-        name: data.cliente,
-        email: data.email,
-        phone: data.phone,
-      });
-      const clientId = clientResponse.data.id;
-
-      await api.post('/appointments', {
-        clientId: clientId,
-        serviceId: selectedService.id,
-        date: appointmentDateTime.toISOString(),
-      });
-      
-      // CORREÇÃO: Corrigido o typo de "setBookigStatus" para "setBookingStatus"
-      setBookingStatus('SUCCESS');
-
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.error || 'Ocorreu um erro ao agendar.';
-      setError(errorMessage);
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   // Se o agendamento foi um sucesso, mostra uma mensagem de confirmação
@@ -165,64 +124,13 @@ export default function PaginaAgendamento() {
   }
 
   return (
-    <main className={styles.container}>
-      <h1 className={styles.titulo}>Agende seu Horário</h1>
 
-      {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
-      
-      {!selectedService ? (
-        // Etapa 1: Selecionar Serviço
-        <div>
-          <h2>1. Escolha um Serviço</h2>
-          <select onChange={(e) => handleServiceSelect(e.target.value)} defaultValue="">
-            <option value="" disabled>Selecione o serviço</option>
-            {services.map(service => (
-              <option key={service.id} value={service.id}>{service.name}</option>
-            ))}
-          </select>
-        </div>
-      ) : !selectedSlot ? (
-        // Etapa 2 e 3: Selecionar Data e Hora
-        <>
-          <div className={styles.calendarContainer}>
-            <h2>{selectedDate ? '3. Escolha um horário' : '2. Escolha um dia'}</h2>
-            <DayPicker
-              mode="single"
-              selected={selectedDate}
-              onSelect={handleDateSelect}
-              locale={ptBR}
-              fromDate={new Date()}
             />
+            <button onClick={() => setSelectedSlot(null)} className={styles.backButton}>
+              Voltar para os horários
+            </button>
           </div>
 
-          {isLoading && <p>Verificando horários...</p>}
-          {selectedDate && !isLoading && (
-            <div className={styles.timeSlotsContainer}>
-              {timeSlots.map((slot) => (
-                <button
-                  key={slot.time}
-                  className={`${styles.timeCard} ${slot.available ? styles.available : styles.unavailable}`}
-                  disabled={!slot.available}
-                  onClick={() => handleSlotSelect(slot.time)}
-                >
-                  {slot.time}
-                </button>
-              ))}
-            </div>
-          )}
-        </>
-      ) : (
-        // Etapa 4: Confirmação e Formulário
-        <div className={styles.confirmationSection}>
-           <h2>4. Confirme seus dados</h2>
-           <p>Serviço: <strong>{selectedService?.name}</strong></p>
-           <p>Data: <strong>{selectedDate?.toLocaleDateString('pt-BR')}</strong> às <strong>{selectedSlot}</strong>.</p>
-           <AgendamentoForm onBookingSubmit={handleBookingSubmit} isLoading={isLoading} />
-           <button onClick={() => setSelectedSlot(null)} className={styles.backButton}>
-             Voltar para os horários
-           </button>
-        </div>
-      )}
     </main>
   );
 }
