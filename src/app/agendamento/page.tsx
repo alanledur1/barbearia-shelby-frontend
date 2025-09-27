@@ -1,4 +1,3 @@
-// src/app/agendamento/page.tsx
 'use client';
 
 import React, { useState } from 'react';
