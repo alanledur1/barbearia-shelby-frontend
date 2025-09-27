@@ -46,7 +46,6 @@ export default function Servicos() {
   if (isLoading) {
     return <p>Carregando serviços...</p>;
   }
-
   if (error) {
     return <p style={{ color: 'red' }}>{error}</p>;
   }
