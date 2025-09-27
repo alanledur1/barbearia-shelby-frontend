@@ -1,138 +1,136 @@
 // src/app/agendamento/page.tsx
+
 'use client';
 
-import React, { useState } from 'react';
-
-// Importações do Calendário
+import React, { useEffect, useState } from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
-import { ptBR } from 'date-fns/locale'; // Para traduzir o calendário
-
+import { ptBR } from 'date-fns/locale';
 import AgendamentoForm from '@/components/Agendamento/AgendamentoForm';
 import styles from './agendamento.module.css';
+import api from '@/services/api';
 
-// Novo tipo para os horários
+// --- Tipos para os dados que virão da API ---
+type Service = {
+  id: number;
+  name: string;
+  duration: number;
+};
+
+type Appointment = {
+  id: number;
+  date: string; // Formato ISO (ex: "2025-07-10T10:00:00.000Z")
+  durationMinutes: number;
+};
+
 type TimeSlot = {
   time: string;
   available: boolean;
 };
 
-// SIMULAÇÃO: Lista de horários já agendados que viria do seu banco de dados
-const bookedAppointments = [
-  { date: '2025-07-10', time: '10:00' },
-  { date: '2025-07-10', time: '14:00' },
-  { date: '2025-07-11', time: '11:00' },
-];
+// Adicionamos este novo tipo para o status do agendamento
+type BookingStatus = 'IDLE' | 'SUCCESS' | 'ERROR';
+
 
 export default function PaginaAgendamento() {
+  const [services, setServices] = useState<Service[]>([]);
+  const [selectedService, setSelectedService] = useState<Service | undefined>();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  // Estado para controlar a tela de sucesso
+  const [bookingStatus, setBookingStatus] = useState<BookingStatus>('IDLE');
 
-  // Função que gera os horários para um dia específico
-  const generateTimeSlotsForDate = (date: Date) => {
-    const dateString = date.toISOString().split('T')[0]; // Formato AAAA-MM-DD
-    const allSlots = [
-      '09:00', '10:00', '11:00', '12:00',
-      '14:00', '15:00', '16:00', '17:00'
-    ];
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await api.get('/services');
+        setServices(response.data);
+      } catch (err) {
+        setError('Não foi possível carregar os serviços.');
+        console.error(err); // Alterado para logar o erro real
+      }
+    };
+    fetchServices();
+  }, []);
 
-    const slotsWithAvailability = allSlots.map(slot => {
-      const isBooked = bookedAppointments.some(
-        booked => booked.date === dateString && booked.time === slot
-      );
-      return { time: slot, available: !isBooked };
-    });
+  const generateTimeSlotsForDate = async (date: Date, service: Service) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      // CORREÇÃO: Usar [0] para pegar apenas a data "AAAA-MM-DD"
+      const dateString = date.toISOString().split('T')[0];
+      const response = await api.get<Appointment[]>(`/appointments?date=${dateString}`);
+      const bookedAppointments = response.data;
 
-    setTimeSlots(slotsWithAvailability);
+      const allSlots = [
+        '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00',
+        '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30'
+      ];
+      
+      const slotsWithAvailability = allSlots.map(slot => {
+        const slotStart = new Date(`${dateString}T${slot}:00.000-03:00`);
+        const slotEnd = new Date(slotStart.getTime() + service.duration * 60000);
+        
+        // CORREÇÃO: Lógica completa para verificar sobreposição de horários
+        const isBooked = bookedAppointments.some(booked => {
+          const bookedStart = new Date(booked.date);
+          const bookedEnd = new Date(bookedStart.getTime() + booked.durationMinutes * 60000);
+          // Verifica se o slot desejado cruza com algum agendamento existente
+          return slotStart < bookedEnd && slotEnd > bookedStart;
+        });
+
+        return { time: slot, available: !isBooked };
+      });
+
+      setTimeSlots(slotsWithAvailability);
+    } catch (err) {
+      setError('Não foi possível verificar os horários.');
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // Função chamada quando o usuário seleciona uma data no calendário
   const handleDateSelect = (date: Date | undefined) => {
-    if (!date) return;
+    if (!date || !selectedService) return;
     setSelectedDate(date);
-    setSelectedSlot(null); // Reseta a seleção de horário ao trocar de data
-    generateTimeSlotsForDate(date);
+    setSelectedSlot(null);
+    generateTimeSlotsForDate(date, selectedService);
   };
 
-  // Função chamada quando o usuário clica em um horário
   const handleSlotSelect = (time: string) => {
     setSelectedSlot(time);
   };
 
-  // Função final para submeter o agendamento
-  const handleBookingSubmit = (data: { cliente: string }) => {
-    if (!selectedDate || !selectedSlot) return;
 
-    const newBooking = {
-      cliente: data.cliente,
-      data: selectedDate.toISOString().split('T')[0],
-      hora: selectedSlot
-    };
-
-    console.log("NOVO AGENDAMENTO:", newBooking);
-    alert(`Horário agendado com sucesso para ${data.cliente} no dia ${newBooking.data} às ${newBooking.hora}!`);
-
-    // Resetar o fluxo
-    setSelectedDate(undefined);
-    setTimeSlots([]);
-    setSelectedSlot(null);
   };
 
+  // Se o agendamento foi um sucesso, mostra uma mensagem de confirmação
+  if (bookingStatus === 'SUCCESS') {
+    return (
+      <main className={styles.container}>
+        <div style={{ textAlign: 'center', padding: '2rem' }}>
+          <h1 style={{ color: '#4CAF50' }}>Agendamento Confirmado!</h1>
+          <p>Seu horário foi reservado com sucesso. Obrigado!</p>
+          <button onClick={() => window.location.reload()} style={{ marginTop: '1rem' }}>
+            Fazer Novo Agendamento
+          </button>
+        </div>
+      </main>
+    );
+  }
+
   return (
-    <main className={styles.pageBackground}>
-      <div className={styles.container}>
-        <h1 className={styles.titulo}>Agende seu Horário</h1>
 
-        {!selectedSlot ? (
-          <>
-            {/* Parte 1: Calendário */}
-            <div className={styles.calendarContainer}>
-              <h2>{selectedDate ? '2. Escolha um horário' : '1. Escolha um dia'}</h2>
-              <DayPicker
-                mode="single"
-                selected={selectedDate}
-                onSelect={handleDateSelect}
-                locale={ptBR}
-                fromDate={new Date()} // Impede seleção de dias passados
-                styles={{
-                  head_cell: { width: '40px' },
-                  caption_label: { fontSize: '1.2rem' }
-                }}
-              />
-            </div>
-
-            {/* Parte 2: Cards de Horário */}
-            {selectedDate && (
-              <div className={styles.timeSlotsContainer}>
-                {timeSlots.map((slot) => (
-                  <button
-                    key={slot.time}
-                    className={`${styles.timeCard} ${slot.available ? styles.available : styles.unavailable}`}
-                    disabled={!slot.available}
-                    onClick={() => handleSlotSelect(slot.time)}
-                  >
-                    {slot.time}
-                  </button>
-                ))}
-              </div>
-            )}
-          </>
-        ) : (
-          /* Parte 3: Formulário de Confirmação */
-          <div className={styles.confirmationSection}>
-            <h2>3. Confirme seus dados</h2>
-            <p>Você selecionou o dia <strong>{selectedDate?.toLocaleDateString('pt-BR')}</strong> às <strong>{selectedSlot}</strong>.</p><br></br>
-            <AgendamentoForm
-              // Modificamos o onSubmit para se adequar ao novo fluxo
-              onBookingSubmit={handleBookingSubmit}
             />
             <button onClick={() => setSelectedSlot(null)} className={styles.backButton}>
               Voltar para os horários
             </button>
           </div>
-        )}
-      </div>
+
     </main>
   );
 }
