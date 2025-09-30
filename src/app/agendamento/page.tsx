@@ -163,7 +163,9 @@ export default function PaginaAgendamento() {
   }
 
   return (
-    <main className={styles.container}>
+    <main className={styles.
+    pageBackground}>
+      <div className={styles.container}>
       <h1 className={styles.titulo}>Agende seu Horário</h1>
 
       {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
@@ -221,6 +223,8 @@ export default function PaginaAgendamento() {
            </button>
         </div>
       )}
+          </div>
     </main>
+
   );
 }
