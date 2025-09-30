@@ -6,166 +6,167 @@
   background: linear-gradient(135deg, #b46e6e, #332424, #141212);
 }
 
-  .title {
-    color:#fff;
-    margin-bottom: 50px;
+.title {
+  color: #fff;
+  margin-bottom: 30px;
+}
+
+.login-form {
+  position: relative;
+  background: #9b9797;
+  padding: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  width: 380px;
+  max-width: 380px;
+  box-shadow: 0 25px 45px #c55f5f66;
+  text-align: center;
+  backdrop-filter: blur(15px);
+  overflow: hidden;
+
+  .login-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: skewX(-15deg);
+    transition: 0.5s;
+    pointer-events: none;
   }
 
-  .login-form {
-    position: relative;
-    background: #9b9797;
-    padding: 45px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 20px;
-    width: 380px;
-    max-width: 380px;
-    box-shadow: 0 25px 45px #c55f5f66;
+  &:hover::before {
+    left: 120%;
+  }
+
+  .login-form h2 {
+    margin: 40px;
+    font-weight: 600;
     text-align: center;
-    backdrop-filter: blur(15px);
-    overflow: hidden;
-
-    .login-form::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.5);
-      transform: skewX(-15deg);
-      transition: 0.5s;
-      pointer-events: none;
-    }
-
-    &:hover::before {
-      left: 120%;
-    }
-
-    .login-form h2 {
-      margin: 40px;
-      font-weight: 600;
-      text-align: center;
-      letter-spacing: 1px;
-      font-size: 28px;
-      color: #333;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    .error {
-      color: #e63946;
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-    }
-
-    .input-group {
-      position: relative;
-      margin-bottom: 30px;
-    }
-
-    .input-group input {
-      width: 100%;
-      padding: 10px 15px;
-      background: rgba(255, 255, 255, 0.8);
-      border: none;
-      outline: none;
-      border-radius: 35px;
-      font-size: 16px;
-      color: #fff;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-    }
-
-    .input-group input::placeholder {
-      color: rgba(255, 255, 255, 0.7);
-    }
-
-    .input-group input:focus {
-      background: rgba(255, 255, 255, 0.3);
-      box-shadow: 0 8px 20px rgba(58, 123, 213, 0.1);
-    }
-
-    .input-group label {
-      position: absolute;
-      top: -30%;
-      left: 20px;
-      transform: translateY(-50%);
-      color: #fff;
-      font-size: 16px;
-      pointer-events: none;
-      transition: all 0.3s ease;
-    }
-
-    .input-group input:focus+label,
-    .input-group input:valid+label {
-      top: 0px;
-      left: 15px;
-      font-size: 12px;
-      background: rgba(255, 255, 255, 0.2);
-      padding: 2px 8px;
-      border-radius: 10px;
-      color: #fff;
-    }
-
-    .remember-forgot {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.8);
-    }
-
-    .remember-forgot input {
-      margin-right: 8px;
-      accent-color: #fff;
-    }
-
-    .remember-forgot a {
-      color: #fff;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-
-    .remember-forgot a:hover {
-      text-decoration: underline;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 15px;
-      background: #3a7bd5;
-      border: none;
-      outline: none;
-      border-radius: 35px;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn:hover {
-      background: #2a5bbf;
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .register-link {
-      margin-top: 25px;
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.8);
-      text-align: center;
-    }
-
-    .register-link a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    .register-link a:hover {
-      text-decoration: underline;
-    }
+    letter-spacing: 1px;
+    font-size: 28px;
+    color: #333;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
+
+  .error {
+    color: #e63946;
+    font-size: 0.9rem;
+    margin-bottom: 35px;
+    margin-top: -10px;
+  }
+
+  .input-group {
+    position: relative;
+    margin-bottom: 35px;
+  }
+
+  .input-group input {
+    width: 100%;
+    padding: 10px 15px;
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    outline: none;
+    border-radius: 35px;
+    font-size: 16px;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .input-group input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .input-group input:focus {
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 20px rgba(58, 123, 213, 0.1);
+  }
+
+  .input-group label {
+    position: absolute;
+    top: -30%;
+    left: 20px;
+    transform: translateY(-50%);
+    color: #fff;
+    font-size: 16px;
+    pointer-events: none;
+    transition: all 0.3s ease;
+  }
+
+  .input-group input:focus+label,
+  .input-group input:valid+label {
+    top: 0px;
+    left: 15px;
+    font-size: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 8px;
+    border-radius: 10px;
+    color: #fff;
+  }
+
+  .remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .remember-forgot input {
+    margin-right: 3px;
+    accent-color: #fff;
+  }
+
+  .remember-forgot a {
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .remember-forgot a:hover {
+    text-decoration: underline;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 15px;
+    background: #3a7bd5;
+    border: none;
+    outline: none;
+    border-radius: 35px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn:hover {
+    background: #2a5bbf;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .register-link {
+    margin-top: 25px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+  }
+
+  .register-link a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .register-link a:hover {
+    text-decoration: underline;
+  }
+}
