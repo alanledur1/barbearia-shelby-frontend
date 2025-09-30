@@ -27,7 +27,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   return (
     <div className="login-container">
       <form onSubmit={handleSubmit} className="login-form">
-        <h2>Login</h2>
+        <h2 className='title'>Entrar</h2>
 
         {error && <p className="error">{error}</p>}
 
@@ -36,7 +36,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           <input
             id="email"
             type="email"
-            placeholder="Digite seu e-mail"
+            placeholder='digite seu email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -47,15 +47,24 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           <input
             id="password"
             type="password"
-            placeholder="Digite sua senha"
+            placeholder='digite sua senha'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
 
+        <div className="remember-forgot">
+          <label><input type="checkbox" /> Lembre de mim </label>
+          <a href="">Esqueceu a senha ?</a>
+        </div>
+
         <button type="submit" className="btn">
           Entrar
         </button>
+
+        <div className="register-link">
+          <p>Não tem uma conta? <a href="./CriarConta">Registre-se</a></p>
+        </div>
       </form>
     </div>
   );
