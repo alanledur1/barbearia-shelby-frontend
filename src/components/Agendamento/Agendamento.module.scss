@@ -1,74 +1,84 @@
 /* src/components/Agendamento/AgendamentoForm.module.scss */
 
-// --- Variáveis de Estilo (fácil de customizar depois) ---
-$primary-color: #007bff;
-$primary-hover-color: #0056b3;
-$text-color: #b39393;
-$border-color: #ccc;
-$focus-glow-color: rgba(0, 123, 255, 0.25);
-$background-color: #ffffff48;
-$label-color: #ffffff;
+$brand-color: #f67366;
+$text-color: #f0f0f0;
+$text-muted: #a0a0a0;
+$input-bg: #2a2a2a;
+$border-color: #3a3a3a;
+$error-color: #dc3545;
 
-// --- Estilos do Formulário ---
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem; // Espaçamento entre os elementos do formulário
-  background-color: $background-color;
-  padding: 2rem;
-  border-radius: 8px;
-  width: 100%;
+  gap: 1rem;
 }
 
 .inputGroup {
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  /* Espaço para a mensagem de erro */
+  padding-bottom: 1.5rem; 
 
   label {
     margin-bottom: 0.5rem;
-    font-weight: bold;
-    color: $label-color;
+    font-weight: 500;
+    color: $text-muted;
     font-size: 0.9rem;
   }
 
   input {
-    width: 100%;
-    padding: 0.8rem 1rem;
+    height: 30px;
+    background-color: $input-bg;
     border: 1px solid $border-color;
-    border-radius: 5px;
-    font-size: 1rem;
     color: $text-color;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    padding: 0.8rem 1rem;
+    margin-left: 5px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
 
-    &::placeholder {
-      color: #999;
-    }
-
-    // Efeito ao clicar no input (foco)
     &:focus {
       outline: none;
-      border-color: $primary-color;
-      box-shadow: 0 0 0 4px $focus-glow-color;
+      border-color: $brand-color;
+      box-shadow: 0 0 0 3px rgba($brand-color, 0.25);
+    }
+  }
+
+  /* Estilo do input com erro */
+  input.error {
+    border-color: $error-color;
+    &:focus {
+      box-shadow: 0 0 0 3px rgba($error-color, 0.25);
     }
   }
 }
 
-.submitButton {
-  padding: 0.9rem 1.5rem;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #fff;
-  background-color: $primary-color;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+.errorMessage {
+  color: $error-color;
+  font-size: 0.8rem;
+  position: absolute;
+  bottom: 0;
+  left: 5px;
+}
 
-  &:hover {
-    background-color: $primary-hover-color;
-  }
+.primaryButton {
+    width: 100%;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: $brand-color;
+    color: #fff;
+    border: none;
+    margin-top: 1rem;
 
-  &:active {
-    transform: scale(0.98);
-  }
+    &:hover {
+        background: darken($brand-color, 10%);
+    }
+
+    &:disabled {
+        background-color: #555;
+        cursor: not-allowed;
+    }
 }

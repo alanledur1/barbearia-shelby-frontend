@@ -1,0 +1,274 @@
+$brand-color: #f67366;
+$dark-bg: #121212;
+$card-bg: #1e1e1e;
+$text-color: #f0f0f0;
+$text-muted: #a0a0a0;
+$input-bg: #2a2a2a;
+$border-color: #3a3a3a;
+$success-color: #28a745;
+$error-color: #dc3545;
+
+/* === Layout Principal === */
+.mainContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 8rem 2rem 4rem;
+  background-color: $dark-bg;
+  font-family: 'Poppins', sans-serif;
+}
+
+.container {
+  width: 100%;
+  max-width: 600px;
+  background-color: $card-bg;
+  border-radius: 16px;
+  border: 1px solid $border-color;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  color: $text-color;
+  overflow: hidden;
+}
+
+/* === Indicador de Progresso (Stepper) === */
+.stepper {
+  display: flex;
+  background-color: $input-bg;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid $border-color;
+}
+
+.step {
+  flex: 1;
+  text-align: center;
+  color: $text-muted;
+  font-weight: 500;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+
+  &.active {
+    color: $brand-color;
+    border-bottom-color: $brand-color;
+  }
+}
+
+.content {
+  padding: 2.5rem;
+  min-height: 450px; /* Altura mínima para evitar "pulos" de layout */
+  display: flex;
+  flex-direction: column;
+}
+
+.stepTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* === Card de Serviço === */
+.serviceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.serviceCard {
+  background-color: $input-bg;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: $text-color;
+  }
+  
+  p {
+    font-size: 0.9rem;
+    color: $text-muted;
+    margin: 0.25rem 0;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    border-color: $brand-color;
+    box-shadow: 0 4px 15px rgba($brand-color, 0.1);
+  }
+}
+
+/* === Seção de Data e Hora === */
+/* === Seção de Data e Hora (ATUALIZADO) === */
+.dateTimePicker {
+  display: flex;
+  flex-direction: column; /* Organiza o calendário e os horários em coluna */
+  gap: 2rem; /* Espaço entre o calendário e a lista de horários */
+  align-items: center; /* Centraliza o calendário */
+}
+
+.dayPickerContainer {
+  /* O container do calendário não precisa de muitas regras agora */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.timeSlotsContainer {
+  width: 100%;
+  display: flex; /* Usamos flexbox para alinhar os horários */
+  flex-wrap: wrap; /* Permite que os horários quebrem a linha */
+  justify-content: center; /* Centraliza os horários */
+  gap: 0.75rem; /* Espaço entre os botões de horário */
+}
+
+/* O estilo do .timeSlot (botão individual de horário) não precisa mudar */
+.timeSlot {
+  width: 100px; /* Largura fixa para cada botão de horário */
+  padding: 0.75rem;
+  background-color: $input-bg;
+  border: 1px solid $border-color;
+  color: $text-color;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+
+  &:hover:not(:disabled) {
+    background-color: $brand-color;
+    color: #fff;
+    border-color: $brand-color;
+  }
+
+  &:disabled {
+    background-color: transparent;
+    color: $text-muted;
+    opacity: 0.5;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+}
+
+.timeSlot {
+  padding: 0.75rem;
+  background-color: $input-bg;
+  border: 1px solid $border-color;
+  color: $text-color;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+
+  &:hover:not(:disabled) {
+    background-color: $brand-color;
+    color: #fff;
+    border-color: $brand-color;
+  }
+
+  &:disabled {
+    background-color: transparent;
+    color: $text-muted;
+    opacity: 0.5;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+}
+
+/* === Seção de Confirmação e Formulário === */
+.summary {
+  background-color: $input-bg;
+  padding: 1.25rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border-left: 4px solid $brand-color;
+  p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    color: $text-muted;
+    strong {
+      color: $text-color;
+      font-weight: 600;
+    }
+  }
+}
+
+/* === Sucesso === */
+.successMessage {
+  text-align: center;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+
+  h2 {
+    color: $success-color;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+  p {
+    color: $text-muted;
+    margin-bottom: 2rem;
+  }
+}
+
+/* === Botões === */
+.primaryButton, .backButton {
+  width: 100%;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.primaryButton {
+  background: $brand-color;
+  color: #fff;
+  border: none;
+  margin-top: 1rem;
+  &:hover {
+    background: darken($brand-color, 10%);
+  }
+  &:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+  }
+}
+
+.backButton {
+  background: transparent;
+  color: $text-muted;
+  border: 1px solid $border-color;
+  margin-top: 1rem;
+  &:hover {
+    background-color: $input-bg;
+    color: $text-color;
+  }
+}
+/* Estilos de Validacao */
+.inputGroup {
+  position: relative;
+  padding-bottom: 1.5rem;
+
+  input.error {
+    border-color: $error-color;
+    &:focus {
+      box-shadow: 0 0 0 3px rgba($error-color, 0.25);
+    }
+  }
+}
+
+.errorMessage {
+  color: $error-color;
+  font-size: 0.8rem;
+  position: absolute;
+  bottom: 0;
+  left: 5px;
+}
