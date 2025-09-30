@@ -80,12 +80,14 @@ export const Navbar = () => {
         </ul>
         <div className="navbar__containerButton">
           <a href="/Login" className="navbar__login">Entrar</a>
-          
-          <div className="container">
+
+          <div className="container" >
             <a href='/CriarConta' className="navbar__signup">Crie uma conta</a>
-            <button className="button">
-              <span className="icon"><FaArrowRight /></span>
-            </button>
+            <a href="/CriarConta">
+              <button className="button">
+                <span className="icon"><FaArrowRight /></span>
+              </button>
+            </a>
           </div>
         </div>
       </nav>
