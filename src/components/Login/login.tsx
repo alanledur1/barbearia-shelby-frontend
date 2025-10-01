@@ -55,7 +55,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
         <div className="remember-forgot">
           <label><input type="checkbox" /> Lembre de mim </label>
-          <a href="">Esqueceu a senha ?</a>
+          <a href="../EsqueciSenha">Esqueceu a senha ?</a>
         </div>
 
         <button type="submit" className="btn">

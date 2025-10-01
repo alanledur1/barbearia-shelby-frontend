@@ -6,66 +6,144 @@
     background: linear-gradient(135deg, #b46e6e, #332424, #141212);
 }
 
-.register-form {
-    background: #9b9797;
-    padding: 2rem;
-    border-radius: 12px;
-    width: 100%;
-    max-width: 380px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    text-align: center;
+.title {
+    color: #fff;
+    margin-bottom: 30px;
+}
 
-    h2 {
-        margin-bottom: 1.5rem;
-        font-size: 1.8rem;
+
+.register-form {
+    position: relative;
+    background: #9b9797;
+    padding: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    width: 380px;
+    max-width: 380px;
+    box-shadow: 0 25px 45px #c55f5f66;
+    text-align: center;
+    backdrop-filter: blur(15px);
+    overflow: hidden;
+
+    .register-form::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.5);
+        transform: skewX(-15deg);
+        transition: 0.5s;
+        pointer-events: none;
+    }
+
+    &:hover::before {
+        left: 120%;
+    }
+
+    .register-form h2 {
+        margin: 40px;
+        font-weight: 600;
+        text-align: center;
+        letter-spacing: 1px;
+        font-size: 28px;
         color: #333;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .error {
         color: #e63946;
         font-size: 0.9rem;
-        margin-bottom: 1rem;
+        margin-bottom: 35px;
+        margin-top: -10px;
     }
 
     .input-group {
-        margin-bottom: 1.2rem;
-        text-align: left;
+        position: relative;
+        margin-bottom: 35px;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 0.4rem;
-            font-size: 0.9rem;
-            color: #444;
-        }
+    .input-group input {
+        width: 100%;
+        padding: 10px 15px;
+        background: rgba(255, 255, 255, 0.8);
+        border: none;
+        outline: none;
+        border-radius: 35px;
+        font-size: 16px;
+        color: #fff;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
 
-        input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
+    .input-group input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
 
-            &:focus {
-                border-color: #00b09b;
-                outline: none;
-            }
-        }
+    .input-group input:focus {
+        background: rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 20px rgba(58, 123, 213, 0.1);
+    }
+
+    .input-group label {
+        position: absolute;
+        top: -30%;
+        left: 20px;
+        transform: translateY(-50%);
+        color: #fff;
+        font-size: 16px;
+        pointer-events: none;
+        transition: all 0.3s ease;
+    }
+
+    .input-group input:focus+label,
+    .input-group input:valid+label {
+        top: 0px;
+        left: 15px;
+        font-size: 12px;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 2px 8px;
+        border-radius: 10px;
+        color: #fff;
+    }
+
+    .login-link {
+        margin-top: 25px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.8);
+        text-align: center;
+    }
+
+    .login-link a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .login-link a:hover {
+        text-decoration: underline;
     }
 
     .btn {
         width: 100%;
-        padding: 0.9rem;
+        padding: 15px;
         background: #3a7bd5;
-        color: white;
         border: none;
-        border-radius: 8px;
-        font-size: 1rem;
+        outline: none;
+        border-radius: 35px;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
         cursor: pointer;
-        transition: background 0.3s;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
 
-        &:hover {
-            background: #335c81;
-        }
+    .btn:hover {
+        background: #2a5bbf;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     }
 }
