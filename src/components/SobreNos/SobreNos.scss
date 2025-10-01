@@ -14,7 +14,7 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  padding: 0 150px;
+  padding: 0 clamp(16px, 6vw, 150px);
 
   .title {
     width: 100%;
@@ -32,17 +32,18 @@
 
   .container {
     display: flex;
-    gap: 85px;
+    gap: 24px;
     justify-content: space-between;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     padding-top: 15px;
   }
 
   .card {
-    padding: 30px 40px;
-    width: 450px;
-    height: 253px;
-    border-radius: 30px;
+    padding: 20px 16px;
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    border-radius: 20px;
     text-align: center;
     background-color: #6C6C6CBF;
     will-change: transform, opacity;
@@ -63,11 +64,19 @@
     color: #ffffff;
     font-family: 'Poppins';
     font-weight: 600;
-    font-size: 48px;
+    font-size: 36px;
     letter-spacing: 0.3em;
     text-align: center;
     text-shadow: 1px 1px 2px #000000;
     margin-bottom: 30px;
     will-change: transform, opacity;
+  }
+
+  @media (max-width: 768px) {
+    padding: 20px;
+    height: auto;
+    .title { font-size: 28px; }
+    .text-bottom { font-size: 28px; }
+    .card { margin-bottom: 12px; }
   }
 }

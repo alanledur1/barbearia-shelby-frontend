@@ -46,12 +46,41 @@ body {
 }
 
 /* Faz o conteúdo principal (onde as páginas são renderizadas) crescer e empurrar o footer para baixo */
+/* Espaço para a navbar fixa: garante que o conteúdo não fique abaixo da navbar */
 main {
   flex-grow: 1;
+  padding-top: 90px; /* ajuste conforme altura da navbar */
 }
 
 /* Estilos para links */
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* Layout responsivo básico */
+.container-fluid {
+  width: 100%;
+  padding: 0 16px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Imagens e vídeos responsivos */
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Tipografia responsiva simples */
+@media (max-width: 1024px) {
+  html { font-size: 15px; }
+}
+@media (max-width: 768px) {
+  html { font-size: 14px; }
+  main { padding-top: 80px; }
+}
+@media (max-width: 480px) {
+  html { font-size: 13px; }
+  main { padding-top: 72px; }
 }

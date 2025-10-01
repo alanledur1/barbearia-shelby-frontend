@@ -6,16 +6,20 @@ import styles from './Agendamento.module.scss';
 import { bookingSchema, type BookingFormData, formatName } from '@/schemas/agendamentoSchema';
 
 type Props = {
-  onBookingSubmit: (data: BookingFormData) => void;
+  onBookingSubmitAction: (data: BookingFormData) => void;
   isLoading: boolean;
+  initialValues?: BookingFormData; // prefill quando usuário está logado
 };
 
-export default function AgendamentoForm({ onBookingSubmit, isLoading }: Props) {
-  const [formData, setFormData] = useState<BookingFormData>({
-    cliente: '',
-    email: '',
-    phone: '',
-  });
+export default function AgendamentoForm({ onBookingSubmitAction, isLoading, initialValues }: Props) {
+  const [formData, setFormData] = useState<BookingFormData>(
+    initialValues ?? { cliente: '', email: '', phone: '' }
+  );
+
+  // Atualiza o formulário quando os valores iniciais mudam (por exemplo, após carregar auth)
+  React.useEffect(() => {
+    if (initialValues) setFormData(initialValues);
+  }, [initialValues]);
 
   const [errors, setErrors] = useState<z.ZodIssue[]>([]);
 
@@ -53,7 +57,7 @@ export default function AgendamentoForm({ onBookingSubmit, isLoading }: Props) {
     } else {
       // Se a validação passar, limpa os erros e envia os dados
       setErrors([]);
-      onBookingSubmit(result.data);
+      onBookingSubmitAction(result.data);
     }
   };
 
