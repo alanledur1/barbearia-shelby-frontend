@@ -3,11 +3,13 @@
 import React, { useState } from 'react';
 import './login.scss';
 
+
 interface LoginProps {
   onLogin: (email: string, password: string) => void;
+  apiError?: string; //Prop opcional
 }
 
-const Login: React.FC<LoginProps> = ({ onLogin }) => {
+const Login: React.FC<LoginProps> = ({ onLogin, apiError }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -29,7 +31,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       <form onSubmit={handleSubmit} className="login-form">
         <h2 className='title'>Entrar</h2>
 
-        {error && <p className="error">{error}</p>}
+        {(apiError || error) && <p className="error">{apiError || error}</p>}
 
         <div className="input-group">
           <label htmlFor="email">E-mail</label>
