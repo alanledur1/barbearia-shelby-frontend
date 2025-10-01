@@ -14,7 +14,7 @@ export const HomePage_2 = () => {
         loop
         muted
         playsInline
-        preload="none"
+        preload="auto"
       >
         <source src="/videos/shelby.webm" type="video/webm" />
       </video>

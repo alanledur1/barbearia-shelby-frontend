@@ -1,7 +1,7 @@
 .contato {
-    width: 100%;
-    height: auto;
-    padding: 20 150px;
+  width: 100%;
+  height: auto;
+  padding: 20px 40px;
     background-image: url(../../images/Imagem-contato.jpg);
     background-position: center;
     background-repeat: no-repeat;
@@ -17,7 +17,7 @@
       display: flex;
       font-family: 'Martian Mono';
       font-weight: 600;
-      font-size: 64px;
+  font-size: 48px;
       line-height: 100%;
       letter-spacing: 0%;
       text-align: center;
@@ -29,16 +29,17 @@
   
     .container {
       display: flex;
-      gap: 85px; /* Ajuste o espaço entre os cards para 85px */
+      gap: 32px; /* Ajuste o espaço entre os cards para ser responsivo */
       justify-content: space-between;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       padding-top: 15px;
     }
   
     .card {
-      padding: 50px 40px;
-      width: 450px;
-      height: 253px;
+      padding: 30px 20px;
+      width: 100%;
+      max-width: 450px;
+      height: auto;
       border-radius: 30px;
       text-align: center;
       margin-top: 30px;
@@ -61,9 +62,9 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
-      gap: 100px; /* Define o espaço exato entre os dois blocos */
+      gap: 40px;
       width: 100%;
-      padding: 150px;
+      padding: 40px 0;
     }
   
     .bloco-titulo {
@@ -74,14 +75,16 @@
   
     .conteudo-horizontal {
       display: flex;
-      gap: 200px; /* Espaço de 200px entre a localização e o formulário */
+      gap: 24px; /* Espaço responsivo entre a localização e o formulário */
       width: 100%;
       justify-content: space-between;
+      flex-wrap: wrap;
     }
   
     .localizacao {
-      width: 40%; 
-      height: 400px;
+      width: 100%; 
+      max-width: 560px;
+      height: 320px;
   
       iframe {
         width: 100%;
@@ -92,10 +95,11 @@
     }
   
     .formulario {
-      width: 40%;
-      background-color: rgba(255, 255, 255, 0.8);
+      width: 100%;
+      max-width: 560px;
+      background-color: rgba(255, 255, 255, 0.9);
       border-radius: 15px;
-      padding: 40px 20px;
+      padding: 24px 16px;
       box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
     }
   
@@ -147,5 +151,17 @@
         font-size: 20px;
         color: #f1f1f1;
         margin-right: 5px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contato {
+    padding: 20px;
+
+    .title { font-size: 32px; }
+    .container { gap: 18px; }
+    .contato-conteudo { padding: 20px 0; }
+    .conteudo-horizontal { gap: 12px; }
+    .card { margin: 12px 0; }
   }
 }

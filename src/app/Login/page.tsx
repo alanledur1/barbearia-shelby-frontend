@@ -4,10 +4,12 @@ import React, { useState } from 'react';
 import Login from '../../components/Login/login';
 import { useRouter } from 'next/navigation';
 import api from '@/services/api';
+import { useAuth } from '@/context/AuthContext';
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
   const [error, setError] = useState('');
+  const auth = useAuth();
   
   const handleLogin =  async (email: string, password: string) => {
     setError('');
@@ -17,17 +19,17 @@ const LoginPage: React.FC = () => {
         password,
       });
 
-      // Se o login deu certo, o backend retorna um token
-      const { token } = response.data;
+      // Se o login deu certo, o backend retorna um token e possivelmente o usuário
+      const { token, user } = response.data;
 
-      // Guardamos o token no localStorage para manter o usuario logado
-      localStorage.setItem('authToken', token);
+      // Usa o contexto para armazenar token/usuário
+      auth.login(token, user || null);
 
-      // Rediriciona para a página inicial
+      // Redireciona para a página inicial
       router.push('/');
-    } catch (err: any) {
-      const errorMessage = err.message?.data?.error || "Não foi possível fazer login. Tente novamente.";
-      setError(errorMessage);
+    } catch (err: unknown) {
+      // Para evitar uso de `any` e problemas de lint, usamos uma mensagem genérica
+      setError("Não foi possível fazer login. Tente novamente.");
       console.error(err);
     }
   };

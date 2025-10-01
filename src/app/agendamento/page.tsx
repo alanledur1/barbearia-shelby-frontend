@@ -5,18 +5,20 @@ import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import { ptBR } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/context/AuthContext'; // 1. Importar o hook de autenticação
 
 import AgendamentoForm from '@/components/Agendamento/AgendamentoForm';
-import styles from './agendamento-moderno.module.scss'; // Use o novo arquivo
+import styles from './agendamento-moderno.module.scss';
 import api from '@/services/api';
 
-// --- Tipos ---
+// (Tipos e outras funções permanecem os mesmos...)
 type Service = { id: number; name: string; duration: number; price: number; };
 type Appointment = { id: number; date: string; durationMinutes: number; };
 type TimeSlot = { time: string; available: boolean; };
-type Step = 1 | 2 | 3 | 4; // 1: Serviço, 2: Data/Hora, 3: Dados, 4: Sucesso
+type Step = 1 | 2 | 3 | 4;
 
 export default function PaginaAgendamento() {
+  const auth = useAuth(); // 2. Obter o estado de autenticação
   const [step, setStep] = useState<Step>(1);
   const [services, setServices] = useState<Service[]>([]);
   const [selectedService, setSelectedService] = useState<Service | undefined>();
@@ -54,11 +56,11 @@ export default function PaginaAgendamento() {
         '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00',
         '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30'
       ];
-      
+
       const slotsWithAvailability = allSlots.map(slot => {
         const slotStart = new Date(`${dateString}T${slot}:00.000-03:00`);
         const slotEnd = new Date(slotStart.getTime() + service.duration * 60000);
-        
+
         const isBooked = bookedAppointments.some(booked => {
           const bookedStart = new Date(booked.date);
           const bookedEnd = new Date(bookedStart.getTime() + booked.durationMinutes * 60000);
@@ -76,7 +78,7 @@ export default function PaginaAgendamento() {
       setIsLoading(false);
     }
   };
-  
+
   const handleServiceSelect = (service: Service) => {
     setSelectedService(service);
     setError(null);
@@ -102,17 +104,53 @@ export default function PaginaAgendamento() {
     const [hours, minutes] = selectedSlot.split(':').map(Number);
     const appointmentDateTime = new Date(selectedDate);
     appointmentDateTime.setHours(hours, minutes, 0, 0);
+
     try {
-      const clientResponse = await api.post('/clients', { name: data.cliente, email: data.email, phone: data.phone });
-      await api.post('/appointments', {
-        clientId: clientResponse.data.id,
-        serviceId: selectedService.id,
-        date: appointmentDateTime.toISOString(),
-      });
+      type BookingPayload = {
+        serviceId: number;
+        date: string;
+        client?: { name: string; email: string; phone: string };
+        clientId?: number;
+      };
+
+      let appointmentPayload: BookingPayload;
+
+      // 3. Verifica se o usuário está logado
+      if (auth.isAuthenticated && auth.user) {
+        // Se LOGADO, envia o clientId
+        appointmentPayload = {
+          serviceId: selectedService.id,
+          date: appointmentDateTime.toISOString(),
+          clientId: auth.user.clientId, // Envia o ID do usuário logado
+        };
+        console.log('Enviando agendamento para usuário logado:', appointmentPayload);
+      } else {
+        // Se NÃO LOGADO, envia o objeto client com os dados do formulário
+        appointmentPayload = {
+          serviceId: selectedService.id,
+          date: appointmentDateTime.toISOString(),
+          client: {
+            name: data.cliente,
+            email: data.email,
+            phone: data.phone,
+          }
+        };
+        console.log('Enviando agendamento para convidado:', appointmentPayload);
+      }
+
+      await api.post('/appointments', appointmentPayload);
       setStep(4);
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.error || 'Ocorreu um erro ao agendar.';
-      setError(errorMessage);
+
+    } catch (err: unknown) {
+      // (Lógica de erro permanece a mesma)
+      console.error('Erro ao criar agendamento:', err);
+      if (typeof err === 'object' && err !== null) {
+        const maybeErr = err as { response?: { data?: { error?: string } }; message?: string };
+        const serverMessage = maybeErr.response?.data?.error || maybeErr.message || 'Ocorreu um erro ao agendar.';
+        setError(serverMessage);
+      } else {
+        setError('Ocorreu um erro ao agendar.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -126,7 +164,7 @@ export default function PaginaAgendamento() {
     setSelectedSlot(null);
     setError(null);
   };
-  
+
   const motionVariants = {
     hidden: { opacity: 0, x: 30 },
     visible: { opacity: 1, x: 0 },
@@ -188,11 +226,20 @@ export default function PaginaAgendamento() {
             {step === 3 && selectedService && selectedDate && selectedSlot && (
               <motion.div key="step3" variants={motionVariants} initial="hidden" animate="visible" exit="exit">
                 <h2 className={styles.stepTitle}>3. Confirme Seus Dados</h2>
+                {error && <p style={{ color: '#f67366', textAlign: 'center', marginBottom: '1rem' }}>{error}</p>}
                 <div className={styles.summary}>
                   <p><strong>Serviço:</strong> {selectedService.name}</p>
                   <p><strong>Data:</strong> {selectedDate.toLocaleDateString('pt-BR')} às <strong>{selectedSlot}</strong></p>
                 </div>
-                <AgendamentoForm onBookingSubmit={handleBookingSubmit} isLoading={isLoading} />
+                <AgendamentoForm
+                  onBookingSubmitAction={handleBookingSubmit}
+                  isLoading={isLoading}
+                  initialValues={auth.isAuthenticated && auth.user ? {
+                    cliente: auth.user.name ?? '',
+                    email: auth.user.email ?? '',
+                    phone: ''
+                  } : undefined}
+                />
                 <button onClick={() => setStep(2)} className={styles.backButton} disabled={isLoading}>
                   Voltar
                 </button>

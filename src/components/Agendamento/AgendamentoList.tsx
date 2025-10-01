@@ -21,7 +21,7 @@ export default function AgendamentoList({ agendamentos }: Props) {
 
   // Checagem para quando a lista estiver vazia
   if (agendamentos.length === 0) {
-    return <p>Nenhum horário marcado no momento.</p>;
+    return <p style={{ marginTop: 24, marginLeft: 12 }}>Nenhum horário marcado no momento.</p>;
   }
 
   return (
