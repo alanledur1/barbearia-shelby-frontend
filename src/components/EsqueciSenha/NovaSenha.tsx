@@ -10,13 +10,21 @@ interface NovaSenhaProps {
 const NovaSenha: React.FC<NovaSenhaProps> = ({ email, onSubmit }) => {
   const [senha, setSenha] = useState('');
   const [confirmar, setConfirmar] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (senha !== confirmar) {
-      alert('As senhas não coincidem!');
+      setError('As senhas não coincidem!');
       return;
     }
+
+    if (senha.length < 6) {
+      setError('A senha deve ter pelo menos 6 caracteres!');
+      return;
+    }
+
+    setError('');
     onSubmit(email, senha);
   };
 
@@ -24,6 +32,9 @@ const NovaSenha: React.FC<NovaSenhaProps> = ({ email, onSubmit }) => {
     <div className={styles.recuperacaoContainer}>
       <form className={styles.recuperacaoForm} onSubmit={handleSubmit}>
         <h2 className={styles.titleN}>Definir Nova Senha</h2>
+
+        {error && <p className={styles.error}>{error}</p>}
+
         <div className={styles.inputGroup}>
           <label htmlFor="novaSenha">Nova Senha</label>
           <input
