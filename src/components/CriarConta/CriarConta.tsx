@@ -4,13 +4,14 @@ import React, { useState } from 'react';
 import './CriarConta.scss';
 
 interface CriarContaProps {
-  onRegister: (name: string, email: string, password: string) => void;
+  onRegister: (name: string, email: string, phone: string, password: string) => void;
+  apiError?: string; // Prop opcional para erro da API
 }
 
-const CriarConta: React.FC<CriarContaProps> = ({ onRegister }) => {
+const CriarConta: React.FC<CriarContaProps> = ({ onRegister, apiError }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [celular, setCelular] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -18,7 +19,7 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !email || !celular || !password || !confirmPassword) {
+    if (!name || !email || !phone || !password || !confirmPassword) {
       setError('Preencha todos os campos!');
       return;
     }
@@ -28,8 +29,8 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister }) => {
       return;
     }
 
-    if (celular.length !== 11) {
-      setError('O celular deve ter 11 dígitos!');
+    if (phone.length !== 11) {
+      setError('O phone deve ter 11 dígitos!');
       return;
     }
 
@@ -39,15 +40,15 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister }) => {
     }
 
     setError('');
-    onRegister(name, email, password);
+    onRegister(name, email, phone, password);
   };
 
   return (
     <div className="register-container">
       <form onSubmit={handleSubmit} className="register-form">
         <h2 className="title">Criar Conta</h2>
-
-        {error && <p className="error">{error}</p>}
+        {/* Mostra o erro da API se ele existir, senão mostra o erro local */}
+        {(apiError || error) && <p className="error">{apiError || error}</p>}
 
         <div className="input-group">
           <label htmlFor="name">Nome</label>
@@ -72,14 +73,14 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister }) => {
         </div>
 
         <div className="input-group">
-          <label htmlFor="celular">Celular</label>
+          <label htmlFor="phone">Celular</label>
           <input
-            id="celular"
+            id="phone"
             type="tel" 
             pattern="[0-9]*"
             placeholder="Digite seu celular"
-            value={celular}
-            onChange={(e) => setCelular(e.target.value)}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
           />
         </div>
 
