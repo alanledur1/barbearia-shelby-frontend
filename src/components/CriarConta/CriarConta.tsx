@@ -28,6 +28,16 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister }) => {
       return;
     }
 
+    if (celular.length !== 11) {
+      setError('O celular deve ter 11 dígitos!');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('A senha deve ter pelo menos 6 caracteres!');
+      return;
+    }
+
     setError('');
     onRegister(name, email, password);
   };
@@ -65,7 +75,8 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister }) => {
           <label htmlFor="celular">Celular</label>
           <input
             id="celular"
-            type="tel"
+            type="tel" 
+            pattern="[0-9]*"
             placeholder="Digite seu celular"
             value={celular}
             onChange={(e) => setCelular(e.target.value)}

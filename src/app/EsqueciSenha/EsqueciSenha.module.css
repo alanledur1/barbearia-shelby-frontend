@@ -1,0 +1,134 @@
+.recuperacaoContainer {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #b46e6e, #332424, #141212);
+}
+
+.recuperacaoForm {
+  position: relative;
+  background: #9b9797;
+  padding: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  width: 380px;
+  max-width: 380px;
+  box-shadow: 0 25px 45px #c55f5f66;
+  text-align: center;
+  backdrop-filter: blur(15px);
+  overflow: hidden;
+}
+
+.recuperacaoForm::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+}
+
+.recuperacaoForm:hover::before {
+  left: 120%;
+}
+
+.title {
+  color: #fff;
+  margin-bottom: 20px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 1px;
+  font-size: 28px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.titleN{
+  color: #fff;
+  margin-bottom: 50px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 1px;
+  font-size: 28px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.infoText{
+  color: #fff;
+  margin-bottom: 40px;
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.inputGroup {
+  position: relative;
+  margin-bottom: 35px;
+}
+
+.inputGroup input {
+  width: 100%;
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  outline: none;
+  border-radius: 35px;
+  font-size: 16px;
+  color: #fff;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.inputGroup input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.inputGroup input:focus {
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 20px rgba(58, 123, 213, 0.1);
+}
+
+.inputGroup label {
+  position: absolute;
+  top: -30%;
+  left: 20px;
+  transform: translateY(-50%);
+  color: #fff;
+  font-size: 16px;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.inputGroup input:focus + label,
+.inputGroup input:valid + label {
+  top: 0px;
+  left: 15px;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.btn {
+  width: 100%;
+  padding: 15px;
+  background: #3a7bd5;
+  border: none;
+  outline: none;
+  border-radius: 35px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.btn:hover {
+  background: #2a5bbf;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}

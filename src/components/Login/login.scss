@@ -37,19 +37,20 @@
     pointer-events: none;
   }
 
-  &:hover::before {
+  &:hover:hover:before {
     left: 120%;
   }
 
-  .login-form h2 {
-    margin: 40px;
+  .title {
+    color: #fff;
+    margin-bottom: 30px;
     font-weight: 600;
     text-align: center;
     letter-spacing: 1px;
     font-size: 28px;
-    color: #333;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
+
 
   .error {
     color: #e63946;
