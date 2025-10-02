@@ -62,6 +62,16 @@
   opacity: 0.9;
 }
 
+.infoTextB {
+  color: #fff;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
 .inputGroup {
   position: relative;
   margin-bottom: 35px;
@@ -77,7 +87,7 @@
 .inputGroup input {
   width: 100%;
   padding: 10px 15px;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.377);
   border: none;
   outline: none;
   border-radius: 35px;
@@ -138,4 +148,40 @@
   background: #2a5bbf;
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.otpGroup {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  margin: 1rem 0;
+}
+
+.otpInput {
+  width: 45px;
+  height: 55px;
+  text-align: center;
+  font-size: 1.4rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+.otpInput:focus {
+  border-color: #b46e6e;
+  box-shadow: 0 0 6px rgba(180, 110, 110, 0.4);
+}
+
+/* Responsivo */
+@media (max-width: 400px) {
+  .recuperacaoForm {
+    padding: 1.5rem;
+  }
+
+  .otpInput {
+    width: 40px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
 }
