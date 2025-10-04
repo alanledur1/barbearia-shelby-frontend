@@ -85,7 +85,7 @@ export default function Servicos() {
   return (
     <div className={styles.SobreNos}>
       <div className={styles.container}>
-        {servicos.map(({ icon, title, text, delay, image }, idx) => (
+        {servicos.map(({ icon, title, text, delay }, idx) => (
           <motion.div
             key={title}
             className={`${styles.flipCard} ${activeCards.includes(idx) ? styles.active : ''}`}

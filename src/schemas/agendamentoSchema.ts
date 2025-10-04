@@ -42,17 +42,17 @@ export const bookingSchema = z.object({
       .max(11, { message: 'O telefone deve ter no máximo 11 dígitos.' })
     // Validacao customizada para formatos brasileiros de telefone
     .refine(phone => {
-
-      // Se tem 11 dígitos, precisa ser um celular (iniciar com 9 após o DDD)
+      // Se tem 11 dígitos, precisa ser um celular (após o DDD inicia com 9)
       if (phone.length === 11) {
         return phone.substring(2).startsWith('9');
       }
 
       // Se tem 10 dígitos, precisa ser um fixo (NÃO pode iniciar com 9 após o DDD)
       if (phone.length === 10) {
-        return phone.substring(2).startsWith('9');
+        return !phone.substring(2).startsWith('9');
       }
-      // Se não tiver 10 ou 11, já falha no min/max, mas é uma segurança extra
+
+      // Caso contrário, inválido
       return false;
     }, { message: 'Número de telefone inválido.'})
   ),
