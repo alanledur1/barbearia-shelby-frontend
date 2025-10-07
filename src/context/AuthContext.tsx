@@ -5,9 +5,10 @@ import { useRouter } from 'next/navigation';
 
 // Tipos para os dados do usuário e do contexto
 interface User {
-    clientId: number;
+    id: number;
     name: string;
     email?: string;
+    userType: 'admin' | 'client';
 }
 
 interface AuthContextType {

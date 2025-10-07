@@ -121,7 +121,7 @@ export default function PaginaAgendamento() {
         appointmentPayload = {
           serviceId: selectedService.id,
           date: appointmentDateTime.toISOString(),
-          clientId: auth.user.clientId, // Envia o ID do usuário logado
+          clientId: auth.user.id, // Envia o ID do usuário logado
         };
         console.log('Enviando agendamento para usuário logado:', appointmentPayload);
       } else {

@@ -14,22 +14,34 @@ const LoginPage: React.FC = () => {
   const handleLogin =  async (email: string, password: string) => {
     setError('');
     try {
-      const response = await api.post('/clients/login', {
+      // 1. A chamada para a API unificada
+      const response = await api.post('/login', {
         email,
         password,
       });
 
-      // Se o login deu certo, o backend retorna um token e possivelmente o usuário
-      const { token, user } = response.data;
+      // 2. Desestruture a resposta da API
+      const { token, userType, admin, client } = response.data;
+
+      // 3. Determine os dados base do usuário
+      const baseUser = userType === 'admin' ? admin : client;
+      // 4. Crie o objeto de usuário final, adicionando o userType
+      const userData = { ...baseUser, userType };
+    
 
       // Usa o contexto para armazenar token/usuário
-      auth.login(token, user || null);
+      auth.login(token, userData || null);
 
-      // Redireciona para a página inicial
-      router.push('/');
+      // 6. Redireciona com base no tipo de usuário
+      if (userType === 'admin') {
+        router.push('/barber');
+      } else {
+        router.push('/')
+      }
+
     } catch (err: unknown) {
       // Para evitar uso de `any` e problemas de lint, usamos uma mensagem genérica
-      setError("Não foi possível fazer login. Tente novamente.");
+      setError("Email ou senha inválidos. Tente novamente.");
       console.error(err);
     }
   };
