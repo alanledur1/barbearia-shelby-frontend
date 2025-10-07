@@ -130,9 +130,9 @@ const isAdmin = Boolean(user && (user.userType === 'admin'));
                       </div>
                     </div>
                     {isAdmin ? (
-                      <Link href="/barber" className="navbar_dropdownItem">Minha Dashboard</Link>
+                      <Link href="/barber" className="navbar__dropdownItemDash navbar__dropdownItem--dashboard">Minha Dashboard</Link>
                     ) : (
-                      <Link href="/meus-servicos" className="navbar__dropdownItem">Meus Serviços</Link>
+                      <Link href="/meus-servicos" className="navbar__dropdownItemDash">Meus Serviços</Link>
                     )}
 
                     <button className="navbar__dropdownItem" onClick={() => { auth.logout(); setOpen(false); }}>Sair</button>
