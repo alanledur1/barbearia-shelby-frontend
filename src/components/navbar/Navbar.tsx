@@ -78,6 +78,9 @@ export const Navbar = () => {
     return pathname === href;
   };
 
+  // Detecta se o usuário é admin
+const user = auth?.user;
+const isAdmin = Boolean(user && (user.userType === 'admin'));
   return (
     <header>
       <nav className="navbar" role="navigation" aria-label="Menu principal">
@@ -126,7 +129,12 @@ export const Navbar = () => {
                         <div className="navbar__userEmail">{auth.user?.email || ''}</div>
                       </div>
                     </div>
-                    <Link href="/meus-servicos" className="navbar__dropdownItem">Meus Serviços</Link>
+                    {isAdmin ? (
+                      <Link href="/barber" className="navbar_dropdownItem">Minha Dashboard</Link>
+                    ) : (
+                      <Link href="/meus-servicos" className="navbar__dropdownItem">Meus Serviços</Link>
+                    )}
+
                     <button className="navbar__dropdownItem" onClick={() => { auth.logout(); setOpen(false); }}>Sair</button>
                   </motion.div>
                 )}

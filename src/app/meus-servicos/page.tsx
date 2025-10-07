@@ -19,7 +19,7 @@ export default function MeusServicosPage() {
       setLoading(true);
       setError(null);
       try {
-        const response = await api.get(`/appointments?clientId=${auth.user.clientId}`, {
+        const response = await api.get(`/appointments?clientId=${auth.user.id}`, {
           headers: { Authorization: `Bearer ${auth.token}` }
         });
 
