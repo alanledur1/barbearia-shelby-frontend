@@ -3,25 +3,27 @@
 
 import React from 'react';
 // MUDANÇA: Importando 'Service' do hook
-import { Appointment, Service, useBarberData } from '@/hooks/useBarberData';
+import { Appointment, Service } from '@/hooks/useBarberData';
 import AppointmentCard from './AppointmentCard';
 import styles from './styles.module.css';
 
 type Props = {
-  appointments: Appointment[];
-  services: Service[]; // MUDANÇA: Recebendo a lista de serviços
+  appointments?: Appointment[] | null;
+  services?: Service[] | null; // agora opcional
 };
 
-export default function AppointmentsList({ appointments, services }: Props) {
-  if (appointments.length === 0) {
+export default function AppointmentsList({ appointments = [], services = [] }: Props) {
+  if (!Array.isArray(appointments) || appointments.length === 0) {
     return <div className={styles.empty}>Nenhum agendamento para hoje.</div>;
   }
+
+  // garante que services é array ao usar find
+  const svcList = Array.isArray(services) ? services : [];
 
   return (
     <div className={styles.list}>
       {appointments.map(a => {
-        // MUDANÇA: Encontrando o serviço correspondente ao agendamento
-        const service = services.find(s => s.id === a.serviceId);
+        const service = svcList.find(s => s.id === a.serviceId) ?? undefined;
         return (
           <AppointmentCard key={a.id} appointment={a} service={service} />
         );
