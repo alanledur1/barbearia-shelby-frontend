@@ -79,8 +79,8 @@ export const Navbar = () => {
   };
 
   // Detecta se o usuário é admin
-const user = auth?.user;
-const isAdmin = Boolean(user && (user.userType === 'admin'));
+  const user = auth?.user;
+  const isAdmin = Boolean(user && (user.userType === 'admin'));
   return (
     <header>
       <nav className="navbar" role="navigation" aria-label="Menu principal">
@@ -148,13 +148,13 @@ const isAdmin = Boolean(user && (user.userType === 'admin'));
 
               <Link href="/Login" className="navbar__login">Entrar</Link>
 
-              <div className="container" >
-                <Link href="/CriarConta" className="navbar__signup">Crie uma conta</Link>
-                <Link href="/CriarConta">
-                  <button className="button">
-                    <span className="icon"><FaArrowRight /></span>
-                  </button>
-                </Link>
+              <div className='container'>
+                <button className='cssbuttons-io-button'>
+                  <Link href="/CriarConta" className="navbar__signup">Crie uma conta</Link>
+                  <div className='icon'>
+                    <Link className='icon' href="/CriarConta"><FaArrowRight /></Link>
+                  </div>
+                </button>
               </div>
 
               <AnimatePresence>

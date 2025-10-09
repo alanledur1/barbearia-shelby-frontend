@@ -9,7 +9,7 @@ export default function Home() {
       <HomePage />
       <div id="topo"/>
       <HomePage_2 />
-      <SobreNos />
+      <SobreNos/>
       <Contato />
     </div>
   );

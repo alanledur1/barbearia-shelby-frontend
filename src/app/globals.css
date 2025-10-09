@@ -5,13 +5,10 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: rgb(0, 0, 0);
-    --foreground: #ededed;
-  }
+:root {
+  --background: #0b0b0b;
+  --foreground: #ffffff;
 }
-
 /* Reset básico e box-sizing */
 * {
   box-sizing: border-box;

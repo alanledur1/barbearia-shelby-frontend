@@ -73,10 +73,13 @@
   }
 
   @media (max-width: 768px) {
-    padding: 20px;
+    padding: 25px;
     height: auto;
     .title { font-size: 28px; }
     .text-bottom { font-size: 28px; }
-    .card { margin-bottom: 12px; }
+    .card { margin-bottom: 10px; }
+    .text-bottom {
+      display: none;
+    } 
   }
 }
