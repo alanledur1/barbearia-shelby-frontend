@@ -1,0 +1,98 @@
+// src/app/barber/components/BarberDashboard/EditServiceModal.module.scss
+
+// Variáveis para cores, facilitando a manutenção
+$brand-color: #f67366;
+$modal-bg: #1e1e1e;
+$text-color: #f0f0f0;
+$text-muted: #a0a0a0;
+$input-bg: #2a2a2a;
+$border-color: #3a3a3a;
+
+// Estilo base para os botões (evita repetição de código)
+%button-base {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+// Estilos principais com aninhamento
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  .modal {
+    background-color: $modal-bg;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    color: $text-color;
+
+    h2 {
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .inputGroup {
+      margin-bottom: 1rem;
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: $text-muted;
+        font-size: 0.9rem;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.75rem;
+        background-color: $input-bg;
+        border: 1px solid $border-color;
+        border-radius: 8px;
+        color: $text-color;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+        &:focus {
+          border-color: $brand-color;
+          box-shadow: 0 0 0 3px rgba($brand-color, 0.25);
+        }
+      }
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 2rem;
+
+      .saveButton {
+        @extend %button-base;
+        background-color: $brand-color;
+        color: white;
+      }
+
+      .cancelButton {
+        @extend %button-base;
+        background-color: $border-color;
+        color: $text-color;
+      }
+    }
+  }
+}

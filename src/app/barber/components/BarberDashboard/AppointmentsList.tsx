@@ -5,7 +5,7 @@ import React from 'react';
 // MUDANÇA: Importando 'Service' do hook
 import { Appointment, Service } from '@/hooks/useBarberData';
 import AppointmentCard from './AppointmentCard';
-import styles from './styles.module.css';
+import styles from './styles.module.scss';
 
 type Props = {
   appointments?: Appointment[] | null;

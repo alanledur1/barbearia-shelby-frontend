@@ -1,33 +1,27 @@
-// src/app/barber/components/BarberDashboard/AppointmentCard.tsx
 'use client';
 
 import React from 'react';
-// MUDANÇA: Importando 'Service'
 import { Appointment, Service, useBarberData } from '@/hooks/useBarberData';
-import styles from './styles.module.css';
-// MUDANÇA: Importando ícones
-import { FaUser, FaClock, FaHandScissors, FaInfoCircle } from 'react-icons/fa';
+import styles from './styles.module.scss';
+import { FaClock, FaHandScissors, FaInfoCircle } from 'react-icons/fa';
 
 type Props = {
   appointment: Appointment;
-  service?: Service; // MUDANÇA: Serviço agora é uma prop
+  service?: Service;
 };
 
 export default function AppointmentCard({ appointment, service }: Props) {
   useBarberData();
-  // ... (função de updateStatus pode continuar a mesma)
 
   const formatDate = (iso?: string) => {
     if (!iso) return 'Data não definida';
     const d = new Date(iso);
-    // Formato mais completo para a dashboard
     return d.toLocaleString('pt-BR', { day: '2-digit', month: 'long', hour: '2-digit', minute: '2-digit' });
   };
   
   const status = appointment.status?.toUpperCase() || 'CONFIRMED';
 
   return (
-    // MUDANÇA: Estrutura do card completamente refeita
     <article className={styles.appointmentCard}>
       <div className={styles.cardHeader}>
         <div>

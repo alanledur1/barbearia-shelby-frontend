@@ -12,7 +12,9 @@ export type Appointment = {
   status?: 'pending' | 'completed' | 'cancelled';
 };
 
-export type Service = { id: number; name: string; duration: number; price: number; };
+export type Service = { id: number; name: string; duration: number; price: number; description?: string; };
+
+export type UpdateServiceData = { name?: string; duration?: number; price?: number; description?: string };
 
 export function useBarberData() {
   const auth = useAuth();
@@ -45,17 +47,47 @@ export function useBarberData() {
   }, [getHeaders]);
 
   const addService = useCallback(
-    async (service: { name: string; duration: number; price: number }) => {
+    async (service: { name: string; duration: number; price: number; description?: string }) => {
       setLoading(true);
       setError(null);
       try {
-        const headers = getHeaders();
-        const res = await api.post('/services', service, { headers });
-        if (res?.data) setServices(prev => [...prev, res.data]);
-        return res?.data;
+        // validação simples no cliente
+        if (!service.name || !service.name.trim()) {
+          throw new Error('Nome do serviço é obrigatório.');
+        }
+        if (service.duration <= 0) {
+          throw new Error('Duração inválida.');
+        }
+        if (service.price < 0) {
+          throw new Error('Preço inválido.');
+        }
+
+        const headers = {
+          ...getHeaders(),
+          'Content-Type': 'application/json',
+        };
+
+        console.debug('[addService] payload:', service, 'headers:', headers);
+
+        // envia description também (conforme backend)
+        const res = await api.post('/services', {
+          name: service.name,
+          description: service.description ?? '',
+          price: service.price,
+          duration: service.duration,
+        }, { headers });
+
+        if (res?.data) {
+          setServices(prev => [...prev, res.data]);
+          return res.data;
+        }
+
+        return null;
       } catch (err) {
-        console.error(err);
-        setError('Erro ao criar serviço.');
+        const axiosResp = err?.response?.data;
+        const backendMsg = axiosResp?.message || axiosResp || err.message;
+        console.error('[addService] erro:', err, 'backend:', axiosResp);
+        setError(String(backendMsg ?? 'Erro ao criar serviço.'));
         throw err;
       } finally {
         setLoading(false);
@@ -68,14 +100,21 @@ export function useBarberData() {
     async (id: number) => {
       setLoading(true);
       setError(null);
+
       try {
         const headers = getHeaders();
         await api.delete(`/services/${id}`, { headers });
         setServices(prev => prev.filter(s => s.id !== id));
       } catch (err) {
         console.error(err);
-        setError('Erro ao excluir serviço.');
-        throw err;
+        // 1. Verifica se o erro veio da API (Axios) e se o status é 409 (Conflito)
+        if (err.response && err.response.status === 409) {
+          // 2. Se for, usa a mensagem específica que o backend enviou
+          setError(err.response.data.error || 'Este serviço não pode ser excluído pois está em uso.');
+        } else {
+          // 3. Para qualquer outro tipo de erro, mostra a mensagem genérica
+          setError('Erro ao excluir serviço. Tente novamente mais tarde.');
+        }
       } finally {
         setLoading(false);
       }
@@ -104,6 +143,31 @@ export function useBarberData() {
     [getHeaders]
   );
 
+  const updateService = useCallback(
+    async (id: number, data: UpdateServiceData) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const headers = getHeaders();
+        // Usamos api.put para a rota de atualizacao
+        const res = await api.put(`/services/${id}`, data, { headers });
+
+        // Atualiza a lista de servicos no estado local para refletir a mudanca instantaneamente
+        if (res?.data) {
+          setServices(prev => prev.map(s => (s.id === id ? res.data : s)));
+        }
+        return res?.data;
+      } catch (err) {
+        console.error(err);
+        setError('Erro ao atualizar o serviço.');
+        throw err; 
+      } finally {
+        setLoading(false);
+      }
+    },
+    [getHeaders]
+  );
+
   useEffect(() => {
     fetchAll();
   }, [fetchAll]);
@@ -118,5 +182,7 @@ export function useBarberData() {
     addService,
     deleteService,
     updateAppointmentStatus,
+    updateService,
+    setError,
   };
 }

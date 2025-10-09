@@ -1,0 +1,372 @@
+// src/app/barber/components/BarberDashboard/styles.module.scss
+
+// === Variáveis ===
+$brand-color: #f67366;
+$dark-bg: #121212;
+$card-bg: #1e1e1e;
+$text-color: #f0f0f0;
+$text-muted: #a0a0a0;
+$border-color: #3a3a3a;
+$success-color: #28a745;
+$cancelled-color: #dc3545;
+$confirmed-color: #0d6efd;
+
+// === Layout Principal ===
+.container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Poppins', sans-serif;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+// === Lista de Agendamentos ===
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+// === Card de Agendamento ===
+.appointmentCard {
+  background-color: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid $border-color;
+  }
+
+  .clientInfo {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: $text-color;
+  }
+
+  .clientContact {
+    display: block;
+    font-size: 0.9rem;
+    color: $text-muted;
+    font-weight: 400;
+  }
+
+  .cardBody {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .infoRow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: $text-muted;
+
+    svg {
+      color: $brand-color;
+    }
+
+    strong {
+      color: $text-color;
+      font-weight: 500;
+    }
+  }
+
+  .cardFooter {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+  }
+}
+
+// === Botões de Ação do Card ===
+.actionButton {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.completeButton {
+  @extend .actionButton;
+  background-color: $success-color;
+  color: white;
+
+  &:hover {
+    background-color: darken($success-color, 10%);
+  }
+}
+
+.cancelButton {
+  @extend .actionButton;
+  background-color: $cancelled-color;
+  color: white;
+
+  &:hover {
+    background-color: darken($cancelled-color, 10%);
+  }
+}
+
+// === Status Pills ===
+.status {
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.statusCONFIRMED {
+  background-color: $confirmed-color;
+}
+
+.statusCOMPLETED {
+  background-color: $success-color;
+}
+
+.statusCANCELLED {
+  background-color: $cancelled-color;
+}
+
+// === Sidebar de Serviços ===
+.sidebar {
+  background-color: $card-bg;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid $border-color;
+  position: sticky;
+  top: 120px;
+
+  h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid $border-color;
+  }
+
+  .serviceList {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .serviceItem {
+    font-size: 0.95rem;
+    color: $text-muted;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    strong {
+      color: $text-color;
+      font-weight: 500;
+    }
+  }
+
+  .serviceActions button {
+    background: none;
+    border: none;
+    color: $text-muted;
+    cursor: pointer;
+    margin-left: 0.5rem;
+    transition: color 0.2s ease;
+  }
+
+  .editButton:hover {
+    color: $confirmed-color;
+  }
+
+  .deleteButton:hover {
+    color: $cancelled-color;
+  }
+}
+
+// === Mensagens e Loading ===
+.message,
+.error,
+.empty {
+  text-align: center;
+  padding: 2rem;
+  color: $text-muted;
+}
+
+.error {
+  color: $cancelled-color;
+}
+
+// === Header ===
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  color: $text-color;
+
+  p {
+    color: $text-muted;
+  }
+}
+
+// Botão 'Recarregar' do Header
+.refreshButton {
+  background-color: $brand-color;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: darken($brand-color, 10%);
+  }
+}
+
+// === Botão Animado 'Adicionar' (do uiverse.io) ===
+.addButton {
+  position: relative;
+  width: 150px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border: 1px solid #34974d;
+  background-color: #3aa856;
+  transition: all 0.3s;
+
+  .buttonText {
+    transform: translateX(30px);
+    color: #fff;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+
+  .buttonIcon {
+    position: absolute;
+    transform: translateX(109px);
+    height: 100%;
+    width: 39px;
+    background-color: #34974d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+  }
+
+  .svg {
+    width: 30px;
+    stroke: #fff;
+  }
+
+  &:hover {
+    background: #34974d;
+
+    .buttonText {
+      color: transparent;
+    }
+
+    .buttonIcon {
+      width: 148px;
+      transform: translateX(0);
+    }
+  }
+
+  &:active {
+    border: 1px solid #2e8644;
+
+    .buttonIcon {
+      background-color: #2e8644;
+    }
+  }
+}
+.addServiceForm {
+  display: flex;
+  flex-wrap: wrap; // Permite que os itens quebrem a linha em telas menores
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  
+  input, .durationSelect {
+    flex-grow: 1;
+    padding: 0.75rem;
+    background-color: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+    color: #f0f0f0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+  }
+}
+
+// Estilo específico para o select
+.durationSelect {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a0a0a0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 1em;
+  padding-right: 2.5rem; // Espaço para a seta
+}
+
+// ... (final do arquivo styles.module.scss)
+
+/* === Estilo da Notificação (Toast) === */
+.toast {
+  position: fixed;
+  top: 100px; /* Abaixo da navbar */
+  right: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  z-index: 2000;
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  animation: fadeInOut 5s forwards ease-in-out;
+}
+
+.toastError {
+  background-color: $cancelled-color; // Reutilizando sua variável de cor de erro
+  color: white;
+  border: 1px solid darken($cancelled-color, 10%);
+}
+
+// Animação para a notificação aparecer e desaparecer
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  10%, 90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
