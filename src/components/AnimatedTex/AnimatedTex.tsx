@@ -1,46 +1,60 @@
 'use client';
-import { motion } from 'framer-motion';
+import React from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 
 export const AnimatedText = () => {
   const text = "Seja O Protagonista Da Sua Própria História.";
   const destaquePalavras = ['Protagonista', 'História'];
 
-  // Geração de spans com destaque nas palavras definidas
+  const reduce = useReducedMotion();
+
+  const letterVariants = reduce
+    ? { hidden: { y: 0, opacity: 1 }, visible: { y: 0, opacity: 1 } }
+    : { hidden: { y: 50, opacity: 0 }, visible: { y: 0, opacity: 1 } };
+
+  const containerVariants = {
+    visible: {
+      transition: {
+        staggerChildren: reduce ? 0 : 0.03,
+      },
+    },
+  };
+
   const renderSpans = () => {
     const spans = [];
     let currentWord = '';
+    let keyCounter = 0;
 
     for (let i = 0; i < text.length; i++) {
       const char = text[i];
       currentWord += char;
 
-      // Verifica se chegou ao fim de uma palavra (espaço ou pontuação)
       const isEndOfWord = char === ' ' || i === text.length - 1 || /[.,!?;]/.test(char);
 
       if (isEndOfWord) {
-        // Remove pontuação temporariamente para checar
         const cleanWord = currentWord.trim().replace(/[.,!?;]/g, '');
 
-        const isHighlighted = destaquePalavras.includes(cleanWord);
+        // comparação case-insensitive para maior robustez
+        const isHighlighted = destaquePalavras.some(
+          p => p.toLowerCase() === cleanWord.toLowerCase()
+        );
 
-        for (let j = 0; j < currentWord.length; j++) {
+        for (let j = 0; j < currentWord.length; j++, keyCounter++) {
           const letter = currentWord[j];
           spans.push(
             <motion.span
-              key={`${i}-${j}`}
-              variants={{
-                hidden: { y: 50, opacity: 0 },
-                visible: { y: 0, opacity: 1 },
-              }}
-              transition={{ duration: 0.5, ease: 'easeOut' }}
-              style={{ display: 'inline-block' }}
+              key={keyCounter}
+              variants={letterVariants}
+              transition={reduce ? {} : { duration: 0.45, ease: 'easeOut' }}
               className={isHighlighted ? 'red' : ''}
+              style={{ whiteSpace: 'pre-wrap' }}
             >
               {letter === ' ' ? '\u00A0' : letter}
             </motion.span>
           );
         }
-
+        // depois de cada palavra, adiciona um "espaço real" que pode quebrar linha
+        spans.push(<span key={`space-${keyCounter++}`}> </span>);
         currentWord = '';
       }
     }
@@ -54,13 +68,7 @@ export const AnimatedText = () => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.5 }}
-      variants={{
-        visible: {
-          transition: {
-            staggerChildren: 0.03,
-          },
-        },
-      }}
+      variants={containerVariants}
     >
       {renderSpans()}
     </motion.div>

@@ -47,7 +47,7 @@ export const Footer = () => {
           <h4>Explore</h4>
           <ul>
             <li><a href='#sobre'>Sobre nós</a></li>
-            <li><a href='#servicos'>Nossos serviços</a></li>
+            <li><a href='/Servicos'>Nossos serviços</a></li>
             <li><a href='#contato'>Contato</a></li>
           </ul>
         </div>

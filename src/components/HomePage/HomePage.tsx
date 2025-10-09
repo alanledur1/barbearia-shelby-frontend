@@ -5,7 +5,7 @@ import { gsap } from 'gsap';
 import { Preloader } from '../Preloader/Preloader';
 import './HomePage.scss';
 import { FaClock, FaMapMarkerAlt, FaExternalLinkAlt } from 'react-icons/fa';
-import Link from 'next/link'; 
+import Link from 'next/link';
 
 export const HomePage = () => {
   const homeRef = useRef<HTMLDivElement>(null);
@@ -37,14 +37,11 @@ export const HomePage = () => {
       {loading && <Preloader onComplete={() => setLoading(false)} />}
       <div className={`HomePage ${loading ? 'hidden' : 'visible'}`} ref={homeRef}>
         <h1 className="h1 animate-left">SHELBY<br />BARBEARIA</h1>
-        <Link href="/agendamento">
-          <button className="button animate-left">Agendar Horário</button>
-        </Link>
 
         {/* Info Box adicionada aqui */}
         <div className="info-box animate-left">
           <h4><FaClock style={{ marginRight: '8px' }} />Horários</h4>
-          <p>Seg a Sex: 9h - 20h<br />Sáb: 9h - 14h</p>
+          <p>Ter a Sex: 9h - 20h<br />Sáb: 9h - 14h</p>
 
           <h4><FaMapMarkerAlt style={{ marginRight: '8px' }} />Localização</h4>
           <p>Rua Esperanto, 203 - Quilombo</p>
@@ -53,6 +50,10 @@ export const HomePage = () => {
             Ver no mapa <FaExternalLinkAlt style={{ marginLeft: '6px' }} />
           </a>
         </div>
+
+        <Link href="/agendamento">
+          <button className="button animate-left">Agendar Horário</button>
+        </Link>
 
         <div
           className="scroll-down-indicator"

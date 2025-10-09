@@ -2,6 +2,21 @@
   width: 85%;
   padding: 5rem;
   margin: 0 auto;
+
+  @media (max-width: 1024px) {
+    width: 90%;
+    padding: 4rem 2rem;
+  }
+
+  @media (max-width: 768px) {
+    width: 95%;
+    padding: 3rem 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    padding: 2rem 1rem;
+  }
 }
 
 .container {
@@ -9,6 +24,21 @@
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 3rem;
   justify-content: center;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.8rem;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+  }
 }
 
 /* FLIP CARD */
@@ -20,7 +50,7 @@
   position: relative;
 
   &:hover .flipInner {
-    transform: rotateY(180deg); // <- Efeito de flip
+    transform: rotateY(180deg);
   }
 
   &:hover .image {
@@ -33,6 +63,15 @@
     opacity: 1;
     transform: translateY(0);
   }
+
+  @media (max-width: 768px) {
+    aspect-ratio: 4 / 3;
+  }
+
+  @media (max-width: 480px) {
+    aspect-ratio: auto;
+    min-height: 260px; /* ✅ altura mínima fixa para evitar o “pulo” */
+  }
 }
 
 .flipInner {
@@ -44,6 +83,7 @@
   transition-timing-function: ease;
   transform-style: preserve-3d;
   position: relative;
+  transform-origin: center center; /* garante giro no eixo central */
 }
 
 .flipFront,
@@ -71,13 +111,6 @@
   z-index: 2;
 }
 
-.image {
-  max-width: 80px;
-  max-height: 80px;
-  margin-bottom: 1rem;
-}
-
-
 .flipBack {
   background-color: #111;
   transform: rotateY(180deg);
@@ -92,10 +125,34 @@
   }
 }
 
+.image {
+  max-width: 80px;
+  max-height: 80px;
+  margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    max-width: 70px;
+    max-height: 70px;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 55px;
+    max-height: 55px;
+  }
+}
+
 .icon {
   font-size: 2.5rem;
   color: #F67366;
   margin-bottom: 0.8rem;
+
+  @media (max-width: 768px) {
+    font-size: 2.2rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.8rem;
+  }
 }
 
 .title {
@@ -103,10 +160,26 @@
   font-weight: bold;
   color: #fff;
   margin-bottom: 0.5rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.15rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 }
 
 .text {
   font-size: 0.95rem;
   color: #ccc;
   line-height: 1.4;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+  }
 }

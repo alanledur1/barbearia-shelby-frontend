@@ -1,29 +1,128 @@
-/* Preloader.scss */
+/* ============================== */
+/*          PRELOADER             */
+/* ============================== */
 
 .preloader__overlay {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0; /* substitui top, left, width, height */
   width: 100%;
   height: 100%;
-  background: black;
+  background: radial-gradient(circle at center, #000 60%, #111 100%);
   z-index: 9999;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   transform: scaleY(1);
   transform-origin: center center;
+  overflow: hidden;
+  transition: opacity 0.10s ease, transform 0.10s ease;
+  padding: 0; /* garante sem deslocamento */
+  margin: 0;
+
+  /* Corrige variações de viewport mobile */
+  min-height: 100dvh; /* usa altura dinâmica real da tela */
+  height: 100dvh;
+
+  &.fade-out {
+    opacity: 0;
+    transform: scaleY(0);
+    pointer-events: none;
+  }
 }
 
+/* ===== Texto ===== */
 .preloader__text {
-  color: white;
-  font-size: 3rem;
+  color: #fff;
   font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
   letter-spacing: 4px;
-  animation: blink 1s infinite;
+  animation: blink 1.2s infinite ease-in-out;
+  text-transform: uppercase;
+  text-align: center;
+  user-select: none;
+  transition: font-size 0.3s ease;
+  font-size: 35px;
+  margin: 0; /* garante centralização perfeita */
+  line-height: 1.2;
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(0.98);
+  }
+}
+
+/* ===== Spinner opcional ===== */
+.preloader__spinner {
+  margin-top: 1.5rem;
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================== */
+/*        RESPONSIVIDADE          */
+/* ============================== */
+
+/* 1024px ↓ (notebooks/tablets) */
+@media (max-width: 1024px) {
+  .preloader__text {
+    font-size: 2.4rem;
+    letter-spacing: 3px;
+  }
+
+  .preloader__spinner {
+    width: 55px;
+    height: 55px;
+  }
+}
+
+/* 768px ↓ (tablets verticais) */
+@media (max-width: 768px) {
+  .preloader__text {
+    font-size: 2rem;
+    letter-spacing: 2px;
+  }
+
+  .preloader__spinner {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* 480px ↓ (celulares pequenos, incluindo 420px) */
+@media (max-width: 480px) {
+  .preloader__overlay {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .preloader__text {
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+    margin-right: 60px;
+    margin-bottom: 50px;
+  }
+
+  .preloader__spinner {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 60px;
+    margin-right: 60px;
+  }
 }
