@@ -14,7 +14,7 @@ type Props = {
 };
 
 export default function AppointmentCard({ appointment, service }: Props) {
-  const { setAppointments } = useBarberData();
+  useBarberData();
   // ... (função de updateStatus pode continuar a mesma)
 
   const formatDate = (iso?: string) => {
