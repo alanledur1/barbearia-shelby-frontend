@@ -10,6 +10,7 @@ $border-color: #3a3a3a;
 $success-color: #28a745;
 $cancelled-color: #dc3545;
 $confirmed-color: #0d6efd;
+$input-bg: #2a2a2a;
 
 // === Layout Principal ===
 .container {
@@ -59,6 +60,12 @@ $confirmed-color: #0d6efd;
     font-size: 1.1rem;
     font-weight: 600;
     color: $text-color;
+
+    .notesFor {
+      font-weight: 400;
+      font-size: 0.9rem;
+      color: $text-muted;
+    }
   }
 
   .clientContact {
@@ -229,6 +236,35 @@ $confirmed-color: #0d6efd;
   p {
     color: $text-muted;
   }
+
+  .overdueBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: $cancelled-color;
+    color: white;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-left: 0.75rem;
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba($cancelled-color, 0.7);
+    }
+
+    70% {
+      box-shadow: 0 0 0 10px rgba($cancelled-color, 0);
+    }
+
+    100% {
+      box-shadow: 0 0 0 0 rgba($cancelled-color, 0);
+    }
+  }
 }
 
 // Botão 'Recarregar' do Header
@@ -304,13 +340,15 @@ $confirmed-color: #0d6efd;
     }
   }
 }
+
 .addServiceForm {
   display: flex;
   flex-wrap: wrap; // Permite que os itens quebrem a linha em telas menores
   gap: 0.75rem;
   margin-bottom: 1.5rem;
-  
-  input, .durationSelect {
+
+  input,
+  .durationSelect {
     flex-grow: 1;
     padding: 0.75rem;
     background-color: #2a2a2a;
@@ -339,7 +377,8 @@ $confirmed-color: #0d6efd;
 /* === Estilo da Notificação (Toast) === */
 .toast {
   position: fixed;
-  top: 100px; /* Abaixo da navbar */
+  top: 100px;
+  /* Abaixo da navbar */
   right: 20px;
   padding: 1rem 1.5rem;
   border-radius: 8px;
@@ -361,12 +400,142 @@ $confirmed-color: #0d6efd;
     opacity: 0;
     transform: translateY(-20px);
   }
-  10%, 90% {
+
+  10%,
+  90% {
     opacity: 1;
     transform: translateY(0);
   }
+
   100% {
     opacity: 0;
     transform: translateY(-20px);
+  }
+}
+
+/* === Paginação === */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  color: $text-muted;
+
+  button {
+    background-color: $input-bg;
+    color: $text-color;
+    border: 1px solid $border-color;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover:not(:disabled) {
+      background-color: lighten($input-bg, 5%);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.dateGroup {
+  margin-bottom: 2rem;
+}
+
+.dateHeader {
+  color: $brand-color;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid $border-color;
+}
+
+.overdueBadge {
+  // Transforma o span em um botão clicável
+  border: none;
+  cursor: pointer;
+  
+  // Adiciona um feedback visual quando o filtro está ativo
+  &.active {
+    background-color: darken($cancelled-color, 15%);
+    animation: none; // Pausa a animação de pulso quando ativo
+    box-shadow: 0 0 0 3px rgba($cancelled-color, 0.5);
+  }
+}
+
+.filterActive {
+  // O grid-column faz a barra ocupar as duas colunas
+  grid-column: 1 / -1; 
+  background-color: lighten($card-bg, 5%);
+  border: 1px solid $border-color;
+  border-left: 4px solid $cancelled-color;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  p {
+    color: $text-color;
+    font-weight: 500;
+  }
+
+  button {
+    background: transparent;
+    border: 1px solid $text-muted;
+    color: $text-muted;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: $border-color;
+      color: $text-color;
+    }
+  }
+}
+/* === Controles de Visualização (Próximos / Histórico) === */
+.viewControls {
+  grid-column: 1 / -1; // Ocupa a largura total
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid $border-color;
+
+  button {
+    background: transparent;
+    border: none;
+    color: $text-muted;
+    padding: 0.75rem 0.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s, box-shadow 0.2s;
+    border-bottom: 3px solid transparent;
+
+    &.active {
+      color: $brand-color;
+      border-bottom-color: $brand-color;
+    }
+
+    &:hover:not(.active) {
+      color: $text-color;
+    }
+  }
+}
+
+.deleteButton {
+  @extend .actionButton;
+  background-color: darken($cancelled-color, 15%);
+  color: white;
+
+  &:hover {
+    background-color: darken($cancelled-color, 25%);
   }
 }

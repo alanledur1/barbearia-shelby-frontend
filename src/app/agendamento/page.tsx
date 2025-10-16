@@ -5,20 +5,25 @@ import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import { ptBR } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '@/context/AuthContext'; // 1. Importar o hook de autenticação
+import { useAuth } from '@/context/AuthContext';
 
 import AgendamentoForm from '@/components/Agendamento/AgendamentoForm';
 import styles from './agendamento-moderno.module.scss';
 import api from '@/services/api';
+import { type BookingFormData } from '@/schemas/agendamentoSchema';
 
-// (Tipos e outras funções permanecem os mesmos...)
 type Service = { id: number; name: string; duration: number; price: number; };
-type Appointment = { id: number; date: string; durationMinutes: number; };
+type Appointment = {
+  id: number;
+  date: string;
+  durationMinutes: number;
+  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
+};
 type TimeSlot = { time: string; available: boolean; };
 type Step = 1 | 2 | 3 | 4;
 
 export default function PaginaAgendamento() {
-  const auth = useAuth(); // 2. Obter o estado de autenticação
+  const auth = useAuth();
   const [step, setStep] = useState<Step>(1);
   const [services, setServices] = useState<Service[]>([]);
   const [selectedService, setSelectedService] = useState<Service | undefined>();
@@ -50,27 +55,67 @@ export default function PaginaAgendamento() {
     try {
       const dateString = date.toISOString().split('T')[0];
       const response = await api.get<Appointment[]>(`/appointments?date=${dateString}`);
-      const bookedAppointments = response.data;
+      const bookedAppointments = (response.data || []).filter((app: any) => app.status === 'CONFIRMED');
 
       const allSlots = [
         '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00',
-        '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30'
+        '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
+        '18:00', '18:30', '19:00', '19:30'
       ];
 
-      const slotsWithAvailability = allSlots.map(slot => {
-        const slotStart = new Date(`${dateString}T${slot}:00.000-03:00`);
-        const slotEnd = new Date(slotStart.getTime() + service.duration * 60000);
+      // 1. Mapeia todos os horários agendados em intervalos de 30 minutos
+      const bookedSlots = new Set<string>();
+      bookedAppointments.forEach((app: any) => {
+        const startTime = new Date(app.date);
+        const startSlot = `${String(startTime.getHours()).padStart(2, '0')}:${String(startTime.getMinutes()).padStart(2, '0')}`;
+        bookedSlots.add(startSlot);
 
-        const isBooked = bookedAppointments.some(booked => {
-          const bookedStart = new Date(booked.date);
-          const bookedEnd = new Date(bookedStart.getTime() + booked.durationMinutes * 60000);
-          return slotStart < bookedEnd && slotEnd > bookedStart;
-        });
+        // Se o serviço agendado tem 60+ min, bloqueia também o slot seguinte
+        if (app.durationMinutes >= 60) {
+          const nextTime = new Date(startTime.getTime() + 30 * 60000);
+          const nextSlot = `${String(nextTime.getHours()).padStart(2, '0')}:${String(nextTime.getMinutes()).padStart(2, '0')}`;
+          bookedSlots.add(nextSlot);
+        }
+      });
 
-        return { time: slot, available: !isBooked };
+      const now = new Date();
+      const isToday = date.toDateString() === now.toDateString();
+
+      // 2. Verifica a disponibilidade de cada slot com base nas novas regras
+      const slotsWithAvailability = allSlots.map((time, index) => {
+        const [hours, minutes] = time.split(':').map(Number);
+        const slotDate = new Date(date);
+        slotDate.setHours(hours, minutes, 0, 0);
+
+        // Regra A: Desabilita horários que já passaram hoje
+        if (isToday && slotDate < now) {
+          return { time, available: false };
+        }
+
+        // Regra B: Desabilita se o próprio slot já estiver agendado
+        if (bookedSlots.has(time)) {
+          return { time, available: false };
+        }
+
+        // Regra C: Lógica para serviços de 60 minutos
+        if (service.duration >= 60) {
+          // Verifica se o próximo slot está dentro do horário de almoço ou fim do dia
+          const nextSlotTime = allSlots[index + 1];
+          if (!nextSlotTime || nextSlotTime === '12:30' || nextSlotTime === '13:00' || nextSlotTime === '13:30' || nextSlotTime === '20:00') {
+            return { time, available: false };
+          }
+          // Desabilita se o *próximo* slot estiver ocupado
+          if (bookedSlots.has(nextSlotTime)) {
+            return { time, available: false };
+          }
+        }
+
+        // Se passou por todas as regras, o horário está disponível
+        return { time, available: true };
       });
 
       setTimeSlots(slotsWithAvailability);
+
     } catch (err) {
       setError('Não foi possível verificar os horários.');
       console.error(err);
@@ -78,7 +123,6 @@ export default function PaginaAgendamento() {
       setIsLoading(false);
     }
   };
-
   const handleServiceSelect = (service: Service) => {
     setSelectedService(service);
     setError(null);
@@ -92,12 +136,25 @@ export default function PaginaAgendamento() {
   };
 
   const handleSlotSelect = (time: string) => {
+    if (!selectedService) return;
+
+    // Se o serviço for de 60 MIN — precisamos bloquear o próximo slot também!
+    if (selectedService.duration === 60) {
+      const index = timeSlots.findIndex(slot => slot.time === time);
+      const nextSlot = timeSlots[index + 1];
+
+      if (nextSlot && !nextSlot.available) {
+        setError(`Esse horário exige 1h, mas ${nextSlot.time} já está ocupado.`);
+        return; // ❌ Não permite continuar
+      }
+    }
+
     setSelectedSlot(time);
     setError(null);
     setStep(3);
   };
 
-  const handleBookingSubmit = async (data: { cliente: string; email: string; phone: string }) => {
+  const handleBookingSubmit = async (data: BookingFormData) => {
     if (!selectedDate || !selectedSlot || !selectedService) return;
     setIsLoading(true);
     setError(null);
@@ -111,21 +168,38 @@ export default function PaginaAgendamento() {
         date: string;
         client?: { name: string; email: string; phone: string };
         clientId?: number;
+        adminId?: number; // Campo para identificar o admin que está agendando
+        notes?: string;
       };
 
       let appointmentPayload: BookingPayload;
 
-      // 3. Verifica se o usuário está logado
+      // --- LÓGICA DE PAYLOAD CORRIGIDA ---
       if (auth.isAuthenticated && auth.user) {
-        // Se LOGADO, envia o clientId
-        appointmentPayload = {
-          serviceId: selectedService.id,
-          date: appointmentDateTime.toISOString(),
-          clientId: auth.user.id, // Envia o ID do usuário logado
-        };
-        console.log('Enviando agendamento para usuário logado:', appointmentPayload);
+        if (auth.user.userType === 'admin') {
+          // SE O ADMIN ESTÁ LOGADO, ele agenda para um cliente
+          appointmentPayload = {
+            serviceId: selectedService.id,
+            date: appointmentDateTime.toISOString(),
+            adminId: auth.user.id, // Identifica o admin
+            client: { // Usa os dados do formulário para o cliente
+              name: data.cliente,
+              email: data.email,
+              phone: data.phone,
+            },
+            notes: data.notes,
+          };
+        } else {
+          // SE O CLIENTE ESTÁ LOGADO, ele agenda para si mesmo
+          appointmentPayload = {
+            serviceId: selectedService.id,
+            date: appointmentDateTime.toISOString(),
+            clientId: auth.user.id,
+            notes: data.notes,
+          };
+        }
       } else {
-        // Se NÃO LOGADO, envia o objeto client com os dados do formulário
+        // SE NINGUÉM ESTÁ LOGADO (CONVIDADO)
         appointmentPayload = {
           serviceId: selectedService.id,
           date: appointmentDateTime.toISOString(),
@@ -133,16 +207,16 @@ export default function PaginaAgendamento() {
             name: data.cliente,
             email: data.email,
             phone: data.phone,
-          }
+          },
+          notes: data.notes,
         };
-        console.log('Enviando agendamento para convidado:', appointmentPayload);
       }
 
       await api.post('/appointments', appointmentPayload);
       setStep(4);
 
     } catch (err: unknown) {
-      // (Lógica de erro permanece a mesma)
+      // (sua lógica de erro permanece a mesma)
       console.error('Erro ao criar agendamento:', err);
       if (typeof err === 'object' && err !== null) {
         const maybeErr = err as { response?: { data?: { error?: string } }; message?: string };
@@ -206,7 +280,17 @@ export default function PaginaAgendamento() {
                 <h2 className={styles.stepTitle}>2. Escolha a Data e Hora</h2>
                 <div className={styles.dateTimePicker}>
                   <div className={styles.dayPickerContainer}>
-                    <DayPicker mode="single" selected={selectedDate} onSelect={handleDateSelect} locale={ptBR} fromDate={new Date()} />
+                    <DayPicker
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={handleDateSelect}
+                      locale={ptBR} fromDate={new Date()}
+                      disabled={[
+                        { before: new Date() },
+                        // Desabilita Domingos (0) e Segundas-feiras (1)
+                        { dayOfWeek: [0, 1] }
+                      ]}
+                    />
                   </div>
                   <div className={styles.timeSlotsContainer}>
                     {isLoading && <p>Buscando...</p>}

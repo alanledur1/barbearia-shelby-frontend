@@ -25,7 +25,7 @@ export default function AgendamentoForm({ onBookingSubmitAction, isLoading, init
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
-    
+
     // Se o campo for o telefone, permite apenas numeros
     if (id === 'phone') {
       const numericValue = value.replace(/\D/g, '');
@@ -81,7 +81,6 @@ export default function AgendamentoForm({ onBookingSubmitAction, isLoading, init
         />
         {getError('cliente') && <p className={styles.errorMessage}>{getError('cliente')}</p>}
       </div>
-
       <div className={styles.inputGroup}>
         <label htmlFor="email">Seu Email</label>
         <input
@@ -96,7 +95,6 @@ export default function AgendamentoForm({ onBookingSubmitAction, isLoading, init
         />
         {getError('email') && <p className={styles.errorMessage}>{getError('email')}</p>}
       </div>
-      
       <div className={styles.inputGroup}>
         <label htmlFor="phone">Seu Telefone</label>
         <input
@@ -112,6 +110,19 @@ export default function AgendamentoForm({ onBookingSubmitAction, isLoading, init
           pattern="[0-9]*"
         />
         {getError('phone') && <p className={styles.errorMessage}>{getError('phone')}</p>}
+      </div>
+      <div className={styles.inputGroup}>
+        <label htmlFor="notes">Para quem é o agendamento? (Opcional)</label>
+        <input
+          type="text"
+          id="notes"
+          value={formData.notes || ''}
+          onChange={handleChange}
+          placeholder="Ex: Meu filho, João"
+          disabled={isLoading}
+          className={getError('notes') ? styles.error : ''}
+        />
+        {getError('notes') && <p className={styles.errorMessage}>{getError('notes')}</p>}
       </div>
 
       <button type="submit" className={styles.primaryButton} disabled={isLoading}>

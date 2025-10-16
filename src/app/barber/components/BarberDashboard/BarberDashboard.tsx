@@ -1,19 +1,64 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useBarberData, Service } from '@/hooks/useBarberData';
 import BarberHeader from './BarberHeader';
 import AppointmentsList from './AppointmentsList';
 import styles from './styles.module.scss';
 import EditServiceModal from './EditServiceModel';
+import ConfirmationModal from './ConfirmationModal';
 
 export default function BarberDashboard() {
-  const { appointments = [], services = [], loading, error, setError, refetch, addService, deleteService, updateService } = useBarberData();
+  const { 
+    appointments = [], 
+    services = [], 
+    loading, 
+    error, 
+    setError, 
+    refetch, 
+    addService, 
+    deleteService,
+    updateService, 
+    updateAppointmentStatus, 
+    deleteAppointment 
+  } = useBarberData();
   const [creating, setCreating] = useState(false);
   const [name, setName] = useState('');
   const [duration, setDuration] = useState<number>(30);
   const [price, setPrice] = useState<number>(50);
   const [editingService, setEditingService] = useState<Service | null>(null);
+  const [filter, setFilter] = useState<'future' | 'overdue' | 'history'>('future');
+
+    // 2. Crie estados para controlar o modal de exclusão de serviço
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState<number | null>(null); // Armazena o ID do serviço a ser deletado
+
+  // Memoiza as listas para otimização de performance
+  const { futureAppointments, overdueAppointments, historyAppointments } = useMemo(() => {
+    const now = new Date();
+    const confirmed = appointments.filter(a => a.status === 'CONFIRMED');
+
+    const future = confirmed
+      .filter(a => new Date(a.date) >= now)
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+    const overdue = confirmed
+      .filter(a => new Date(a.date) < now)
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()); // Mais antigo primeiro
+
+    const history = appointments
+      .filter(a => a.status === 'COMPLETED' || a.status === 'CANCELLED')
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); // Mais recente primeiro
+
+    return { futureAppointments: future, overdueAppointments: overdue, historyAppointments: history };
+  }, [appointments]);
+
+  // Escolhe qual lista exibir com base no filtro ativo
+  const displayedAppointments = useMemo(() => {
+    if (filter === 'overdue') return overdueAppointments;
+    if (filter === 'history') return historyAppointments;
+    return futureAppointments;
+  }, [filter, futureAppointments, overdueAppointments, historyAppointments]);
+  // --- FIM DA LÓGICA DE FILTROS ---
 
   const handleCreateService = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,13 +74,19 @@ export default function BarberDashboard() {
   };
 
   const handleDeleteService = async (id: number) => {
-    if (!confirm('Excluir serviço?')) return;
-    try {
-      await deleteService(id);
-    } catch {
-      // opcional: toast
-    }
+    setIsConfirmingDelete(id);
   };
+
+  const handleConfirmDeleteService = async () => {
+    if (isConfirmingDelete === null) return;
+    try {
+      await deleteService(isConfirmingDelete);
+    } catch {
+
+    } finally {
+      setIsConfirmingDelete(null);
+    }
+  }
 
   const handleUpdateService = async (id: number, data: { name: string; duration: number; price: number }) => {
     await updateService(id, data);
@@ -58,11 +109,43 @@ export default function BarberDashboard() {
           {error}
         </div>
       )}
-      <BarberHeader onRefresh={refetch} appointmentsCount={appointments.length} servicesCount={services.length} />
+      <BarberHeader
+        onRefresh={refetch}
+        appointmentsCount={futureAppointments.length}
+        servicesCount={services.length}
+        allAppointments={appointments}
+        onFilterToggle={() => setFilter(prev => prev === 'future' ? 'overdue' : 'future')}
+        currentFilter={filter}
+      />
+
       {loading && <div className={styles.message}>Carregando dados...</div>}
+
       {!loading && (
         <div className={styles.content}>
-          <AppointmentsList appointments={appointments} services={services} />
+          {/* PAINEL DE CONTROLE DAS VISUALIZAÇÕES */}
+          {filter === 'overdue' ? (
+            <div className={styles.filterActive}>
+              <p>Atenção: Mostrando {overdueAppointments.length} agendamento(s) pendente(s).</p>
+              <button onClick={() => setFilter('future')}>Ver Próximos</button>
+            </div>
+          ) : (
+            <div className={styles.viewControls}>
+              <button onClick={() => setFilter('future')} className={filter === 'future' ? styles.active : ''}>
+                Próximos Agendamentos
+              </button>
+              <button onClick={() => setFilter('history')} className={filter === 'history' ? styles.active : ''}>
+                Histórico
+              </button>
+            </div>
+          )}
+
+          <AppointmentsList 
+            appointments={displayedAppointments} 
+            services={services} 
+            viewType={filter}  
+            updateAppointmentStatus={updateAppointmentStatus} 
+            deleteAppointment={deleteAppointment}
+          />
 
           <aside className={styles.sidebar}>
             <h3>Serviços</h3>
@@ -82,7 +165,7 @@ export default function BarberDashboard() {
                 required
               />
               <select
-                className={styles.durationSelect} 
+                className={styles.durationSelect}
                 value={duration}
                 onChange={(e) => setDuration(Number(e.target.value))}
               >
@@ -122,6 +205,14 @@ export default function BarberDashboard() {
               onSubmit={handleUpdateService}
             />
           )}
+
+          <ConfirmationModal 
+            isOpen={isConfirmingDelete !== null}
+            onClose={() => setIsConfirmingDelete(null)}
+            onConfirm={handleConfirmDeleteService}
+            title="Confirmar Exclusão"
+            message="Tem certeza que deseja este serviço? Esta ação não pode ser desfeita."
+          />
         </div>
       )}
     </section>

@@ -272,3 +272,15 @@ $error-color: #dc3545;
   bottom: 0;
   left: 5px;
 }
+
+:global(.rdp-day_disabled) {
+  color: #ff4d4d !important;
+  text-decoration: line-through !important;
+  opacity: 0.8 !important;
+  cursor: not-allowed !important;
+  background-color: transparent !important;
+
+  &:hover {
+    background-color: transparent !important;
+  }
+}
