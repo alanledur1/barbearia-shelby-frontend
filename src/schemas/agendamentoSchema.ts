@@ -56,6 +56,7 @@ export const bookingSchema = z.object({
       return false;
     }, { message: 'Número de telefone inválido.'})
   ),
+  notes: z.string().max(100, { message: 'Observação muito longa.' }).optional(),
 });
 
 export type BookingFormData = z.infer<typeof bookingSchema>;

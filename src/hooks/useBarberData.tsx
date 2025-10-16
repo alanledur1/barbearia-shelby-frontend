@@ -9,7 +9,15 @@ export type Appointment = {
   clientEmail?: string;
   clientPhone?: string;
   serviceId?: number;
-  status?: 'pending' | 'completed' | 'cancelled';
+  status?: 'CONFIRMED' | 'COMPLETED' | 'CANCELLED';
+  notes?: string;
+};
+
+export type BillingSummary = {
+  totalRevenue: number;
+  totalAppointments: number;
+  averageTicket: number;
+  servicesBreakdown: { [key: string]: { count: number; revenue: number } };
 };
 
 export type Service = { id: number; name: string; duration: number; price: number; description?: string; };
@@ -20,6 +28,7 @@ export function useBarberData() {
   const auth = useAuth();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [services, setServices] = useState<Service[]>([]);
+  const [billingSummary, setBillingSummary] = useState<BillingSummary | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,17 +36,46 @@ export function useBarberData() {
     return auth?.token ? { Authorization: `Bearer ${auth.token}` } : undefined;
   }, [auth?.token]);
 
+  const fetchBillingSummary = useCallback(async () => {
+    try {
+      const headers = getHeaders();
+      const res = await api.get('/billing/summary', { headers });
+      setBillingSummary(res.data);
+    } catch (err) {
+      console.error("Erro ao buscar resumo de faturamento:", err);
+      // Não define um erro global para não interferir na outra tela
+    }
+  }, [getHeaders]);
+
   const fetchAll = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const headers = getHeaders();
-      const [aRes, sRes] = await Promise.all([
+      // Busca tudo em paralelo, incluindo o faturamento
+      const [aRes, sRes, bRes] = await Promise.all([
         api.get('/appointments', { headers }),
         api.get('/services', { headers }),
+        api.get('/billing/summary', { headers }) // Busca o faturamento junto
       ]);
-      setAppointments(aRes?.data ?? []);
+
+      // Lógica de transformação dos dados vindo da API
+      const transformedAppointments = (aRes?.data || []).map((app: any) => ({
+        id: app.id,
+        date: app.date,
+        status: app.status,
+        serviceId: app.serviceId,
+
+        // Se 'app.client' existir, usa os seus dados. Senao, usa os os dados de 'guest'.
+        clientName: app.client?.name || app.guestName,
+        clientEmail: app.client?.email || app.guestEmail,
+        clientPhone: app.client?.phone || app.guestPhone,
+        notes: app.notes,
+      }));
+
+      setAppointments(transformedAppointments);
       setServices(sRes?.data ?? []);
+      setBillingSummary(bRes?.data ?? null);
     } catch (err) {
       console.error(err);
       setError('Erro ao carregar dados. Tente novamente.');
@@ -51,7 +89,7 @@ export function useBarberData() {
       setLoading(true);
       setError(null);
       try {
-        // validação simples no cliente
+        // 1. Validações (estão corretas)
         if (!service.name || !service.name.trim()) {
           throw new Error('Nome do serviço é obrigatório.');
         }
@@ -62,86 +100,94 @@ export function useBarberData() {
           throw new Error('Preço inválido.');
         }
 
-        const headers = {
-          ...getHeaders(),
-          'Content-Type': 'application/json',
-        };
+        const headers = getHeaders();
 
-        console.debug('[addService] payload:', service, 'headers:', headers);
-
-        // envia description também (conforme backend)
-        const res = await api.post('/services', {
+        // 2. PRIMEIRO: Cria o serviço no banco de dados
+        await api.post('/services', {
           name: service.name,
           description: service.description ?? '',
           price: service.price,
           duration: service.duration,
         }, { headers });
 
-        if (res?.data) {
-          setServices(prev => [...prev, res.data]);
-          return res.data;
-        }
+        // 3. DEPOIS: Recarrega TODOS os dados do servidor.
+        //    Isso garante que a lista de serviços esteja 100% atualizada.
+        await fetchAll();
 
-        return null;
-      } catch (err) {
+      } catch (err: any) {
         const axiosResp = err?.response?.data;
-        const backendMsg = axiosResp?.message || axiosResp || err.message;
+        const backendMsg = axiosResp?.message || axiosResp?.error || err.message;
         console.error('[addService] erro:', err, 'backend:', axiosResp);
         setError(String(backendMsg ?? 'Erro ao criar serviço.'));
-        throw err;
+        throw err; // Lança o erro para o componente poder tratar
       } finally {
         setLoading(false);
       }
     },
-    [getHeaders]
+    [getHeaders, fetchAll] // Adicione fetchAll às dependências
   );
 
   const deleteService = useCallback(
     async (id: number) => {
-      setLoading(true);
       setError(null);
-
       try {
         const headers = getHeaders();
         await api.delete(`/services/${id}`, { headers });
-        setServices(prev => prev.filter(s => s.id !== id));
-      } catch (err) {
-        console.error(err);
-        // 1. Verifica se o erro veio da API (Axios) e se o status é 409 (Conflito)
+
+        // CORREÇÃO: Chama o fetchAll para recarregar todos os dados do zero
+        await fetchAll();
+
+      } catch (err: any) {
         if (err.response && err.response.status === 409) {
-          // 2. Se for, usa a mensagem específica que o backend enviou
           setError(err.response.data.error || 'Este serviço não pode ser excluído pois está em uso.');
         } else {
-          // 3. Para qualquer outro tipo de erro, mostra a mensagem genérica
-          setError('Erro ao excluir serviço. Tente novamente mais tarde.');
+          setError('Erro ao excluir serviço.');
         }
-      } finally {
-        setLoading(false);
+        // Lança o erro para que o componente saiba que a operação falhou e não feche o modal, por exemplo
+        throw err;
       }
     },
-    [getHeaders]
+    [getHeaders, fetchAll]
   );
 
-  const updateAppointmentStatus = useCallback(
-    async (id: number, status: Appointment['status']) => {
-      setLoading(true);
+  const deleteAppointment = useCallback(
+    async (id: number) => {
       setError(null);
       try {
         const headers = getHeaders();
-        const res = await api.patch(`/appointments/${id}`, { status }, { headers });
-        const newStatus = res?.data?.status ?? status;
-        setAppointments(prev => prev.map(a => (a.id === id ? { ...a, status: newStatus } : a)));
-        return res?.data;
-      } catch (err) {
-        console.error(err);
-        setError('Erro ao atualizar agendamento.');
+        await api.delete(`/appointments/${id}`, { headers });
+
+        // Atualiza lista após exclusao
+        await fetchAll();
+      } catch (err: any) {
+        console.error("Erro ao deletar agendamento:", err);
+        const errorMessage = err.response?.data?.error || 'Erro ao deletar agendamento.';
+        setError(errorMessage);
         throw err;
-      } finally {
-        setLoading(false);
       }
     },
-    [getHeaders]
+    [getHeaders, fetchAll]
   );
+
+  const updateAppointmentStatus = useCallback(
+    async (id: number, status: 'COMPLETED' | 'CANCELLED') => {
+      setError(null);
+      try {
+        const headers = getHeaders();
+        await api.patch(`/appointments/${id}`, { status }, { headers });
+
+        await fetchAll();
+
+      } catch (err: any) {
+        console.error("Falha ao atualizar status:", err);
+        const errorMessage = err.response?.data?.error || 'Erro ao atualizar agendamento.';
+        setError(errorMessage);
+        throw err;
+      }
+    },
+    [getHeaders, fetchAll]
+  );
+
 
   const updateService = useCallback(
     async (id: number, data: UpdateServiceData) => {
@@ -160,7 +206,7 @@ export function useBarberData() {
       } catch (err) {
         console.error(err);
         setError('Erro ao atualizar o serviço.');
-        throw err; 
+        throw err;
       } finally {
         setLoading(false);
       }
@@ -184,5 +230,8 @@ export function useBarberData() {
     updateAppointmentStatus,
     updateService,
     setError,
+    billingSummary,
+    refetchBilling: fetchBillingSummary,
+    deleteAppointment,
   };
 }
