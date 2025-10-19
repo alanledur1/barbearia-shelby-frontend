@@ -1,0 +1,102 @@
+// src/components/ClientDashboard/ClientAppointmentCard.module.scss
+
+// Importando as mesmas variáveis de cor
+$brand-color: #f67366;
+$card-bg: #1e1e1e;
+$text-color: #f0f0f0;
+$text-muted: #a0a0a0;
+$border-color: #3a3a3a;
+$success-color: #28a745;
+$cancelled-color: #dc3545;
+$confirmed-color: #0d6efd;
+
+.appointmentCard {
+  background-color: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  }
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.serviceName {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: $text-color;
+}
+
+.serviceDetails {
+  display: block;
+  font-size: 0.9rem;
+  color: $text-muted;
+}
+
+.cardBody {
+  padding: 1rem 0;
+  border-top: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
+  margin-bottom: 1.5rem;
+
+  p {
+    margin: 0.5rem 0;
+    color: $text-muted;
+    strong {
+      color: $text-color;
+    }
+  }
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cancelButton {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: $cancelled-color;
+  color: white;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: darken($cancelled-color, 10%);
+  }
+}
+
+// Status (Pills)
+.status {
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.statusCONFIRMED {
+  background-color: $confirmed-color;
+}
+
+.statusCOMPLETED {
+  background-color: $success-color;
+}
+
+.statusCANCELLED {
+  background-color: $cancelled-color;
+}
+
