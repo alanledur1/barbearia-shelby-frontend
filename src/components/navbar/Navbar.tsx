@@ -134,7 +134,10 @@ export const Navbar = () => {
                     ) : (
                       <Link href="/meus-servicos" className="navbar__dropdownItemDash">Meus Serviços</Link>
                     )}
-
+                    <Link href="/" className="navbar__dropdownItemDash" onClick={() => setMobileOpen(false)}>Home</Link>
+                    <Link href="/Servicos" className="navbar__dropdownItemDash" onClick={() => setMobileOpen(false)}>Serviços</Link>
+                    <Link href="/#sobre" className="navbar__dropdownItemDash" onClick={() => setMobileOpen(false)}>Sobre Nós</Link>
+                    <Link href="/#contato" className="navbar__dropdownItemDash" onClick={() => setMobileOpen(false)}>Contato</Link>
                     <button className="navbar__dropdownItem" onClick={() => { auth.logout(); setOpen(false); }}>Sair</button>
                   </motion.div>
                 )}
@@ -171,6 +174,8 @@ export const Navbar = () => {
                       <li><Link href="/Servicos" onClick={() => setMobileOpen(false)}>Serviços</Link></li>
                       <li><Link href="/#sobre" onClick={() => setMobileOpen(false)}>Sobre Nós</Link></li>
                       <li><Link href="/#contato" onClick={() => setMobileOpen(false)}>Contato</Link></li>
+                      <li><Link href="/Login" onClick={() => setMobileOpen(false)}>Entrar</Link></li>
+                      <li><Link href="/CriarConta" onClick={() => setMobileOpen(false)}>Criar Conta</Link></li>
                     </ul>
                   </motion.nav>
                 )}
