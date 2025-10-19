@@ -22,10 +22,30 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: 'Barbearia Shelby',
-  description: 'Cortes personalizados para você.',
+  title:{
+  default: 'BarbeBarbearia Shelby - Agende seu Corte de Cabelo e Barba',
+  template: '%s | Barbearia Shelby',
+},
+description: 'Barbearia Shelby: agendamento online de cortes de cabelo e barba. Ambiente moderno, profissionais qualificados e o estilo que você procura. Agende seu horário!',
+  keywords: ['barbearia', 'agendamento online', 'corte de cabelo masculino', 'barba', 'barbeiro', 'shelby'],
+  authors: [{ name: 'Seu Nome ou Nome da Empresa' }],
+  // Open Graph para compartilhamento em redes sociais
+  openGraph: {
+    title: 'Barbearia Shelby - Agende seu Horário',
+    description: 'Estilo, conforto e atitude. Agende seu corte de cabelo e barba na Barbearia Shelby.',
+    url: 'https://seusite.com.br', // Substitua pela URL real do seu site
+    siteName: 'Barbearia Shelby',
+    images: [
+      {
+        url: 'https://seusite.com.br/og-image.jpg', // Crie uma imagem de preview (ex: 1200x630px)
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: 'pt_BR',
+    type: 'website',
+  },
 };
-
 
 export default function RootLayout({
   children,

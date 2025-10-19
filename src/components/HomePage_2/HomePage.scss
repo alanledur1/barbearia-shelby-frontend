@@ -4,10 +4,10 @@
     width: 100%;
     height: 100vh;
     display: flex;
-    flex-wrap: wrap; // alinhamento vertical
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 60px; // mais espaçamento entre os blocos
+    gap: 60px;
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
@@ -19,7 +19,7 @@
         height: 100vh;
         width: 100vw;
         object-fit: cover;
-        z-index: -1; // abaixo da overlay
+        z-index: -1;
     }
 
     .background-overlay {
@@ -50,17 +50,13 @@
         line-height: 1.4;
         text-align: center;
         text-transform: capitalize;
-        max-width: 700px; // mais espaço antes de quebrar
+        max-width: 700px;
         width: 100%;
-        margin: 0 auto; // centraliza horizontalmente
-        position: relative; // para garantir que fiquem acima do vídeo
+        margin: 0 auto; 
+        position: relative; 
         z-index: 2;
-        color: white; // para garantir visibilidade sobre o vídeo
+        color: white; 
     }
-
-    .title-2 {
-    }
-
     .description {
         margin-top: 20px;
         color: #D2D2D2;
@@ -77,11 +73,15 @@
     .HomePage_2 .title-1,
     .HomePage_2 .title-2 {
         font-size: 24px;
+        padding: 0 clamp(1.5rem, 6vw, 150px);
+
     }
 
     .HomePage_2 .description {
         font-size: 13px;
-    }
+        padding: 0 clamp(1.5rem, 6vw, 150px);
+
+    } 
 
   @keyframes bounceArrow {
     0%, 100% {

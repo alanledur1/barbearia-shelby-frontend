@@ -158,12 +158,29 @@
 @media (max-width: 768px) {
   .contato {
     padding: 20px;
-    .title { font-size: 32px; }
-    .container { gap: 18px; }
-    .contato-conteudo { padding: 20px 0; }
-    .conteudo-horizontal { gap: 12px; }
-    .card { margin: 12px 0; }
-    .localizacao, .formulario {
+
+    .title {
+      font-size: 32px;
+    }
+
+    .container {
+      gap: 18px;
+    }
+
+    .contato-conteudo {
+      padding: 20px 0;
+    }
+
+    .conteudo-horizontal {
+      gap: 12px;
+    }
+
+    .card {
+      margin: 12px 0;
+    }
+
+    .localizacao,
+    .formulario {
       max-width: 100%;
     }
   }
@@ -175,7 +192,10 @@
 @media (min-width: 769px) and (max-width: 1023px) {
   .contato {
     padding: 40px;
-    .title { font-size: 40px; }
+
+    .title {
+      font-size: 40px;
+    }
 
     .container {
       gap: 24px;
@@ -201,7 +221,7 @@
 @media (min-width: 1024px) {
   .contato {
     padding: 60px 80px;
-    
+
     .title {
       font-size: 74px;
       text-align: left;
@@ -235,8 +255,8 @@
 
     .localizacao,
     .formulario {
-      max-width: 700px;
-      height: 450px;
+      width: 90%;
+      max-width: 600px; 
     }
   }
 }

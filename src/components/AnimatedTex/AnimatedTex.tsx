@@ -1,12 +1,36 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 
-export const AnimatedText = () => {
+
+function useHasMounted() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  return mounted;
+}
+
+export default function AnimatedText() {
+  const reduce = useReducedMotion();
   const text = "Seja O Protagonista Da Sua Própria História.";
   const destaquePalavras = ['Protagonista', 'História'];
+  const mounted = useHasMounted();
 
-  const reduce = useReducedMotion();
+  if (!mounted) {
+    // SSR fallback – estrutura o mais parecida possível com a final
+    return (
+      <div className="animated-title">
+        {text.split('').map((char, i) => (
+          <span
+            key={i}
+            className={destaquePalavras.some(p => p.toLowerCase() === char.toLowerCase()) ? 'red' : ''}
+            style={{ whiteSpace: 'pre-wrap' }}
+          >
+            {char === ' ' ? '\u00A0' : char}
+          </span>
+        ))}
+      </div>
+    );
+  }
 
   const letterVariants = reduce
     ? { hidden: { y: 0, opacity: 1 }, visible: { y: 0, opacity: 1 } }
@@ -67,7 +91,14 @@ export const AnimatedText = () => {
       className="animated-title"
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.5 }}
+      // ✅ COMBINANDO margin E amount
+      // Exige que o elemento esteja 150px dentro da borda inferior
+      // E que pelo menos 80% de sua altura esteja visível.
+      viewport={{
+        once: true,
+        margin: "0px 0px -150px 0px",
+        amount: 0.8
+      }}
       variants={containerVariants}
     >
       {renderSpans()}
