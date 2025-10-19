@@ -1,0 +1,71 @@
+// src/app/meus-agendamentos/ClientDashboard.module.scss
+
+// Importando as mesmas variáveis de cor para consistência
+$brand-color: #f67366;
+$dark-bg: #121212;
+$card-bg: #1e1e1e;
+$text-color: #f0f0f0;
+$text-muted: #a0a0a0;
+$border-color: #3a3a3a;
+$error-color: #dc3545;
+
+.container {
+  padding: 2rem;
+  max-width: 800px; // Um pouco mais estreito, focado no cliente
+  margin: 0 auto;
+  font-family: 'Poppins', sans-serif;
+  color: $text-color;
+
+  h1 {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 2rem;
+  }
+}
+
+.section {
+  margin-bottom: 3rem;
+
+  h2 {
+    font-size: 1.5rem;
+    color: $brand-color;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid $border-color;
+  }
+}
+
+.error {
+  color: $error-color;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* === Paginação (Reutilizado do BarberDashboard) === */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  color: $text-muted; // Usando variável de cor definida no início
+
+  button {
+    background-color: #2a2a2a; // Cor de fundo do input (exemplo)
+    color: $text-color;
+    border: 1px solid $border-color;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover:not(:disabled) {
+      background-color: lighten(#2a2a2a, 5%);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
