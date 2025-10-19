@@ -58,10 +58,17 @@ export const HomePage = () => {
         <div
           className="scroll-down-indicator"
           onClick={scrollToNextSection}
-          role="button"
-          tabIndex={0}
-          aria-label="Scroll para próxima seção"
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') scrollToNextSection(); }}
+          // Atributos de Acessibilidade:
+          role="button" // Informa que o elemento age como um botão
+          tabIndex={0}  // Permite que o elemento seja focado com a tecla Tab
+          aria-label="Rolar para próxima seção" // Descreve a ação para leitores de tela
+          // Permite que o "botão" seja ativado com as teclas Enter ou Espaço
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault(); // Evita o scroll padrão da tecla de espaço
+              scrollToNextSection();
+            }
+          }}
         >
           ↓
         </div>
