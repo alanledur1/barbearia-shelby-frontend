@@ -273,7 +273,8 @@ $error-color: #dc3545;
   left: 5px;
 }
 
-:global(.rdp-day_disabled) {
+// Agora o :global está "ancorado" dentro da classe local .dayPickerContainer
+.dayPickerContainer :global(.rdp-day_disabled) {
   color: #ff4d4d !important;
   text-decoration: line-through !important;
   opacity: 0.8 !important;
