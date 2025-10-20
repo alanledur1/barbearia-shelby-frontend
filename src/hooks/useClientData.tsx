@@ -14,11 +14,11 @@ export type Appointment = {
   notes?: string;
 };
 
-export type Service = { 
-  id: number; 
-  name: string; 
-  duration: number; 
-  price: number; 
+export type Service = {
+  id: number;
+  name: string;
+  duration: number;
+  price: number;
 };
 
 export function useClientData() {
@@ -60,15 +60,21 @@ export function useClientData() {
   const cancelAppointment = useCallback(async (id: number) => {
     setError(null);
     try {
-        const headers = getHeaders();
-        // A rota PATCH que muda o status já existe e pode ser reutilizada!
-        await api.patch(`/appointments/${id}`, { status: 'CANCELLED' }, { headers });
-        await fetchClientData(); // Recarrega os dados para refletir a mudança
-    } catch (err: any) {
-        console.error("Falha ao cancelar agendamento:", err);
-        const errorMessage = err.response?.data?.error || 'Não foi possível cancelar o agendamento.';
-        setError(errorMessage);
-        throw err;
+      const headers = getHeaders();
+      // A rota PATCH que muda o status já existe e pode ser reutilizada!
+      await api.patch(`/appointments/${id}`, { status: 'CANCELLED' }, { headers });
+      await fetchClientData(); // Recarrega os dados para refletir a mudança
+    } catch (err: unknown) { // <-- CORRIGIDO AQUI
+      let errorMessage = 'Não foi possível cancelar o agendamento.';
+      if (typeof err === 'object' && err !== null) {
+        const maybeErr = err as { response?: { data?: { error?: string } }, message?: string };
+        errorMessage = maybeErr.response?.data?.error || maybeErr.message || errorMessage;
+      } else if (typeof err === 'string') {
+        errorMessage = err;
+      }
+      console.error("Falha ao cancelar agendamento:", err);
+      setError(errorMessage);
+      throw err; // Re-lança para que o componente saiba que falhou
     }
   }, [getHeaders, fetchClientData]);
 

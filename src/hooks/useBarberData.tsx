@@ -114,12 +114,17 @@ export function useBarberData() {
         //    Isso garante que a lista de serviços esteja 100% atualizada.
         await fetchAll();
 
-      } catch (err: any) {
-        const axiosResp = err?.response?.data;
-        const backendMsg = axiosResp?.message || axiosResp?.error || err.message;
-        console.error('[addService] erro:', err, 'backend:', axiosResp);
-        setError(String(backendMsg ?? 'Erro ao criar serviço.'));
-        throw err; // Lança o erro para o componente poder tratar
+      } catch (err: unknown) { // <-- CORRIGIDO AQUI
+        let errorMessage = 'Erro ao criar serviço.';
+        if (typeof err === 'object' && err !== null) {
+          const maybeErr = err as { response?: { data?: { message?: string, error?: string } }, message?: string };
+          errorMessage = maybeErr.response?.data?.message || maybeErr.response?.data?.error || maybeErr.message || errorMessage;
+        } else if (typeof err === 'string') {
+          errorMessage = err;
+        }
+        console.error('[addService] erro:', err);
+        setError(errorMessage);
+        throw err;
       } finally {
         setLoading(false);
       }
@@ -137,13 +142,19 @@ export function useBarberData() {
         // CORREÇÃO: Chama o fetchAll para recarregar todos os dados do zero
         await fetchAll();
 
-      } catch (err: any) {
-        if (err.response && err.response.status === 409) {
-          setError(err.response.data.error || 'Este serviço não pode ser excluído pois está em uso.');
-        } else {
-          setError('Erro ao excluir serviço.');
+      } catch (err: unknown) { // <-- CORRIGIDO AQUI
+        let errorMessage = 'Erro ao excluir serviço.';
+        if (typeof err === 'object' && err !== null) {
+          const maybeErr = err as { response?: { status?: number, data?: { error?: string } } };
+          if (maybeErr.response && maybeErr.response.status === 409) {
+            errorMessage = maybeErr.response.data?.error || 'Este serviço não pode ser excluído pois está em uso.';
+          } else {
+            errorMessage = (maybeErr as Error).message || errorMessage;
+          }
+        } else if (typeof err === 'string') {
+          errorMessage = err;
         }
-        // Lança o erro para que o componente saiba que a operação falhou e não feche o modal, por exemplo
+        setError(errorMessage);
         throw err;
       }
     },
@@ -159,9 +170,15 @@ export function useBarberData() {
 
         // Atualiza lista após exclusao
         await fetchAll();
-      } catch (err: any) {
+      } catch (err: unknown) { // <-- CORRIGIDO AQUI
+        let errorMessage = 'Erro ao deletar agendamento.';
+        if (typeof err === 'object' && err !== null) {
+          const maybeErr = err as { response?: { data?: { error?: string } }, message?: string };
+          errorMessage = maybeErr.response?.data?.error || maybeErr.message || errorMessage;
+        } else if (typeof err === 'string') {
+          errorMessage = err;
+        }
         console.error("Erro ao deletar agendamento:", err);
-        const errorMessage = err.response?.data?.error || 'Erro ao deletar agendamento.';
         setError(errorMessage);
         throw err;
       }
@@ -178,9 +195,15 @@ export function useBarberData() {
 
         await fetchAll();
 
-      } catch (err: any) {
+      } catch (err: unknown) { // <-- CORRIGIDO AQUI
+        let errorMessage = 'Erro ao atualizar agendamento.';
+        if (typeof err === 'object' && err !== null) {
+          const maybeErr = err as { response?: { data?: { error?: string } }, message?: string };
+          errorMessage = maybeErr.response?.data?.error || maybeErr.message || errorMessage;
+        } else if (typeof err === 'string') {
+          errorMessage = err;
+        }
         console.error("Falha ao atualizar status:", err);
-        const errorMessage = err.response?.data?.error || 'Erro ao atualizar agendamento.';
         setError(errorMessage);
         throw err;
       }
