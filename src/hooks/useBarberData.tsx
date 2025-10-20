@@ -2,6 +2,25 @@ import { useState, useEffect, useCallback } from 'react';
 import api from '@/services/api';
 import { useAuth } from '@/context/AuthContext';
 
+type RawAppointmentData = {
+  id: number;
+  date: string;
+  status?: 'CONFIRMED' | 'COMPLETED' | 'CANCELLED';
+  serviceId?: number;
+  notes?: string;
+  durationMinutes: number;
+  // Garanta que 'client' pode ser null ou ter as propriedades esperadas
+  client?: {
+    id: number;
+    name: string;
+    email?: string | null; // Permite null também
+    phone?: string | null; // Permite null também
+  } | null;
+  guestName?: string | null; // Permite null
+  guestEmail?: string | null; // Permite null
+  guestPhone?: string | null; // Permite null
+};
+
 export type Appointment = {
   id: number;
   date: string;
@@ -52,26 +71,44 @@ export function useBarberData() {
     setError(null);
     try {
       const headers = getHeaders();
-      // Busca tudo em paralelo, incluindo o faturamento
       const [aRes, sRes, bRes] = await Promise.all([
-        api.get('/appointments', { headers }),
+        api.get<RawAppointmentData[]>('/appointments', { headers }),
         api.get('/services', { headers }),
-        api.get('/billing/summary', { headers }) // Busca o faturamento junto
+        api.get('/billing/summary', { headers })
       ]);
 
-      // Lógica de transformação dos dados vindo da API
-      const transformedAppointments = (aRes?.data || []).map((app: any) => ({
-        id: app.id,
-        date: app.date,
-        status: app.status,
-        serviceId: app.serviceId,
+      // CORREÇÃO APLICADA AQUI:
+      // Acessa as propriedades usando o tipo RawAppointmentData e ?? para fallbacks
+      const transformedAppointments: Appointment[] = (aRes?.data || []).map((app: RawAppointmentData) => {
+        // Define os valores padrão explicitamente
+        let name = 'Cliente Desconhecido';
+        let email = 'N/A';
+        let phone = 'N/A';
 
-        // Se 'app.client' existir, usa os seus dados. Senao, usa os os dados de 'guest'.
-        clientName: app.client?.name || app.guestName,
-        clientEmail: app.client?.email || app.guestEmail,
-        clientPhone: app.client?.phone || app.guestPhone,
-        notes: app.notes,
-      }));
+        // Usa os dados do cliente logado se existirem
+        if (app.client) {
+          name = app.client.name;
+          email = app.client.email ?? 'N/A'; // Usa ?? para tratar null/undefined
+          phone = app.client.phone ?? 'N/A'; // Usa ?? para tratar null/undefined
+        }
+        // Se não houver cliente logado, usa os dados do convidado se existirem
+        else {
+          name = app.guestName ?? name; // Mantém 'Cliente Desconhecido' se guestName for null
+          email = app.guestEmail ?? email; // Mantém 'N/A' se guestEmail for null
+          phone = app.guestPhone ?? phone; // Mantém 'N/A' se guestPhone for null
+        }
+
+        return {
+          id: app.id,
+          date: app.date,
+          status: app.status,
+          serviceId: app.serviceId,
+          clientName: name,
+          clientEmail: email,
+          clientPhone: phone,
+          notes: app.notes,
+        };
+      });
 
       setAppointments(transformedAppointments);
       setServices(sRes?.data ?? []);
@@ -82,7 +119,7 @@ export function useBarberData() {
     } finally {
       setLoading(false);
     }
-  }, [getHeaders]);
+  }, [getHeaders]); // Remova fetchBillingSummary se não for usado aqui
 
   const addService = useCallback(
     async (service: { name: string; duration: number; price: number; description?: string }) => {
