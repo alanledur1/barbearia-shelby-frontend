@@ -1,107 +1,45 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import React, { useRef, useEffect, useState } from 'react';
+import SplitType from 'split-type';
+import { gsap } from 'gsap';
 
+export const AnimatedText = () => {
+  const textRef = useRef<HTMLDivElement>(null);
+  const [hasAnimated, setHasAnimated] = useState(false);
 
-function useHasMounted() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  return mounted;
-}
+  useEffect(() => {
+    if (!textRef.current || hasAnimated) return;
 
-export default function AnimatedText() {
-  const reduce = useReducedMotion();
-  const text = "Seja O Protagonista Da Sua Própria História.";
-  const destaquePalavras = ['Protagonista', 'História'];
-  const mounted = useHasMounted();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting) {
+          const split = new SplitType(textRef.current!, { types: 'chars' });
 
-  if (!mounted) {
-    // SSR fallback – estrutura o mais parecida possível com a final
-    return (
-      <div className="animated-title">
-        {text.split('').map((char, i) => (
-          <span
-            key={i}
-            className={destaquePalavras.some(p => p.toLowerCase() === char.toLowerCase()) ? 'red' : ''}
-            style={{ whiteSpace: 'pre-wrap' }}
-          >
-            {char === ' ' ? '\u00A0' : char}
-          </span>
-        ))}
-      </div>
-    );
-  }
+          gsap.from(split.chars, {
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.03,
+            ease: 'power3.out',
+          });
 
-  const letterVariants = reduce
-    ? { hidden: { y: 0, opacity: 1 }, visible: { y: 0, opacity: 1 } }
-    : { hidden: { y: 50, opacity: 0 }, visible: { y: 0, opacity: 1 } };
-
-  const containerVariants = {
-    visible: {
-      transition: {
-        staggerChildren: reduce ? 0 : 0.03,
-      },
-    },
-  };
-
-  const renderSpans = () => {
-    const spans = [];
-    let currentWord = '';
-    let keyCounter = 0;
-
-    for (let i = 0; i < text.length; i++) {
-      const char = text[i];
-      currentWord += char;
-
-      const isEndOfWord = char === ' ' || i === text.length - 1 || /[.,!?;]/.test(char);
-
-      if (isEndOfWord) {
-        const cleanWord = currentWord.trim().replace(/[.,!?;]/g, '');
-
-        // comparação case-insensitive para maior robustez
-        const isHighlighted = destaquePalavras.some(
-          p => p.toLowerCase() === cleanWord.toLowerCase()
-        );
-
-        for (let j = 0; j < currentWord.length; j++, keyCounter++) {
-          const letter = currentWord[j];
-          spans.push(
-            <motion.span
-              key={keyCounter}
-              variants={letterVariants}
-              transition={reduce ? {} : { duration: 0.45, ease: 'easeOut' }}
-              className={isHighlighted ? 'red' : ''}
-              style={{ whiteSpace: 'pre-wrap' }}
-            >
-              {letter === ' ' ? '\u00A0' : letter}
-            </motion.span>
-          );
+          setHasAnimated(true); // evita reanimação
+          observer.disconnect();
         }
-        // depois de cada palavra, adiciona um "espaço real" que pode quebrar linha
-        spans.push(<span key={`space-${keyCounter++}`}> </span>);
-        currentWord = '';
-      }
-    }
+      },
+      { threshold: 0.5 } // ativa quando 50% estiver visível
+    );
 
-    return spans;
-  };
+    observer.observe(textRef.current);
+
+    return () => observer.disconnect();
+  }, [hasAnimated]);
 
   return (
-    <motion.div
-      className="animated-title"
-      initial="hidden"
-      whileInView="visible"
-      // ✅ COMBINANDO margin E amount
-      // Exige que o elemento esteja 150px dentro da borda inferior
-      // E que pelo menos 80% de sua altura esteja visível.
-      viewport={{
-        once: true,
-        margin: "0px 0px -150px 0px",
-        amount: 0.8
-      }}
-      variants={containerVariants}
-    >
-      {renderSpans()}
-    </motion.div>
+
+    <div ref={textRef} className="animated-title">
+        Seja O <span className="red">Protagonista</span> Da Sua Própria <span className="red">História</span>.
+    </div>
   );
 };

@@ -130,14 +130,14 @@ export const Navbar = () => {
                       </div>
                     </div>
                     {isAdmin ? (
-                      <Link href="/barber" className="navbar__dropdownItemDash navbar__dropdownItem--dashboard">Minha Dashboard</Link>
+                      <Link href="/barber" className="navbar__dropdownItemDash navbar__dropdownItem--dashboard" onClick={() => setOpen(false)}>Minha Dashboard</Link>
                     ) : (
-                      <Link href="/meus-servicos" className="navbar__dropdownItemDash">Meus Serviços</Link>
+                      <Link href="/meus-servicos" className="navbar__dropdownItemDash" onClick={() => setOpen(false)}>Meus Serviços</Link>
                     )}
-                    <Link href="/" className="navbar__dropdownItemDash" onClick={() => setMobileOpen(false)}>Home</Link>
-                    <Link href="/Servicos" className="navbar__dropdownItemDash" onClick={() => setMobileOpen(false)}>Serviços</Link>
-                    <Link href="/#sobre" className="navbar__dropdownItemDash" onClick={() => setMobileOpen(false)}>Sobre Nós</Link>
-                    <Link href="/#contato" className="navbar__dropdownItemDash" onClick={() => setMobileOpen(false)}>Contato</Link>
+                    <Link href="/" className="navbar__dropdownItemDash" onClick={() => setOpen(false)}>Home</Link>
+                    <Link href="/Servicos" className="navbar__dropdownItemDash" onClick={() => setOpen(false)}>Serviços</Link>
+                    <Link href="/#sobre" className="navbar__dropdownItemDash" onClick={() => setOpen(false)}>Sobre Nós</Link>
+                    <Link href="/#contato" className="navbar__dropdownItemDash" onClick={() => setOpen(false)}>Contato</Link>
                     <button className="navbar__dropdownItem" onClick={() => { auth.logout(); setOpen(false); }}>Sair</button>
                   </motion.div>
                 )}

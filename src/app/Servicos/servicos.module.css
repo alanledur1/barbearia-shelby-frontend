@@ -19,7 +19,7 @@
 
 /* Seção com imagem de fundo */
 .servicos-header {
-  width: 100vw;
+  width: 100%;
   height: 40vh;
   background-image: url('../../images/foto-shelby.PNG');
   background-position: center;

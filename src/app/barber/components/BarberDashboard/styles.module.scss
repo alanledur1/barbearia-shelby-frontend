@@ -539,3 +539,90 @@ $input-bg: #2a2a2a;
     background-color: darken($cancelled-color, 25%);
   }
 }
+
+
+/* ================================================================
+   INÍCIO DAS CORREÇÕES PARA DISPOSITIVOS MÓVEIS
+   ================================================================
+*/
+@media (max-width: 768px) {
+  
+  .container {
+    padding: 1rem; // Menos padding no container geral
+  }
+
+  // 1. Empilha o cabeçalho
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+
+    // Faz os botões do header ocuparem a largura toda
+    div:last-child {
+      display: flex;
+      width: 100%;
+      gap: 1rem;
+      
+      .refreshButton {
+        flex: 1; // Faz os botões crescerem igualmente
+      }
+    }
+  }
+
+  // 2. Transforma o grid principal em 1 coluna
+  .content {
+    grid-template-columns: 1fr;
+  }
+
+  // 3. Remove o "position: sticky" da sidebar
+  .sidebar {
+    position: static;
+    top: auto;
+  }
+  
+  // 4. Ajusta o formulário de adicionar serviço
+  .addServiceForm {
+    // Força o select e o botão a ficarem em linhas separadas
+    .durationSelect {
+      flex-basis: 100%;
+    }
+    .addButton {
+      width: 100%; // Botão ocupa a largura total
+    }
+  }
+
+  // 5. Ajusta o card de agendamento
+  .appointmentCard {
+    padding: 1rem;
+
+    .cardHeader {
+      flex-direction: column; // Empilha o nome e o status
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    
+    .cardFooter {
+      flex-wrap: wrap; // Permite que os botões quebrem a linha
+      justify-content: center; // Centraliza os botões
+    }
+  }
+
+  // 6. Ajusta a notificação (toast)
+  .toast {
+    top: 80px; // Sobe um pouco (navbar de 70px + 10px)
+    left: 10px;
+    right: 10px;
+    width: auto; // Remove largura fixa
+  }
+
+  // 7. Ajusta a barra de filtro (quando "pendentes" está ativo)
+  .filterActive {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+
+    button {
+      width: 100%; // Botão ocupa largura total
+    }
+  }
+}
