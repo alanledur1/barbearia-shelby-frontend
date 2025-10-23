@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
+import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
@@ -146,51 +147,36 @@ export default function PaginaAgendamento() {
     setStep(3);
   };
 
-  const handleBookingSubmit = async (data: BookingFormData) => {
-    if (!selectedDate || !selectedSlot || !selectedService) return;
-    setIsLoading(true);
-    setError(null);
-    const [hours, minutes] = selectedSlot.split(':').map(Number);
-    const appointmentDateTime = new Date(selectedDate);
-    appointmentDateTime.setHours(hours, minutes, 0, 0);
+const handleBookingSubmit = async (data: BookingFormData) => {
+  if (!selectedDate || !selectedSlot || !selectedService) return;
+  setIsLoading(true);
+  setError(null);
 
-    try {
-      type BookingPayload = {
-        serviceId: number;
-        date: string;
-        client?: { name: string; email: string; phone: string };
-        clientId?: number;
-        adminId?: number;
-        notes?: string;
-      };
+  const [hours, minutes] = selectedSlot.split(':').map(Number);
+  const appointmentDateTime = new Date(selectedDate);
+  appointmentDateTime.setHours(hours, minutes, 0, 0);
 
-      let appointmentPayload: BookingPayload;
+  // ✅ Converte para string local sem UTC
+  const appointmentDateString = format(appointmentDateTime, "yyyy-MM-dd'T'HH:mm:ss");
 
-      if (auth.isAuthenticated && auth.user) {
-        if (auth.user.userType === 'admin') {
-          appointmentPayload = {
-            serviceId: selectedService.id,
-            date: appointmentDateTime.toISOString(),
-            adminId: auth.user.id,
-            client: {
-              name: data.cliente,
-              email: data.email,
-              phone: data.phone,
-            },
-            notes: data.notes,
-          };
-        } else {
-          appointmentPayload = {
-            serviceId: selectedService.id,
-            date: appointmentDateTime.toISOString(),
-            clientId: auth.user.id,
-            notes: data.notes,
-          };
-        }
-      } else {
+  try {
+    type BookingPayload = {
+      serviceId: number;
+      date: string;
+      client?: { name: string; email: string; phone: string };
+      clientId?: number;
+      adminId?: number;
+      notes?: string;
+    };
+
+    let appointmentPayload: BookingPayload;
+
+    if (auth.isAuthenticated && auth.user) {
+      if (auth.user.userType === 'admin') {
         appointmentPayload = {
           serviceId: selectedService.id,
-          date: appointmentDateTime.toISOString(),
+          date: appointmentDateString,
+          adminId: auth.user.id,
           client: {
             name: data.cliente,
             email: data.email,
@@ -198,25 +184,44 @@ export default function PaginaAgendamento() {
           },
           notes: data.notes,
         };
-      }
-
-      await api.post('/appointments', appointmentPayload);
-      setStep(4);
-
-    } catch (err: unknown) { // <-- CORRIGIDO AQUI
-      console.error('Erro ao criar agendamento:', err);
-      if (typeof err === 'object' && err !== null) {
-        // Acessando propriedades de forma segura
-        const maybeErr = err as { response?: { data?: { error?: string } }; message?: string };
-        const serverMessage = maybeErr.response?.data?.error || maybeErr.message || 'Ocorreu um erro ao agendar.';
-        setError(serverMessage);
       } else {
-        setError('Ocorreu um erro ao agendar.');
+        appointmentPayload = {
+          serviceId: selectedService.id,
+          date: appointmentDateString,
+          clientId: auth.user.id,
+          notes: data.notes,
+        };
       }
-    } finally {
-      setIsLoading(false);
+    } else {
+      appointmentPayload = {
+        serviceId: selectedService.id,
+        date: appointmentDateString,
+        client: {
+          name: data.cliente,
+          email: data.email,
+          phone: data.phone,
+        },
+        notes: data.notes,
+      };
     }
-  };
+
+    console.log("📤 Enviando data:", appointmentDateString);
+    await api.post('/appointments', appointmentPayload);
+    setStep(4);
+
+  } catch (err: unknown) {
+    console.error('Erro ao criar agendamento:', err);
+    if (typeof err === 'object' && err !== null) {
+      const maybeErr = err as { response?: { data?: { error?: string } }; message?: string };
+      const serverMessage = maybeErr.response?.data?.error || maybeErr.message || 'Ocorreu um erro ao agendar.';
+      setError(serverMessage);
+    } else {
+      setError('Ocorreu um erro ao agendar.');
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const resetFlow = () => {
     setStep(1);
