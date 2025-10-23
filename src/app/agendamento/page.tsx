@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import { ptBR } from 'date-fns/locale';
+import { format } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 
@@ -154,6 +155,8 @@ export default function PaginaAgendamento() {
     const appointmentDateTime = new Date(selectedDate);
     appointmentDateTime.setHours(hours, minutes, 0, 0);
 
+    const appointmentDateString = format(appointmentDateTime, "yyyy-MM-dd'T'HH:mm:ss");
+
     try {
       type BookingPayload = {
         serviceId: number;
@@ -170,7 +173,7 @@ export default function PaginaAgendamento() {
         if (auth.user.userType === 'admin') {
           appointmentPayload = {
             serviceId: selectedService.id,
-            date: appointmentDateTime.toISOString(),
+            date: appointmentDateString,
             adminId: auth.user.id,
             client: {
               name: data.cliente,
@@ -182,7 +185,7 @@ export default function PaginaAgendamento() {
         } else {
           appointmentPayload = {
             serviceId: selectedService.id,
-            date: appointmentDateTime.toISOString(),
+            date: appointmentDateString,
             clientId: auth.user.id,
             notes: data.notes,
           };
@@ -190,7 +193,7 @@ export default function PaginaAgendamento() {
       } else {
         appointmentPayload = {
           serviceId: selectedService.id,
-          date: appointmentDateTime.toISOString(),
+          date: appointmentDateString,
           client: {
             name: data.cliente,
             email: data.email,
