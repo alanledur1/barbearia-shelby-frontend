@@ -33,6 +33,7 @@ export default function PaginaAgendamento() {
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [bookedPhone, setBookedPhone] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -149,6 +150,9 @@ export default function PaginaAgendamento() {
 
   const handleBookingSubmit = async (data: BookingFormData) => {
     if (!selectedDate || !selectedSlot || !selectedService) return;
+
+    setBookedPhone(data.phone);
+
     setIsLoading(true);
     setError(null);
 
@@ -289,7 +293,8 @@ export default function PaginaAgendamento() {
                   <div className={styles.timeSlotsContainer}>
                     {isLoading && <p>Buscando...</p>}
                     {selectedDate && timeSlots.map((slot) => (
-                      <button key={slot.time} className={styles.timeSlot} disabled={!slot.available} onClick={() => handleSlotSelect(slot.time)}>
+                      <button key={slot.time} className={`${styles.timeSlot} ${selectedSlot === slot.time ? styles.timeSlotSelected : ''
+                        }`} disabled={!slot.available} onClick={() => handleSlotSelect(slot.time)}>
                         {slot.time}
                       </button>
                     ))}
@@ -325,14 +330,39 @@ export default function PaginaAgendamento() {
             )}
 
             {step === 4 && (
-              <motion.div key="step4" variants={motionVariants} initial="hidden" animate="visible" exit="exit" className={styles.successMessage}>
+              <motion.div
+                key="step4"
+                variants={motionVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className={styles.successMessage}
+              >
                 <h2>Agendamento Confirmado!</h2>
-                <p>Seu horário foi reservado. Um resumo foi enviado para o seu email. Nos vemos em breve!</p>
-                <button onClick={resetFlow} className={styles.primaryButton}>
+                <p>Seu horário foi reservado. Um resumo foi enviado para o seu whatsapp. Nos vemos em breve!</p>
+
+                {/* ✅ botão para novo agendamento */}
+                <button
+                  onClick={() => {
+                    // Verifica se temos o telefone
+                    if (bookedPhone) {
+                      const message = `Olá! Seu horário foi agendado com sucesso para ${selectedDate?.toLocaleDateString('pt-BR')} às ${selectedSlot}. 💈`;
+                      const whatsappUrl = `https://wa.me/55${bookedPhone}?text=${encodeURIComponent(message)}`;
+                      window.open(whatsappUrl, '_blank');
+                    } else {
+                      alert("Não foi possível encontrar o número de telefone deste agendamento.");
+                    }
+
+                    // Reseta o fluxo
+                    resetFlow();
+                  }}
+                  className={styles.primaryButton}
+                >
                   Agendar Novo Horário
                 </button>
               </motion.div>
             )}
+
           </AnimatePresence>
         </div>
       </div>

@@ -177,6 +177,12 @@ $error-color: #dc3545;
     text-decoration: line-through;
   }
 }
+.timeSlotSelected {
+  background-color: $brand-color;
+  color: #fff;
+  border-color: $brand-color;
+  font-weight: 600;
+}
 
 /* === Seção de Confirmação e Formulário === */
 .summary {
