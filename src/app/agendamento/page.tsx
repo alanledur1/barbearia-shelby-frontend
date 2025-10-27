@@ -162,8 +162,7 @@ export default function PaginaAgendamento() {
     const appointmentDateTime = new Date(selectedDate);
     appointmentDateTime.setHours(hours, minutes, 0, 0);
 
-    // ✅ Depois formata para string local (sem UTC)
-    const appointmentDateString = format(appointmentDateTime, "yyyy-MM-dd'T'HH:mm:ss");
+    const appointmentDateString = appointmentDateTime.toISOString();
 
     try {
       type BookingPayload = {
