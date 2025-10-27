@@ -1,4 +1,5 @@
-// src/app/barber/components/BarberDashboard/styles.module.scss
+
+@use "sass:color";
 
 // === Variáveis ===
 $brand-color: #f67366;
@@ -389,9 +390,10 @@ $input-bg: #2a2a2a;
 }
 
 .toastError {
-  background-color: $cancelled-color; // Reutilizando sua variável de cor de erro
   color: white;
-  border: 1px solid darken($cancelled-color, 10%);
+  border: 1px solid color.adjust($cancelled-color, $lightness: -10%);
+  background-color: color.adjust($input-bg, $lightness: 5%);
+
 }
 
 // Animação para a notificação aparecer e desaparecer
@@ -458,7 +460,7 @@ $input-bg: #2a2a2a;
   // Transforma o span em um botão clicável
   border: none;
   cursor: pointer;
-  
+
   // Adiciona um feedback visual quando o filtro está ativo
   &.active {
     background-color: darken($cancelled-color, 15%);
@@ -469,7 +471,7 @@ $input-bg: #2a2a2a;
 
 .filterActive {
   // O grid-column faz a barra ocupar as duas colunas
-  grid-column: 1 / -1; 
+  grid-column: 1 / -1;
   background-color: lighten($card-bg, 5%);
   border: 1px solid $border-color;
   border-left: 4px solid $cancelled-color;
@@ -500,6 +502,7 @@ $input-bg: #2a2a2a;
     }
   }
 }
+
 /* === Controles de Visualização (Próximos / Histórico) === */
 .viewControls {
   grid-column: 1 / -1; // Ocupa a largura total
@@ -546,7 +549,7 @@ $input-bg: #2a2a2a;
    ================================================================
 */
 @media (max-width: 768px) {
-  
+
   .container {
     padding: 1rem; // Menos padding no container geral
   }
@@ -562,7 +565,7 @@ $input-bg: #2a2a2a;
       display: flex;
       width: 100%;
       gap: 1rem;
-      
+
       .refreshButton {
         flex: 1; // Faz os botões crescerem igualmente
       }
@@ -579,13 +582,15 @@ $input-bg: #2a2a2a;
     position: static;
     top: auto;
   }
-  
+
   // 4. Ajusta o formulário de adicionar serviço
   .addServiceForm {
+
     // Força o select e o botão a ficarem em linhas separadas
     .durationSelect {
       flex-basis: 100%;
     }
+
     .addButton {
       width: 100%; // Botão ocupa a largura total
     }
@@ -600,7 +605,7 @@ $input-bg: #2a2a2a;
       align-items: flex-start;
       gap: 0.75rem;
     }
-    
+
     .cardFooter {
       flex-wrap: wrap; // Permite que os botões quebrem a linha
       justify-content: center; // Centraliza os botões
