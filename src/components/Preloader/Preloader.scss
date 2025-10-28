@@ -17,11 +17,11 @@
   transform-origin: center center;
   overflow: hidden;
   transition: opacity 0.10s ease, transform 0.10s ease;
-  padding: 0; /* garante sem deslocamento */
+  padding: 0; 
   margin: 0;
 
   /* Corrige variações de viewport mobile */
-  min-height: 100dvh; /* usa altura dinâmica real da tela */
+  min-height: 100dvh; 
   height: 100dvh;
 
   &.fade-out {
@@ -117,8 +117,6 @@
   .preloader__text {
     font-size: 1.6rem;
     letter-spacing: 1px;
-    margin-right: 60px;
-    margin-bottom: 50px;
   }
 
   .preloader__spinner {
