@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import './CriarConta.scss';
 
 interface CriarContaProps {
@@ -19,28 +20,45 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister, apiError }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !email || !phone || !password || !confirmPassword) {
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+    const trimmedConfirmPassword = confirmPassword.trim();
+    const numericPhone = phone.replace(/\D/g, '');
+
+    if (!trimmedName || !trimmedEmail || !numericPhone || !trimmedPassword || !trimmedConfirmPassword) {
       setError('Preencha todos os campos!');
       return;
     }
 
-    if (password !== confirmPassword) {
+    if (trimmedPassword !== trimmedConfirmPassword) {
       setError('As senhas não coincidem!');
       return;
     }
 
-    if (phone.length !== 11) {
-      setError('O phone deve ter 11 dígitos!');
+    if (numericPhone.length !== 11) {
+      setError('O celular deve ter 11 dígitos numéricos!');
       return;
     }
 
-    if (password.length < 6) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      setError('Informe um e-mail válido.');
+      return;
+    }
+
+    if (trimmedName.length < 3) {
+      setError('O nome deve ter pelo menos 3 caracteres.');
+      return;
+    }
+
+    if (trimmedPassword.length < 6) {
       setError('A senha deve ter pelo menos 6 caracteres!');
       return;
     }
 
     setError('');
-    onRegister(name, email, phone, password);
+    onRegister(trimmedName, trimmedEmail, numericPhone, trimmedPassword);
   };
 
   return (
@@ -48,7 +66,7 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister, apiError }) => {
       <form onSubmit={handleSubmit} className="register-form">
         <h2 className="title">Criar Conta</h2>
         {/* Mostra o erro da API se ele existir, senão mostra o erro local */}
-        {(apiError || error) && <p className="error">{apiError || error}</p>}
+        {(apiError || error) && <p className="error" aria-live="polite">{apiError || error}</p>}
 
         <div className="input-group">
           <label htmlFor="name">Nome</label>
@@ -58,6 +76,7 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister, apiError }) => {
             placeholder="Digite seu nome"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            autoComplete="name"
           />
         </div>
 
@@ -69,6 +88,7 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister, apiError }) => {
             placeholder="Digite seu e-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
           />
         </div>
 
@@ -76,11 +96,17 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister, apiError }) => {
           <label htmlFor="phone">Celular</label>
           <input
             id="phone"
-            type="tel" 
+            type="tel"
             pattern="[0-9]*"
             placeholder="Digite seu celular"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => {
+              const digitsOnly = e.target.value.replace(/\D/g, '');
+              setPhone(digitsOnly.slice(0, 11));
+            }}
+            inputMode="numeric"
+            autoComplete="tel"
+            maxLength={11}
           />
         </div>
 
@@ -92,6 +118,7 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister, apiError }) => {
             placeholder="Digite sua senha"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            autoComplete="new-password"
           />
         </div>
 
@@ -103,6 +130,7 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister, apiError }) => {
             placeholder="Confirme sua senha"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            autoComplete="new-password"
           />
         </div>
 
@@ -111,7 +139,7 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister, apiError }) => {
         </button>
 
         <div className="login-link">
-          <p>Já tem conta? <a href="./Login">Faça login</a></p>
+          <p>Já tem conta? <Link href="/Login">Faça login</Link></p>
         </div>
       </form>
     </div>
