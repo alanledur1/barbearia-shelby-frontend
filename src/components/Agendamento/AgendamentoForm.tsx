@@ -38,11 +38,8 @@ export default function AgendamentoForm({ onBookingSubmitAction, isLoading, init
 
   const handleNameBluer = (event: React.FocusEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    if (value) {
-      const formattedName = formatName(value);
-      setFormData(prev => ({ ...prev, cliente: formattedName }));
-    }
-  }
+    setFormData(prev => ({ ...prev, cliente: value.trim() }));
+  };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -74,7 +71,7 @@ export default function AgendamentoForm({ onBookingSubmitAction, isLoading, init
           value={formData.cliente}
           onChange={handleChange}
           onBlur={handleNameBluer}
-          placeholder="Digite seu nome completo"
+          placeholder="Digite seu nome"
           required
           disabled={isLoading}
           className={getError('cliente') ? styles.error : ''}
@@ -94,22 +91,6 @@ export default function AgendamentoForm({ onBookingSubmitAction, isLoading, init
           className={getError('email') ? styles.error : ''}
         />
         {getError('email') && <p className={styles.errorMessage}>{getError('email')}</p>}
-      </div>
-      <div className={styles.inputGroup}>
-        <label htmlFor="phone">Seu Telefone</label>
-        <input
-          type="tel"
-          id="phone"
-          value={formData.phone}
-          onChange={handleChange}
-          placeholder="(51) 99999-9999"
-          required
-          disabled={isLoading}
-          className={getError('phone') ? styles.error : ''}
-          inputMode="numeric"
-          pattern="[0-9]*"
-        />
-        {getError('phone') && <p className={styles.errorMessage}>{getError('phone')}</p>}
       </div>
       <div className={styles.inputGroup}>
         <label htmlFor="notes">Para quem é o agendamento? (Opcional)</label>

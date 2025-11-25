@@ -21,10 +21,6 @@ export const bookingSchema = z.object({
     .trim() // 1. Remove espaços no início e no fim
     .min(6, { message: 'Nome completo deve ter no mínimo 3 caracteres.' })
     .max(36)
-    // 2. Garante que há pelo menos um espaço (nome e sobrenome)
-    .refine(name => name.includes(' '), {
-        message: 'Por favor, insira seu nome completo.',
-    })
     // 3. Garante que só há letras e espaços (incluindo acentos)
     .refine(name => /^[a-zA-Z\u00C0-\u017F\s'-]+$/.test(name), {
         message: 'Nome pode conter apenas letras e espaços.',
