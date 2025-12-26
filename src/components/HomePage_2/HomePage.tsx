@@ -9,37 +9,41 @@ export const HomePage_2 = () => {
   const title2Ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Animação inicial dos títulos
-    if (container.current) {
-      gsap.from(container.current.querySelectorAll('.title-anim'), {
-        duration: 1.2,
-        y: 100,
-        opacity: 0,
-        stagger: 0.3,
-        ease: 'power3.out',
-      });
-    }
+    if (!container.current) return;
 
-    // Animação com scroll da title-2
+    const titles = container.current.querySelectorAll('.title-anim');
+
+    // 🔒 GARANTE estado inicial SEMPRE
+    gsap.set(titles, { opacity: 0, y: 40 });
+
+    // ▶️ Anima entrada inicial
+    gsap.to(titles, {
+      opacity: 1,
+      y: 0,
+      duration: 1.2,
+      stagger: 0.3,
+      ease: 'power3.out',
+      clearProps: 'transform', // evita conflitos futuros
+    });
+
+    // ===== Scroll animation da title-2 =====
     if (title2Ref.current) {
+      gsap.set(title2Ref.current, { opacity: 0, x: 80 });
+
       const observer = new IntersectionObserver(
-        (entries, observerInstance) => {
-          const [entry] = entries;
+        ([entry], observerInstance) => {
           if (entry.isIntersecting) {
-            gsap.fromTo(
-              title2Ref.current,
-              { x: 100, opacity: 0 },
-              {
-                x: 0,
-                opacity: 1,
-                duration: 1.5,
-                ease: 'power3.out',
-              }
-            );
-            observerInstance.disconnect(); // remove o observer após animar
+            gsap.to(title2Ref.current, {
+              opacity: 1,
+              x: 0,
+              duration: 1.5,
+              ease: 'power3.out',
+              clearProps: 'transform',
+            });
+            observerInstance.disconnect();
           }
         },
-        { threshold: 0.4 } // dispara quando 40% do elemento estiver visível
+        { threshold: 0.4 }
       );
 
       observer.observe(title2Ref.current);
@@ -53,13 +57,18 @@ export const HomePage_2 = () => {
       <video className="background-video" autoPlay loop muted playsInline>
         <source src="/videos/barbearia.mp4" type="video/mp4" />
       </video>
+
       <div className="background-overlay" />
+
       <div className="title-1 title-anim">
         <AnimatedText />
+
         <div className="description">
           Na barbearia Shelby, Cada Detalhe É Feito Para Você.
         </div>
-        <br /> <br />
+
+        <br /><br />
+
         <div className="title-2" ref={title2Ref}>
           Na <span className="red">Shelby</span>, Cada <span className="red">Corte</span> É <br />
           Mais Do Que Um <br />
@@ -71,6 +80,5 @@ export const HomePage_2 = () => {
         </div>
       </div>
     </div>
-
   );
 };

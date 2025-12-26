@@ -40,6 +40,9 @@ export default function BarberHeader({ onRefresh, appointmentsCount, servicesCou
         <p>{appointmentsCount} agendamento(s) futuros • {servicesCount} serviço(s)</p>
       </div>
       <div>
+        <Link href="/agendamento">
+          <button className={styles.refreshButton} style={{ marginRight: '1rem' }}>Novo Agendamento</button>
+        </Link>
         <Link href="/barber/billing">
           <button className={styles.refreshButton} style={{ marginRight: '1rem' }}>Faturamento</button>
         </Link>

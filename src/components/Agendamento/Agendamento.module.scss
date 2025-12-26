@@ -13,72 +13,94 @@ $error-color: #dc3545;
   gap: 1rem;
 }
 
-.inputGroup {
+.field {
   position: relative;
-  /* Espaço para a mensagem de erro */
-  padding-bottom: 1.5rem; 
-
-  label {
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: $text-muted;
-    font-size: 0.9rem;
-  }
+  padding-bottom: 1.2rem;
 
   input {
-    height: 30px;
-    background-color: $input-bg;
+    width: 100%;
+    background: $input-bg;
     border: 1px solid $border-color;
     color: $text-color;
-    padding: 0.8rem 1rem;
-    margin-left: 5px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    transition: border-color 0.3s, box-shadow 0.3s;
+    padding: 1.2rem 1rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    transition: all 0.25s ease;
 
     &:focus {
       outline: none;
       border-color: $brand-color;
-      box-shadow: 0 0 0 3px rgba($brand-color, 0.25);
+      box-shadow: 0 0 0 3px rgba($brand-color, 0.2);
     }
+
+    &:focus+label,
+    &:not(:placeholder-shown)+label {
+      top: 6px;
+      font-size: 0.7rem;
+      color: $brand-color;
+    }
+  }
+
+  label {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text-muted;
+    font-size: 0.85rem;
+    pointer-events: none;
+    transition: all 0.25s ease;
+    background: $input-bg;
+    padding: 0 0.25rem;
   }
 
   /* Estilo do input com erro */
   input.error {
     border-color: $error-color;
+
     &:focus {
-      box-shadow: 0 0 0 3px rgba($error-color, 0.25);
+      box-shadow: 0 0 0 3px rgba($error-color, 0.2);
     }
   }
 }
 
 .errorMessage {
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
   color: $error-color;
-  font-size: 0.8rem;
-  position: absolute;
-  bottom: 0;
-  left: 5px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .primaryButton {
-    width: 100%;
-    font-weight: 600;
-    font-size: 1rem;
-    padding: 0.9rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: $brand-color;
-    color: #fff;
-    border: none;
-    margin-top: 1rem;
+  width: 100%;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: $brand-color;
+  color: #fff;
+  border: none;
+  margin-top: 1rem;
 
-    &:hover {
-        background: darken($brand-color, 10%);
-    }
+  &:hover {
+    background: darken($brand-color, 10%);
+  }
 
-    &:disabled {
-        background-color: #555;
-        cursor: not-allowed;
-    }
+  &:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+  }
 }

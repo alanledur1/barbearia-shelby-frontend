@@ -9,7 +9,11 @@ type Props = {
   onBookingSubmitAction: (data: BookingFormData) => void;
   isLoading: boolean;
   initialValues?: BookingFormData; // prefill quando usuário está logado
+  serviceName: string;
+  date: string;
+  time: string;
 };
+
 
 export default function AgendamentoForm({ onBookingSubmitAction, isLoading, initialValues }: Props) {
   const [formData, setFormData] = useState<BookingFormData>(
@@ -66,68 +70,89 @@ export default function AgendamentoForm({ onBookingSubmitAction, isLoading, init
 
   return (
     <form onSubmit={handleSubmit} className={styles.form} noValidate>
-      <div className={styles.inputGroup}>
-        <label htmlFor="cliente">Seu Nome</label>
+      {/* Nome */}
+      <div className={styles.field}>
         <input
           type="text"
           id="cliente"
           value={formData.cliente}
           onChange={handleChange}
           onBlur={handleNameBluer}
-          placeholder="Digite seu nome completo"
           required
+          placeholder=" "
           disabled={isLoading}
           className={getError('cliente') ? styles.error : ''}
         />
-        {getError('cliente') && <p className={styles.errorMessage}>{getError('cliente')}</p>}
+        <label htmlFor="cliente">Seu Nome</label>
+        {getError('cliente') && (
+          <p className={styles.errorMessage}>{getError('cliente')}</p>
+        )}
       </div>
-      <div className={styles.inputGroup}>
-        <label htmlFor="email">Seu Email</label>
+
+      {/* Email */}
+      <div className={styles.field}>
         <input
           type="email"
           id="email"
           value={formData.email}
           onChange={handleChange}
-          placeholder="exemplo@email.com"
+          placeholder=" "
           required
           disabled={isLoading}
           className={getError('email') ? styles.error : ''}
         />
-        {getError('email') && <p className={styles.errorMessage}>{getError('email')}</p>}
+        <label htmlFor="email">Seu email</label>
+        {getError('email') && (
+          <p className={styles.errorMessage}>{getError('email')}</p>
+        )}
       </div>
-      <div className={styles.inputGroup}>
-        <label htmlFor="phone">Seu Telefone</label>
+
+      {/* Telefone */}
+      <div className={styles.field}>
         <input
           type="tel"
           id="phone"
           value={formData.phone}
           onChange={handleChange}
-          placeholder="(51) 99999-9999"
+          placeholder=" "
+          autoComplete="tel"
+          inputMode="numeric"
           required
           disabled={isLoading}
           className={getError('phone') ? styles.error : ''}
-          inputMode="numeric"
-          pattern="[0-9]*"
         />
-        {getError('phone') && <p className={styles.errorMessage}>{getError('phone')}</p>}
+        <label htmlFor="phone">Seu telefone</label>
+        {getError('phone') && (
+          <p className={styles.errorMessage}>{getError('phone')}</p>
+        )}
       </div>
-      <div className={styles.inputGroup}>
-        <label htmlFor="notes">Para quem é o agendamento? (Opcional)</label>
+
+      {/* Observações */}
+      <div className={styles.field}>
         <input
           type="text"
           id="notes"
           value={formData.notes || ''}
           onChange={handleChange}
-          placeholder="Ex: Meu filho, João"
+          placeholder=" "
           disabled={isLoading}
           className={getError('notes') ? styles.error : ''}
         />
-        {getError('notes') && <p className={styles.errorMessage}>{getError('notes')}</p>}
+        <label htmlFor="notes">Para quem é o agendamento? (opcional)</label>
+        {getError('notes') && (
+          <p className={styles.errorMessage}>{getError('notes')}</p>
+        )}
       </div>
 
-      <button type="submit" className={styles.primaryButton} disabled={isLoading}>
+      <button 
+        type="submit" 
+        className={styles.primaryButton} 
+        disabled={isLoading}
+      >
         {isLoading ? 'Confirmando...' : 'Confirmar Agendamento'}
       </button>
     </form>
+
   );
+
 }

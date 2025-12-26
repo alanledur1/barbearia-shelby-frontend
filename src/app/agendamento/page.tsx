@@ -151,7 +151,6 @@ export default function PaginaAgendamento() {
     if (!selectedDate || !selectedSlot || !selectedService) return;
 
     setBookedPhone(data.phone);
-
     setIsLoading(true);
     setError(null);
 
@@ -318,9 +317,8 @@ export default function PaginaAgendamento() {
                   initialValues={auth.isAuthenticated && auth.user ? {
                     cliente: auth.user.name ?? '',
                     email: auth.user.email ?? '',
-                    phone: '' // Telefone pode não estar no user, mantenha vazio ou pegue de outro lugar
-                  } : undefined}
-                />
+                    phone: ''
+                  } : undefined} serviceName={''} date={''} time={''} />
                 <button onClick={() => setStep(2)} className={styles.backButton} disabled={isLoading}>
                   Voltar
                 </button>
@@ -337,29 +335,29 @@ export default function PaginaAgendamento() {
                 className={styles.successMessage}
               >
                 <h2>Agendamento Confirmado!</h2>
-                <p>Seu horário foi reservado. Um resumo foi enviado para o seu whatsapp. Nos vemos em breve!</p>
+                <p>
+                  Seu horário foi reservado com sucesso.
+                  Caso precise falar conosco, clique no botão abaixo.
+                </p>
 
-                {/* ✅ botão para novo agendamento */}
-                <button
-                  onClick={() => {
-                    // Verifica se temos o telefone
-                    if (bookedPhone) {
-                      const message = `Olá! Seu horário foi agendado com sucesso para ${selectedDate?.toLocaleDateString('pt-BR')} às ${selectedSlot}. 💈`;
-                      const whatsappUrl = `https://wa.me/55${bookedPhone}?text=${encodeURIComponent(message)}`;
-                      window.open(whatsappUrl, '_blank');
-                    } else {
-                      alert("Não foi possível encontrar o número de telefone deste agendamento.");
-                    }
-
-                    // Reseta o fluxo
-                    resetFlow();
-                  }}
+                <a
+                  href="https://wa.me/5551998177919"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={styles.primaryButton}
                 >
-                  Agendar Novo Horário
+                  Falar com a Barbearia no WhatsApp
+                </a>
+
+                <button
+                  onClick={resetFlow}
+                  className={styles.backButton}
+                >
+                  Novo Agendamento
                 </button>
               </motion.div>
             )}
+
 
           </AnimatePresence>
         </div>
