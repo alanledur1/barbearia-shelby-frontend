@@ -9,16 +9,16 @@ import styles from './servicos.module.css';
 export default function Page() {
   return (
     <div className={styles['servicos-container']}>
-      <div className={styles['servicos-header']}>
-        <motion.h1
-          className={styles['servicos-title']}
-          initial={{ opacity: 0, x: -100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-        >
-          Serviços
-        </motion.h1>
-      </div>
+
+      <motion.div
+        className={styles['servicos-header']}
+        initial={{ scale: 1.05 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 1.2, ease: 'easeOut' }}
+      >
+        <h1 className={styles['servicos-title']}>Serviços</h1>
+      </motion.div>
+
       <Servicos />
     </div>
   );

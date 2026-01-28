@@ -32,7 +32,7 @@ export default function PaginaAgendamento() {
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [bookedPhone, setBookedPhone] = useState<string | null>(null);
+  const [, setBookedPhone] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchServices = async () => {
