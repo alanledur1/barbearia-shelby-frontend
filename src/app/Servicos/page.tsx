@@ -12,9 +12,6 @@ export default function Page() {
 
       <motion.div
         className={styles['servicos-header']}
-        initial={{ scale: 1.05 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 1.2, ease: 'easeOut' }}
       >
         <h1 className={styles['servicos-title']}>Serviços</h1>
       </motion.div>
