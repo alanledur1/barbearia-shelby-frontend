@@ -68,7 +68,7 @@ export default function PaginaAgendamento() {
       ];
 
       // Se NÃO for sexta-feira, remover horários antes de 13:00
-      if (day !== 5) {
+      if (day !== 5 && day !== 6) {
         allSlots = allSlots.filter(slot => {
           const hour = Number(slot.split(':')[0]);
           return hour >= 13;
