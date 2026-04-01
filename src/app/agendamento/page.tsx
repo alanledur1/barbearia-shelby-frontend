@@ -59,16 +59,26 @@ export default function PaginaAgendamento() {
       // CORREÇÃO: Tipar 'app' como Appointment ou um tipo mais específico se necessário
       const bookedAppointments = (response.data || []).filter((app: Appointment) => app.status === 'CONFIRMED');
 
-      const day = date.getDay(); // 5 = sexta-feira
+      const day = date.getDay();
 
       let allSlots = [
-        '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '13:00', '13:30',
+        '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '13:00', '13:30',
         '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
         '18:00', '18:30', '19:00', '19:30'
       ];
 
-      // Se NÃO for sexta-feira, remover horários antes de 13:00
-      if (day !== 5) {
+      // 👉 SÁBADO (mantém manhã e limita até 16:30)
+      if (day === 6) {
+        allSlots = allSlots.filter(slot => {
+          const hour = Number(slot.split(':')[0]);
+          const minute = Number(slot.split(':')[1]);
+
+          return hour < 16 || (hour === 16 && minute <= 30);
+        });
+      }
+
+      // 👉 OUTROS DIAS (exceto sexta e sábado)
+      else if (day !== 5) {
         allSlots = allSlots.filter(slot => {
           const hour = Number(slot.split(':')[0]);
           return hour >= 13;
