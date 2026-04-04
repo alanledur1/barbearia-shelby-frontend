@@ -54,44 +54,6 @@ A **Barbearia Shelby** é uma aplicação fullstack desenvolvida para modernizar
 
 ---
 
-## 🖥️ Como rodar localmente
-
-### Pré-requisitos
-- Node.js 18+
-- npm
-- Backend rodando ([instruções aqui](https://github.com/alanledur1/barbearia-backend))
-
-### Instalação
-
-```bash
-# Clone o repositório
-git clone https://github.com/alanledur1/barbearia-shelby-frontend.git
-
-# Entre na pasta
-cd barbearia-shelby-frontend
-
-# Instale as dependências
-npm install
-```
-
-### Variáveis de ambiente
-
-Crie um arquivo `.env.local` na raiz do projeto:
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:3001
-```
-
-### Rodando o projeto
-
-```bash
-npm run dev
-```
-
-Acesse [http://localhost:3000](http://localhost:3000) no seu navegador.
-
----
-
 ## 📁 Estrutura do projeto
 
 ```
@@ -116,10 +78,16 @@ O frontend está hospedado na **Vercel**. Acesse em:
 
 ---
 
-## 👨‍💻 Autor
+## 👨‍💻 Autores
 
 Desenvolvido por **Alan Ledur**
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Alan%20Ledur-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/alan-ledur/)
 [![GitHub](https://img.shields.io/badge/GitHub-alanledur1-black?style=flat-square&logo=github)](https://github.com/alanledur1)
 [![Portfolio](https://img.shields.io/badge/Portfolio-alan--ledur.vercel.app-green?style=flat-square)](https://alan-ledur.vercel.app)
+
+e **Carlos Henrique**
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Carlos%20Henrique-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/carlos-henrique-tem-pass-finger-892001196/)
+[![GitHub](https://img.shields.io/badge/GitHub-CarlosHTPF-black?style=flat-square&logo=github)](https://github.com/CarlosHTPF)
+[![Portfolio](https://img.shields.io/badge/Portfolio-portifolio--nine--lake--33.vercel.app-green?style=flat-square)](https://portifolio-nine-lake-33.vercel.app)
