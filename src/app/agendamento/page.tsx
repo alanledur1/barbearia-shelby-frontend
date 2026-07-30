@@ -13,26 +13,29 @@ import api from '@/services/api';
 import { type BookingFormData } from '@/schemas/agendamentoSchema';
 
 type Service = { id: number; name: string; duration: number; price: number; };
-type Appointment = {
-  id: number;
+type Barber = { id: number; name: string; };
+type AvailabilityEntry = {
   date: string;
   durationMinutes: number;
-  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
 };
 type TimeSlot = { time: string; available: boolean; };
-type Step = 1 | 2 | 3 | 4;
+type Step = 1 | 2 | 3 | 4 | 5;
 
 export default function PaginaAgendamento() {
   const auth = useAuth();
   const [step, setStep] = useState<Step>(1);
   const [services, setServices] = useState<Service[]>([]);
   const [selectedService, setSelectedService] = useState<Service | undefined>();
+  const [barbers, setBarbers] = useState<Barber[]>([]);
+  const [selectedBarber, setSelectedBarber] = useState<Barber | undefined>();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [, setBookedPhone] = useState<string | null>(null);
+
+  const isStaffBooking = !!(auth.isAuthenticated && auth.user && ['barbeiro', 'dono', 'admin'].includes(auth.user.userType));
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -50,14 +53,26 @@ export default function PaginaAgendamento() {
     fetchServices();
   }, []);
 
-  const generateTimeSlotsForDate = async (date: Date, service: Service) => {
+  useEffect(() => {
+    const fetchBarbers = async () => {
+      try {
+        const response = await api.get<Barber[]>('/appointments/barbers');
+        setBarbers(response.data);
+      } catch (err) {
+        setError('Não foi possível carregar os barbeiros. Tente recarregar a página.');
+        console.error(err);
+      }
+    };
+    fetchBarbers();
+  }, []);
+
+  const generateTimeSlotsForDate = async (date: Date, service: Service, barber: Barber) => {
     setIsLoading(true);
     setError(null);
     try {
       const dateString = date.toISOString().split('T')[0];
-      const response = await api.get<Appointment[]>(`/appointments?date=${dateString}`);
-      // CORREÇÃO: Tipar 'app' como Appointment ou um tipo mais específico se necessário
-      const bookedAppointments = (response.data || []).filter((app: Appointment) => app.status === 'CONFIRMED');
+      const response = await api.get<AvailabilityEntry[]>(`/appointments/availability?date=${dateString}&adminId=${barber.id}`);
+      const bookedAppointments = response.data || [];
 
       const day = date.getDay();
 
@@ -86,8 +101,7 @@ export default function PaginaAgendamento() {
       }
 
       const bookedSlots = new Set<string>();
-      // CORREÇÃO: Tipar 'app' como Appointment ou um tipo mais específico
-      bookedAppointments.forEach((app: Appointment) => {
+      bookedAppointments.forEach((app: AvailabilityEntry) => {
         const startTime = new Date(app.date);
         const startSlot = `${String(startTime.getHours()).padStart(2, '0')}:${String(startTime.getMinutes()).padStart(2, '0')}`;
         bookedSlots.add(startSlot);
@@ -140,13 +154,34 @@ export default function PaginaAgendamento() {
   const handleServiceSelect = (service: Service) => {
     setSelectedService(service);
     setError(null);
-    setStep(2);
+
+    if (isStaffBooking && auth.user) {
+      // Staff logado agenda como si mesmo — pula a escolha manual de barbeiro.
+      setSelectedBarber({ id: auth.user.id, name: auth.user.name ?? 'Você' });
+      setStep(3);
+    } else {
+      setStep(2);
+    }
+  };
+
+  const handleBarberSelect = (barber: Barber) => {
+    setSelectedBarber(barber);
+    setSelectedSlot(null);
+    setError(null);
+    setStep(3);
+
+    // Se o usuário já tinha escolhido uma data antes de trocar de barbeiro
+    // (ex.: voltou da tela de Data & Hora), os horários precisam ser
+    // recalculados para o novo barbeiro — senão ficam com dados do anterior.
+    if (selectedDate && selectedService) {
+      generateTimeSlotsForDate(selectedDate, selectedService, barber);
+    }
   };
 
   const handleDateSelect = (date: Date | undefined) => {
-    if (!date || !selectedService) return;
+    if (!date || !selectedService || !selectedBarber) return;
     setSelectedDate(date);
-    generateTimeSlotsForDate(date, selectedService);
+    generateTimeSlotsForDate(date, selectedService, selectedBarber);
   };
 
   const handleSlotSelect = (time: string) => {
@@ -164,7 +199,7 @@ export default function PaginaAgendamento() {
 
     setSelectedSlot(time);
     setError(null);
-    setStep(3);
+    setStep(4);
   };
 
   const handleBookingSubmit = async (data: BookingFormData) => {
@@ -195,11 +230,11 @@ export default function PaginaAgendamento() {
       let appointmentPayload: BookingPayload;
 
       if (auth.isAuthenticated && auth.user) {
-        if (['barbeiro', 'dono', 'admin'].includes(auth.user.userType)) {
+        if (isStaffBooking) {
           appointmentPayload = {
             serviceId: selectedService.id,
             date: appointmentDateString,
-            adminId: auth.user.id,
+            adminId: selectedBarber?.id,
             client: {
               name: data.cliente,
               email: data.email,
@@ -212,6 +247,7 @@ export default function PaginaAgendamento() {
             serviceId: selectedService.id,
             date: appointmentDateString,
             clientId: auth.user.id,
+            adminId: selectedBarber?.id,
             notes: data.notes,
           };
         }
@@ -224,13 +260,14 @@ export default function PaginaAgendamento() {
             email: data.email,
             phone: data.phone,
           },
+          adminId: selectedBarber?.id,
           notes: data.notes,
         };
       }
 
       console.log("📤 Enviando data:", appointmentDateString);
       await api.post('/appointments', appointmentPayload);
-      setStep(4);
+      setStep(5);
 
     } catch (err: unknown) {
       console.error('Erro ao criar agendamento:', err);
@@ -249,6 +286,7 @@ export default function PaginaAgendamento() {
   const resetFlow = () => {
     setStep(1);
     setSelectedService(undefined);
+    setSelectedBarber(undefined);
     setSelectedDate(undefined);
     setTimeSlots([]);
     setSelectedSlot(null);
@@ -264,11 +302,12 @@ export default function PaginaAgendamento() {
   return (
     <main className={styles.mainContainer}>
       <div className={styles.container}>
-        {step < 4 && (
+        {step < 5 && (
           <div className={styles.stepper}>
             <div className={`${styles.step} ${step >= 1 ? styles.active : ''}`}>Serviço</div>
-            <div className={`${styles.step} ${step >= 2 ? styles.active : ''}`}>Data & Hora</div>
-            <div className={`${styles.step} ${step >= 3 ? styles.active : ''}`}>Seus Dados</div>
+            <div className={`${styles.step} ${step >= 2 ? styles.active : ''}`}>Barbeiro</div>
+            <div className={`${styles.step} ${step >= 3 ? styles.active : ''}`}>Data & Hora</div>
+            <div className={`${styles.step} ${step >= 4 ? styles.active : ''}`}>Seus Dados</div>
           </div>
         )}
 
@@ -293,7 +332,28 @@ export default function PaginaAgendamento() {
 
             {step === 2 && selectedService && (
               <motion.div key="step2" variants={motionVariants} initial="hidden" animate="visible" exit="exit">
-                <h2 className={styles.stepTitle}>2. Escolha a Data e Hora</h2>
+                <h2 className={styles.stepTitle}>2. Escolha o Barbeiro</h2>
+                {error && <p style={{ color: '#f67366' }}>{error}</p>}
+                {barbers.length === 0 ? (
+                  <p>Nenhum barbeiro disponível no momento.</p>
+                ) : (
+                  <div className={styles.serviceGrid}>
+                    {barbers.map(barber => (
+                      <div key={barber.id} className={styles.serviceCard} onClick={() => handleBarberSelect(barber)}>
+                        <h3>{barber.name}</h3>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <button onClick={() => setStep(1)} className={styles.backButton}>
+                  Voltar para Serviços
+                </button>
+              </motion.div>
+            )}
+
+            {step === 3 && selectedService && selectedBarber && (
+              <motion.div key="step3" variants={motionVariants} initial="hidden" animate="visible" exit="exit">
+                <h2 className={styles.stepTitle}>3. Escolha a Data e Hora</h2>
                 <div className={styles.dateTimePicker}>
                   <div className={styles.dayPickerContainer}>
                     <DayPicker
@@ -317,18 +377,19 @@ export default function PaginaAgendamento() {
                     ))}
                   </div>
                 </div>
-                <button onClick={() => setStep(1)} className={styles.backButton}>
-                  Voltar para Serviços
+                <button onClick={() => setStep(isStaffBooking ? 1 : 2)} className={styles.backButton}>
+                  Voltar
                 </button>
               </motion.div>
             )}
 
-            {step === 3 && selectedService && selectedDate && selectedSlot && (
-              <motion.div key="step3" variants={motionVariants} initial="hidden" animate="visible" exit="exit">
-                <h2 className={styles.stepTitle}>3. Confirme Seus Dados</h2>
+            {step === 4 && selectedService && selectedDate && selectedSlot && (
+              <motion.div key="step4" variants={motionVariants} initial="hidden" animate="visible" exit="exit">
+                <h2 className={styles.stepTitle}>4. Confirme Seus Dados</h2>
                 {error && <p style={{ color: '#f67366', textAlign: 'center', marginBottom: '1rem' }}>{error}</p>}
                 <div className={styles.summary}>
                   <p><strong>Serviço:</strong> {selectedService.name}</p>
+                  {selectedBarber && <p><strong>Barbeiro:</strong> {selectedBarber.name}</p>}
                   <p><strong>Data:</strong> {selectedDate.toLocaleDateString('pt-BR')} às <strong>{selectedSlot}</strong></p>
                 </div>
                 <AgendamentoForm
@@ -339,15 +400,15 @@ export default function PaginaAgendamento() {
                     email: auth.user.email ?? '',
                     phone: ''
                   } : undefined} serviceName={''} date={''} time={''} />
-                <button onClick={() => setStep(2)} className={styles.backButton} disabled={isLoading}>
+                <button onClick={() => setStep(3)} className={styles.backButton} disabled={isLoading}>
                   Voltar
                 </button>
               </motion.div>
             )}
 
-            {step === 4 && (
+            {step === 5 && (
               <motion.div
-                key="step4"
+                key="step5"
                 variants={motionVariants}
                 initial="hidden"
                 animate="visible"
