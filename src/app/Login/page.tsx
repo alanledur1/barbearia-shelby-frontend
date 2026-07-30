@@ -21,22 +21,19 @@ const LoginPage: React.FC = () => {
       });
 
       // 2. Desestruture a resposta da API
-      const { token, userType, admin, client } = response.data;
+      const { token, userType, user } = response.data;
 
-      // 3. Determine os dados base do usuário
-      const baseUser = userType === 'admin' ? admin : client;
-      // 4. Crie o objeto de usuário final, adicionando o userType
-      const userData = { ...baseUser, userType };
-    
+      // 3. Crie o objeto de usuário final, adicionando o userType
+      const userData = { ...user, userType };
 
       // Usa o contexto para armazenar token/usuário
       auth.login(token, userData || null);
 
-      // 6. Redireciona com base no tipo de usuário
-      if (userType === 'admin') {
-        router.push('/barber');
+      // 4. Redireciona com base no tipo de usuário
+      if (userType === 'cliente') {
+        router.push('/');
       } else {
-        router.push('/')
+        router.push('/barber');
       }
 
     } catch (err: unknown) {

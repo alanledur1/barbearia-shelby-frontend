@@ -195,7 +195,7 @@ export default function PaginaAgendamento() {
       let appointmentPayload: BookingPayload;
 
       if (auth.isAuthenticated && auth.user) {
-        if (auth.user.userType === 'admin') {
+        if (['barbeiro', 'dono', 'admin'].includes(auth.user.userType)) {
           appointmentPayload = {
             serviceId: selectedService.id,
             date: appointmentDateString,

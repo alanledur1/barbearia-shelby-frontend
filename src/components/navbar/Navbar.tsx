@@ -78,9 +78,9 @@ export const Navbar = () => {
     return pathname === href;
   };
 
-  // Detecta se o usuário é admin
+  // Detecta se o usuário é staff (barbeiro/dono/admin)
   const user = auth?.user;
-  const isAdmin = Boolean(user && (user.userType === 'admin'));
+  const isAdmin = Boolean(user && ['barbeiro', 'dono', 'admin'].includes(user.userType));
   return (
     <header>
       <nav className="navbar" role="navigation" aria-label="Menu principal">

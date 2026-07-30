@@ -3,7 +3,7 @@ import React from 'react';
 
 export default function BarberLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ProtectedRoute allowedUserType="admin">
+    <ProtectedRoute allowedUserType={['barbeiro', 'dono', 'admin']}>
       {children}
     </ProtectedRoute>
   );

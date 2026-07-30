@@ -4,11 +4,13 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 // Tipos para os dados do usuário e do contexto
+export type UserType = 'cliente' | 'barbeiro' | 'dono' | 'admin';
+
 interface User {
     id: number;
     name: string;
     email?: string;
-    userType: 'admin' | 'client';
+    userType: UserType;
 }
 
 interface AuthContextType {

@@ -33,7 +33,7 @@ export function useClientData() {
   }, [auth.token]);
 
   const fetchClientData = useCallback(async () => {
-    if (!auth.user || auth.user.userType !== 'client') return;
+    if (!auth.user || auth.user.userType !== 'cliente') return;
 
     setLoading(true);
     setError(null);
