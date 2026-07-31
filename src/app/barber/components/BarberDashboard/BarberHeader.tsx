@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 import styles from './styles.module.scss';
 import Link from 'next/link';
 import { Appointment } from '@/hooks/useBarberData';
+import { useAuth } from '@/context/AuthContext';
 
 type Props = {
   onRefresh: () => void;
@@ -15,6 +16,7 @@ type Props = {
 };
 
 export default function BarberHeader({ onRefresh, appointmentsCount, servicesCount, allAppointments, onFilterToggle, currentFilter }: Props) {
+  const auth = useAuth();
   const overdueCount = useMemo(() => {
     const now = new Date();
     return allAppointments.filter(
@@ -46,6 +48,11 @@ export default function BarberHeader({ onRefresh, appointmentsCount, servicesCou
         <Link href="/barber/billing">
           <button className={styles.refreshButton} style={{ marginRight: '1rem' }}>Faturamento</button>
         </Link>
+        {auth.user?.userType === 'dono' && (
+          <Link href="/barber/configuracoes">
+            <button className={styles.refreshButton} style={{ marginRight: '1rem' }}>Configurações</button>
+          </Link>
+        )}
         <button className={styles.refreshButton} onClick={onRefresh}>Recarregar</button>
       </div>
     </header>
