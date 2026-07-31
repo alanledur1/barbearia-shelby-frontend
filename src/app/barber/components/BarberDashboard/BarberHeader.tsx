@@ -49,6 +49,11 @@ export default function BarberHeader({ onRefresh, appointmentsCount, servicesCou
           <button className={styles.refreshButton} style={{ marginRight: '1rem' }}>Faturamento</button>
         </Link>
         {(auth.user?.userType === 'dono' || auth.user?.userType === 'admin') && (
+          <Link href="/barber/metricas">
+            <button className={styles.refreshButton} style={{ marginRight: '1rem' }}>Métricas</button>
+          </Link>
+        )}
+        {(auth.user?.userType === 'dono' || auth.user?.userType === 'admin') && (
           <Link href="/barber/configuracoes">
             <button className={styles.refreshButton} style={{ marginRight: '1rem' }}>Configurações</button>
           </Link>

@@ -1,0 +1,107 @@
+$card-bg: #1e1e1e;
+$border-color: #3a3a3a;
+$text-color: #f0f0f0;
+$text-muted: #a0a0a0;
+$brand-color: #f67366;
+
+.metricsPageContainer {
+  padding: 2rem 0;
+}
+
+.metricsContainer {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Poppins', sans-serif;
+
+  h1 {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.metricCard {
+  background-color: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+
+  h2 {
+    font-size: 1.1rem;
+    color: $text-muted;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: $brand-color;
+  }
+}
+
+.breakdownSection {
+  h2 {
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+}
+
+.tableContainer {
+  background-color: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  overflow: hidden;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+      padding: 1rem 1.5rem;
+      text-align: left;
+    }
+
+    thead {
+      background-color: lighten($card-bg, 5%);
+
+      th {
+        color: $text-muted;
+      }
+    }
+
+    tbody {
+      tr {
+        border-top: 1px solid $border-color;
+
+        &:hover {
+          background-color: lighten($card-bg, 3%);
+        }
+      }
+
+      td {
+        color: $text-color;
+      }
+    }
+  }
+}
+
+.loading,
+.error {
+  text-align: center;
+  font-size: 1.2rem;
+  color: $text-muted;
+  padding: 4rem 0;
+}
+
+.error {
+  color: $brand-color;
+}
