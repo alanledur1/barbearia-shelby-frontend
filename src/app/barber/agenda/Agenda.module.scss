@@ -1,0 +1,240 @@
+$brand-color: #f67366;
+$card-bg: #1e1e1e;
+$border-color: #3a3a3a;
+$text-color: #f0f0f0;
+$text-muted: #a0a0a0;
+$input-bg: #2a2a2a;
+$confirmed-color: #0d6efd;
+$success-color: #28a745;
+$cancelled-color: #dc3545;
+
+.container {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: 'Poppins', sans-serif;
+  color: $text-color;
+
+  h1 {
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background-color: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.dateNav {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+
+  button {
+    background-color: $input-bg;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    color: $text-color;
+    padding: 0.4rem 0.75rem;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+      border-color: $brand-color;
+    }
+  }
+
+  input[type='date'] {
+    background-color: $input-bg;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    color: $text-color;
+    padding: 0.4rem 0.6rem;
+  }
+}
+
+.dateLabel {
+  color: $text-muted;
+  font-weight: 600;
+}
+
+.barberSelect {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  select {
+    background-color: $input-bg;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    color: $text-color;
+    padding: 0.4rem 0.6rem;
+  }
+}
+
+.error {
+  background-color: rgba($brand-color, 0.15);
+  border: 1px solid $brand-color;
+  color: $brand-color;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.loading,
+.emptyState {
+  text-align: center;
+  color: $text-muted;
+  margin: 1rem 0;
+}
+
+.gridWrapper {
+  position: relative;
+  background-color: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  padding: 1rem 1rem 1rem 4.5rem;
+  overflow-y: auto;
+  max-height: 70vh;
+}
+
+.closedBanner {
+  background-color: rgba($cancelled-color, 0.15);
+  border: 1px solid $cancelled-color;
+  color: $text-color;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.grid {
+  position: relative;
+  border-top: 1px solid $border-color;
+}
+
+.blockedZone {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba($text-muted, 0.08),
+    rgba($text-muted, 0.08) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+  pointer-events: none;
+}
+
+.hourRow {
+  position: absolute;
+  left: -4.5rem;
+  right: 0;
+  border-top: 1px solid $border-color;
+  height: 1px;
+}
+
+.hourLabel {
+  position: absolute;
+  left: 0;
+  top: -0.6rem;
+  width: 4rem;
+  font-size: 0.75rem;
+  color: $text-muted;
+  text-align: right;
+}
+
+.appointmentBlock {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  border: none;
+  border-radius: 6px;
+  padding: 0.3rem 0.5rem;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.8rem;
+
+  strong {
+    font-size: 0.85rem;
+  }
+
+  span {
+    opacity: 0.85;
+  }
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+}
+
+.statusCONFIRMED {
+  background-color: $confirmed-color;
+}
+
+.statusCOMPLETED {
+  background-color: $success-color;
+}
+
+.statusCANCELLED {
+  background-color: $cancelled-color;
+  opacity: 0.7;
+}
+
+.detailsPanel {
+  margin-top: 1.5rem;
+  background-color: $input-bg;
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  padding: 1.25rem;
+
+  p {
+    margin: 0.4rem 0;
+  }
+}
+
+.detailsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+
+  h3 {
+    margin: 0;
+  }
+
+  button {
+    background: none;
+    border: none;
+    color: $text-muted;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+
+    &:hover {
+      color: $brand-color;
+    }
+  }
+}
