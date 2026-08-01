@@ -7,6 +7,7 @@ import { ptBR } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useSubscription } from '@/hooks/useSubscription';
+import { useBusinessSettings } from '@/hooks/useBusinessSettings';
 
 import AgendamentoForm from '@/components/Agendamento/AgendamentoForm';
 import styles from './agendamento-moderno.module.scss';
@@ -22,9 +23,34 @@ type AvailabilityEntry = {
 type TimeSlot = { time: string; available: boolean; };
 type Step = 1 | 2 | 3 | 4 | 5;
 
+// Gera horários de 30 em 30 min entre openTime e closeTime (ex.: "09:00"-"20:00" -> 09:00..19:30).
+function generateSlotsInRange(openTime: string, closeTime: string): string[] {
+  const [openH, openM] = openTime.split(':').map(Number);
+  const [closeH, closeM] = closeTime.split(':').map(Number);
+  const slots: string[] = [];
+  let cursor = openH * 60 + openM;
+  const end = closeH * 60 + closeM;
+  while (cursor + 30 <= end) {
+    const h = Math.floor(cursor / 60);
+    const m = cursor % 60;
+    slots.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
+    cursor += 30;
+  }
+  return slots;
+}
+
+// Feriados são salvos como meia-noite UTC representando a data no calendário. Reconstrói um
+// Date em meia-noite LOCAL com os mesmos componentes de ano/mês/dia, para não desalinhar em
+// fusos atrás de UTC (ex.: BRT) ao comparar com datas do calendário/DayPicker (que usa local).
+function holidayToLocalDate(isoDate: string): Date {
+  const d = new Date(isoDate);
+  return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+}
+
 export default function PaginaAgendamento() {
   const auth = useAuth();
   const { subscription } = useSubscription();
+  const { businessHours, holidays } = useBusinessSettings();
   const [usePlanToggle, setUsePlanToggle] = useState(true);
   const [step, setStep] = useState<Step>(1);
   const [services, setServices] = useState<Service[]>([]);
@@ -78,29 +104,12 @@ export default function PaginaAgendamento() {
       const bookedAppointments = response.data || [];
 
       const day = date.getDay();
+      const dayConfig = businessHours.find(d => d.dayOfWeek === day);
+      const isHoliday = holidays.some(h => new Date(h.date).toISOString().split('T')[0] === dateString);
 
-      let allSlots = [
-        '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '13:00', '13:30',
-        '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
-        '18:00', '18:30', '19:00', '19:30'
-      ];
-
-      // 👉 SÁBADO (mantém manhã e limita até 16:30)
-      if (day === 6) {
-        allSlots = allSlots.filter(slot => {
-          const hour = Number(slot.split(':')[0]);
-          const minute = Number(slot.split(':')[1]);
-
-          return hour < 16 || (hour === 16 && minute <= 30);
-        });
-      }
-
-      // 👉 OUTROS DIAS (exceto sexta e sábado)
-      else if (day !== 5) {
-        allSlots = allSlots.filter(slot => {
-          const hour = Number(slot.split(':')[0]);
-          return hour >= 13;
-        });
+      let allSlots: string[] = [];
+      if (dayConfig && !dayConfig.isClosed && !isHoliday) {
+        allSlots = generateSlotsInRange(dayConfig.openTime, dayConfig.closeTime);
       }
 
       const bookedSlots = new Set<string>();
@@ -134,10 +143,7 @@ export default function PaginaAgendamento() {
 
         if (service.duration >= 60) {
           const nextSlotTime = allSlots[index + 1];
-          if (!nextSlotTime || nextSlotTime === '12:30' || nextSlotTime === '13:00' || nextSlotTime === '13:30' || nextSlotTime === '20:00') {
-            return { time, available: false };
-          }
-          if (bookedSlots.has(nextSlotTime)) {
+          if (!nextSlotTime || bookedSlots.has(nextSlotTime)) {
             return { time, available: false };
           }
         }
@@ -368,7 +374,8 @@ export default function PaginaAgendamento() {
                       locale={ptBR} fromDate={new Date()}
                       disabled={[
                         { before: new Date() },
-                        { dayOfWeek: [0, 1] }
+                        { dayOfWeek: businessHours.filter(d => d.isClosed).map(d => d.dayOfWeek) },
+                        ...holidays.map(h => holidayToLocalDate(h.date))
                       ]}
                     />
                   </div>
