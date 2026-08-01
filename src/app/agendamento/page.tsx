@@ -6,6 +6,7 @@ import 'react-day-picker/dist/style.css';
 import { ptBR } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
+import { useSubscription } from '@/hooks/useSubscription';
 
 import AgendamentoForm from '@/components/Agendamento/AgendamentoForm';
 import styles from './agendamento-moderno.module.scss';
@@ -23,6 +24,8 @@ type Step = 1 | 2 | 3 | 4 | 5;
 
 export default function PaginaAgendamento() {
   const auth = useAuth();
+  const { subscription } = useSubscription();
+  const [usePlanToggle, setUsePlanToggle] = useState(true);
   const [step, setStep] = useState<Step>(1);
   const [services, setServices] = useState<Service[]>([]);
   const [selectedService, setSelectedService] = useState<Service | undefined>();
@@ -225,6 +228,7 @@ export default function PaginaAgendamento() {
         clientId?: number;
         adminId?: number;
         notes?: string;
+        usePlan?: boolean;
       };
 
       let appointmentPayload: BookingPayload;
@@ -249,6 +253,7 @@ export default function PaginaAgendamento() {
             clientId: auth.user.id,
             adminId: selectedBarber?.id,
             notes: data.notes,
+            ...(subscription && subscription.cutsRemaining > 0 && usePlanToggle ? { usePlan: true } : {}),
           };
         }
       } else {
@@ -392,6 +397,16 @@ export default function PaginaAgendamento() {
                   {selectedBarber && <p><strong>Barbeiro:</strong> {selectedBarber.name}</p>}
                   <p><strong>Data:</strong> {selectedDate.toLocaleDateString('pt-BR')} às <strong>{selectedSlot}</strong></p>
                 </div>
+                {subscription && subscription.cutsRemaining > 0 && (
+                  <label className={styles.planToggle}>
+                    <input
+                      type="checkbox"
+                      checked={usePlanToggle}
+                      onChange={(e) => setUsePlanToggle(e.target.checked)}
+                    />
+                    Usar meu plano ({subscription.cutsRemaining} corte{subscription.cutsRemaining > 1 ? 's' : ''} restante{subscription.cutsRemaining > 1 ? 's' : ''} neste ciclo)
+                  </label>
+                )}
                 <AgendamentoForm
                   onBookingSubmitAction={handleBookingSubmit}
                   isLoading={isLoading}

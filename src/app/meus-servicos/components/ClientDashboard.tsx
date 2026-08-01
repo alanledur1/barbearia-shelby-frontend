@@ -2,8 +2,9 @@
 
 import React, { useState, useMemo } from 'react'; // 1. Importe useState e useMemo
 import { useClientData } from '@/hooks/useClientData';
-import styles from './ClientDashboard.module.scss'; 
+import styles from './ClientDashboard.module.scss';
 import ClientAppointmentCard from './ClientAppointmentCard';
+import MySubscription from './MySubscription';
 
 export default function ClientDashboard() { // Renomeie a função se necessário
   const { appointments, services, loading, error, cancelAppointment } = useClientData();
@@ -53,6 +54,8 @@ export default function ClientDashboard() { // Renomeie a função se necessári
   return (
     <div className={styles.container}>
       <h1>Meus Agendamentos</h1>
+
+      <MySubscription />
 
       <section className={styles.section}>
         <h2>Próximos Agendamentos</h2>

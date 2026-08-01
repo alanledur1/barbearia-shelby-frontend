@@ -66,6 +66,11 @@ export default function BarberHeader({ onRefresh, appointmentsCount, servicesCou
             <button className={styles.refreshButton} style={{ marginRight: '1rem' }}>Usuários</button>
           </Link>
         )}
+        {(auth.user?.userType === 'dono' || auth.user?.userType === 'admin') && (
+          <Link href="/barber/planos">
+            <button className={styles.refreshButton} style={{ marginRight: '1rem' }}>Planos</button>
+          </Link>
+        )}
         <button className={styles.refreshButton} onClick={onRefresh}>Recarregar</button>
       </div>
     </header>

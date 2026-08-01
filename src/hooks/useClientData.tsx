@@ -12,6 +12,7 @@ export type Appointment = {
   serviceId?: number;
   service?: { name: string; duration: number; price: number; };
   notes?: string;
+  subscription?: { id: number; plan: { id: number; name: string } } | null;
 };
 
 export type Service = {

@@ -47,6 +47,9 @@ export default function ClientAppointmentCard({ appointment, service, onCancel }
         <p><strong>Duração:</strong> {service?.duration || 'N/A'} min</p>
         <p><strong>Preço:</strong> R$ {service?.price.toFixed(2) || 'N/A'}</p>
         {appointment.notes && <p><strong>Obs:</strong> {appointment.notes}</p>}
+        {appointment.subscription && (
+          <p><strong>Pago com:</strong> Plano {appointment.subscription.plan.name}</p>
+        )}
       </div>
 
       {status === 'CONFIRMED' && (
