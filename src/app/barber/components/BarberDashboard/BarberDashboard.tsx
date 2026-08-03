@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { useBarberData, Service } from '@/hooks/useBarberData';
-import BarberHeader from './BarberHeader';
 import AppointmentsList from './AppointmentsList';
 import styles from './styles.module.scss';
 import EditServiceModal from './EditServiceModel';
@@ -109,14 +108,26 @@ export default function BarberDashboard() {
           {error}
         </div>
       )}
-      <BarberHeader
-        onRefresh={refetch}
-        appointmentsCount={futureAppointments.length}
-        servicesCount={services.length}
-        allAppointments={appointments}
-        onFilterToggle={() => setFilter(prev => prev === 'future' ? 'overdue' : 'future')}
-        currentFilter={filter}
-      />
+      <header className={styles.header}>
+        <div>
+          <h1>
+            Dashboard do Barbeiro
+            {overdueAppointments.length > 0 && (
+              <button
+                className={`${styles.overdueBadge} ${filter === 'overdue' ? styles.active : ''}`}
+                title={`Atenção: ${overdueAppointments.length} agendamento(s) passado(s) pendente(s). Clique para ver.`}
+                onClick={() => setFilter(prev => prev === 'future' ? 'overdue' : 'future')}
+              >
+                {overdueAppointments.length}
+              </button>
+            )}
+          </h1>
+          <p>{futureAppointments.length} agendamento(s) futuros • {services.length} serviço(s)</p>
+        </div>
+        <div>
+          <button className={styles.refreshButton} onClick={refetch}>Recarregar</button>
+        </div>
+      </header>
 
       {loading && <div className={styles.message}>Carregando dados...</div>}
 

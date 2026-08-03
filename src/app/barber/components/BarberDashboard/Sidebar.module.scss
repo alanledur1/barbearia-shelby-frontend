@@ -1,0 +1,131 @@
+// Variáveis replicadas de styles.module.scss (mesmo padrão já usado em cada .module.scss
+// de subpágina do projeto — não há arquivo central de tokens hoje).
+$brand-color: #f67366;
+$card-bg: #1e1e1e;
+$text-color: #f0f0f0;
+$text-muted: #a0a0a0;
+$border-color: #3a3a3a;
+
+$navbar-height: 90px; // altura do Navbar global fixo (globals.css)
+$sidebar-width: 72px;
+$sidebar-height-mobile: 64px;
+
+.sidebar {
+  position: fixed;
+  top: $navbar-height;
+  left: 0;
+  bottom: 0;
+  width: $sidebar-width;
+  background-color: $card-bg;
+  border-right: 1px solid $border-color;
+  z-index: 900; // abaixo do Navbar (z-index 1000) e seus dropdowns
+  // Sem overflow: auto/hidden em qualquer eixo aqui de propósito — um valor não-"visible" em
+  // overflow-y forçaria o navegador a computar overflow-x também como não-"visible" (regra do
+  // spec de CSS Overflow), o que cortaria o .tooltip (ele é posicionado fora da largura de
+  // 72px da sidebar de propósito, via left: calc(100% + 10px)).
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 0;
+  margin: 0;
+}
+
+.item {
+  position: relative;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  color: $text-muted;
+  transition: background-color 0.2s ease, color 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    background-color: #2a2a2a;
+    color: $text-color;
+  }
+
+  &.active {
+    background-color: $brand-color;
+    color: #fff;
+  }
+}
+
+.icon {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.tooltip {
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-6px);
+  background-color: #000;
+  color: $text-color;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  z-index: 950;
+}
+
+.link:hover .tooltip,
+.link:focus-visible .tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: $sidebar-height-mobile;
+    border-right: none;
+    border-top: 1px solid $border-color;
+    // Mesmo motivo do comentário acima: nenhum overflow não-"visible" aqui, para o .tooltip
+    // (que nesse breakpoint escapa para cima, fora da altura de 64px da barra) não ser cortado.
+  }
+
+  .list {
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 0 0.5rem;
+    height: 100%;
+    gap: 0.25rem;
+  }
+
+  .link {
+    width: 40px;
+    height: 40px;
+  }
+
+  .tooltip {
+    left: 50%;
+    top: auto;
+    bottom: calc(100% + 10px);
+    transform: translateX(-50%) translateY(6px);
+  }
+
+  .link:hover .tooltip,
+  .link:focus-visible .tooltip {
+    transform: translateX(-50%) translateY(0);
+  }
+}

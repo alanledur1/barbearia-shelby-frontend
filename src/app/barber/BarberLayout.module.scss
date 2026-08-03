@@ -1,0 +1,13 @@
+$sidebar-width: 72px;
+$sidebar-height-mobile: 64px;
+
+.content {
+  margin-left: $sidebar-width;
+}
+
+@media (max-width: 768px) {
+  .content {
+    margin-left: 0;
+    margin-bottom: $sidebar-height-mobile;
+  }
+}
