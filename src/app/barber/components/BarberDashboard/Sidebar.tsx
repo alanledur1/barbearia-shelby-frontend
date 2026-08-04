@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { IconType } from 'react-icons';
@@ -43,6 +43,17 @@ function isItemActive(pathname: string, href: string): boolean {
 export default function Sidebar() {
   const auth = useAuth();
   const pathname = usePathname();
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (!profileRef.current) return;
+      if (!profileRef.current.contains(e.target as Node)) setProfileOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
   const visibleItems = SIDEBAR_ITEMS.filter(
     (item) => !item.roles || (auth.user && item.roles.includes(auth.user.userType))
@@ -64,6 +75,28 @@ export default function Sidebar() {
           </li>
         ))}
       </ul>
+
+      <div className={styles.profile} ref={profileRef}>
+        <button
+          className={styles.avatarButton}
+          onClick={() => setProfileOpen((v) => !v)}
+          aria-haspopup="true"
+          aria-expanded={profileOpen}
+          aria-label="Perfil"
+        >
+          {auth.user?.name ? auth.user.name.charAt(0).toUpperCase() : 'U'}
+        </button>
+
+        {profileOpen && (
+          <div className={styles.profileMenu} role="menu">
+            <div className={styles.profileHeader}>
+              <div className={styles.profileName}>{auth.user?.name}</div>
+              <div className={styles.profileEmail}>{auth.user?.email || ''}</div>
+            </div>
+            <button onClick={() => { auth.logout(); setProfileOpen(false); }}>Sair</button>
+          </div>
+        )}
+      </div>
     </nav>
   );
 }

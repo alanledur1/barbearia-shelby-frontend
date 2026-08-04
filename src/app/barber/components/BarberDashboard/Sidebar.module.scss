@@ -6,19 +6,23 @@ $text-color: #f0f0f0;
 $text-muted: #a0a0a0;
 $border-color: #3a3a3a;
 
-$navbar-height: 90px; // altura do Navbar global fixo (globals.css)
+$navbar-height: 90px; // altura do Navbar global fixo (globals.css) — Navbar começa depois da
+                      // sidebar em telas largas (ver Navbar.scss), não fica por cima dela.
 $sidebar-width: 72px;
 $sidebar-height-mobile: 64px;
 
 .sidebar {
   position: fixed;
-  top: $navbar-height;
+  top: 0;
   left: 0;
   bottom: 0;
   width: $sidebar-width;
   background-color: $card-bg;
   border-right: 1px solid $border-color;
-  z-index: 900; // abaixo do Navbar (z-index 1000) e seus dropdowns
+  z-index: 1100; // acima do Navbar (1000) — a sidebar cobre toda a altura da tela, o Navbar
+                 // ocupa só a faixa superior à direita dela.
+  display: flex;
+  flex-direction: column;
   // Sem overflow: auto/hidden em qualquer eixo aqui de propósito — um valor não-"visible" em
   // overflow-y forçaria o navegador a computar overflow-x também como não-"visible" (regra do
   // spec de CSS Overflow), o que cortaria o .tooltip (ele é posicionado fora da largura de
@@ -33,6 +37,80 @@ $sidebar-height-mobile: 64px;
   gap: 0.5rem;
   padding: 1.5rem 0;
   margin: 0;
+  flex: 1;
+}
+
+.profile {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0 1.5rem;
+  border-top: 1px solid $border-color;
+}
+
+.avatarButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: $brand-color;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover,
+  &:focus-visible {
+    filter: brightness(1.1);
+  }
+}
+
+.profileMenu {
+  position: absolute;
+  left: calc(100% + 10px);
+  bottom: 0;
+  background: #fff;
+  color: #000;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  padding: 8px 0;
+  min-width: 220px;
+  z-index: 1200;
+
+  .profileHeader {
+    padding: 10px 16px 8px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 4px;
+
+    .profileName {
+      font-weight: 700;
+    }
+
+    .profileEmail {
+      font-size: 12px;
+      color: #666;
+    }
+  }
+
+  button,
+  a {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+
+    &:hover {
+      background: #f1f1f1;
+    }
+  }
 }
 
 .item {
@@ -81,7 +159,8 @@ $sidebar-height-mobile: 64px;
   pointer-events: none;
   transition: opacity 0.15s ease, transform 0.15s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
-  z-index: 950;
+  z-index: 1150; // acima do Navbar (1000) — os itens do topo da sidebar (ex. "Site") ficam na
+                 // mesma faixa vertical que o Navbar, que agora começa em left: 72px.
 }
 
 .link:hover .tooltip,
@@ -100,6 +179,10 @@ $sidebar-height-mobile: 64px;
     height: $sidebar-height-mobile;
     border-right: none;
     border-top: 1px solid $border-color;
+    // Vira barra horizontal — .list (ícones) e .profile (avatar) precisam ficar lado a lado,
+    // não empilhados como na coluna do desktop.
+    flex-direction: row;
+    align-items: center;
     // Mesmo motivo do comentário acima: nenhum overflow não-"visible" aqui, para o .tooltip
     // (que nesse breakpoint escapa para cima, fora da altura de 64px da barra) não ser cortado.
   }
@@ -127,5 +210,21 @@ $sidebar-height-mobile: 64px;
   .link:hover .tooltip,
   .link:focus-visible .tooltip {
     transform: translateX(-50%) translateY(0);
+  }
+
+  .profile {
+    border-top: none;
+    padding: 0;
+  }
+
+  .avatarButton {
+    width: 40px;
+    height: 40px;
+  }
+
+  .profileMenu {
+    left: auto;
+    right: 0;
+    bottom: calc(100% + 10px);
   }
 }

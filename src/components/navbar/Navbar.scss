@@ -17,6 +17,16 @@
   width: 100%;
   z-index: 1000;
 
+  // Staff logado que voltou pro site público pelo ícone "Site" da Sidebar continua vendo a
+  // Sidebar (fixa, 72px, altura cheia) — o Navbar recua pra não ficar por cima dela. Só em
+  // telas largas: no breakpoint mobile a Sidebar vira barra inferior e some dessa região.
+  &--withSidebar {
+    @media (min-width: 769px) {
+      left: 72px;
+      width: calc(100% - 72px);
+    }
+  }
+
   // Logo
   &__logo {
     font-size: 1.5em;

@@ -81,9 +81,24 @@ export const Navbar = () => {
   // Detecta se o usuário é staff (barbeiro/dono/admin)
   const user = auth?.user;
   const isAdmin = Boolean(user && ['barbeiro', 'dono', 'admin'].includes(user.userType));
+  // Dentro de /barber a área é exclusiva da dashboard: navegação e perfil vivem só na Sidebar.
+  // O Navbar/site público só volta a aparecer quando o usuário sai por lá (ícone "Site" -> "/").
+  const isDashboardArea = pathname?.startsWith('/barber') ?? false;
+  if (isDashboardArea) return null;
+  // Staff que voltou pro site pelo ícone "Site" continua vendo a Sidebar (StaffSiteSidebarGate,
+  // renderizada no layout raiz) — o Navbar precisa recuar pra não brigar com ela no canto
+  // superior esquerdo.
+  // isMounted evita mismatch de hidratação: auth.user já vem preenchido no primeiro render do
+  // client (AuthContext lê localStorage de forma síncrona), mas no server é sempre null.
+  const isStaffOnSite = isMounted && pathname === '/' && isAdmin;
+
   return (
     <header>
-      <nav className="navbar" role="navigation" aria-label="Menu principal">
+      <nav
+        className={`navbar${isStaffOnSite ? ' navbar--withSidebar' : ''}`}
+        role="navigation"
+        aria-label="Menu principal"
+      >
         <div className="navbar__logo">
           <Link href="/" className="navbar__logoLink">
             <Image src="/images/logo.png" alt="Logo Shelby" width={48} height={48} className="navbar__logo-img" />
