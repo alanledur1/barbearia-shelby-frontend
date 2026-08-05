@@ -1,12 +1,15 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useBusinessSettings, BusinessHoursDay } from '@/hooks/useBusinessSettings';
+import { useAuth } from '@/context/AuthContext';
 import styles from './Configuracoes.module.scss';
 
 const DAY_LABELS = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 
 export default function ConfiguracoesPage() {
+  const auth = useAuth();
   const { businessHours, holidays, loading, error, saveBusinessHours, addHoliday, removeHoliday } = useBusinessSettings();
   const [draft, setDraft] = useState<BusinessHoursDay[]>(businessHours);
   const [saving, setSaving] = useState(false);
@@ -112,6 +115,16 @@ export default function ConfiguracoesPage() {
           {holidays.length === 0 && <li>Nenhum feriado cadastrado.</li>}
         </ul>
       </section>
+
+      {auth.user?.userType === 'admin' && (
+        <section className={styles.section}>
+          <h2>Sistema</h2>
+          <p>Parâmetros de auditoria e jobs agendados do sistema — visível apenas para administradores.</p>
+          <Link href="/barber/configuracoes/sistema" className={styles.systemLink}>
+            Abrir configurações de sistema
+          </Link>
+        </section>
+      )}
     </main>
   );
 }
