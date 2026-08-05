@@ -5,9 +5,10 @@ import styles from '../../app/EsqueciSenha/EsqueciSenha.module.css';
 interface NovaSenhaProps {
   email: string;
   onSubmit: (email: string, senha: string) => void;
+  apiError?: string;
 }
 
-const NovaSenha: React.FC<NovaSenhaProps> = ({ email, onSubmit }) => {
+const NovaSenha: React.FC<NovaSenhaProps> = ({ email, onSubmit, apiError }) => {
   const [senha, setSenha] = useState('');
   const [confirmar, setConfirmar] = useState('');
   const [error, setError] = useState('');
@@ -33,7 +34,7 @@ const NovaSenha: React.FC<NovaSenhaProps> = ({ email, onSubmit }) => {
       <form className={styles.recuperacaoForm} onSubmit={handleSubmit}>
         <h2 className={styles.titleN}>Definir Nova Senha</h2>
 
-        {error && <p className={styles.error}>{error}</p>}
+        {(apiError || error) && <p className={styles.error} aria-live="polite">{apiError || error}</p>}
 
         <div className={styles.inputGroup}>
           <label htmlFor="novaSenha">Nova Senha</label>

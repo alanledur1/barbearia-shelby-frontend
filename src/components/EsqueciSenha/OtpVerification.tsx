@@ -3,10 +3,13 @@ import React, { useState } from 'react';
 import styles from '../../app/EsqueciSenha/EsqueciSenha.module.css';
 
 interface OtpProps {
+  email: string;
   onVerify: (code: string) => void;
+  onResend: () => void;
+  apiError?: string;
 }
 
-const OtpVerification: React.FC<OtpProps> = ({ onVerify }) => {
+const OtpVerification: React.FC<OtpProps> = ({ email, onVerify, onResend, apiError }) => {
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
 
   const handleChange = (value: string, index: number) => {
@@ -33,8 +36,10 @@ const OtpVerification: React.FC<OtpProps> = ({ onVerify }) => {
       <form className={styles.recuperacaoForm} onSubmit={handleSubmit}>
         <h2 className={styles.title}>Verificação de Código</h2>
         <div className={styles.infoText}>
-          <p>Digite o código de 6 dígitos enviado para seu email.</p>
+          <p>Digite o código de 6 dígitos enviado para {email}.</p>
         </div>
+
+        {apiError && <p className={styles.error} aria-live="polite">{apiError}</p>}
 
         <div className={styles.otpGroup}>
           {otp.map((digit, index) => (
@@ -51,7 +56,8 @@ const OtpVerification: React.FC<OtpProps> = ({ onVerify }) => {
           ))}
         </div>
         <div className={styles.infoTextB}>
-          <p>Não recebeu o codigo ?</p><a href="">Reenviar</a>
+          <p>Não recebeu o codigo ?</p>
+          <a href="#" onClick={(e) => { e.preventDefault(); onResend(); }}>Reenviar</a>
         </div>
         <button type="submit" className={styles.btn}>Confirmar</button>
       </form>
