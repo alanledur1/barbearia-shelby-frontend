@@ -1,42 +1,62 @@
+@use "sass:color";
 // src/app/meus-agendamentos/ClientDashboard.module.scss
 
 // Importando as mesmas variáveis de cor para consistência
-$brand-color: #f67366;
-$dark-bg: #121212;
-$card-bg: #1e1e1e;
-$text-color: #f0f0f0;
-$text-muted: #a0a0a0;
-$border-color: #3a3a3a;
-$error-color: #dc3545;
+$brand-color: #f5605e; // = var(--primary) oklch(68% .185 25)
+$dark-bg: #070707; // = var(--background) oklch(13% 0 0)
+$card-bg: #0f0f0f; // = var(--card) oklch(17% 0 0)
+$text-color: #f5f5f5; // = var(--foreground) oklch(97% 0 0)
+$text-muted: #a4a4a4; // = var(--muted-foreground) oklch(72% 0 0)
+$border-color: #2b2b2b; // = var(--border) oklch(28% 0 0)
+$input-bg: #161616; // = var(--muted) oklch(20% 0 0)
+$error-color: #e5484d; // = var(--destructive)
 
 .container {
-  padding: 2rem;
+  // padding-top generoso: a página não fica dentro de <main>, então precisa reservar
+  // ela mesma o espaço da navbar fixa (90px) — antes o conteúdo começava embaixo dela.
+  padding: 8rem 1.5rem 4rem;
+  min-height: 100vh;
   max-width: 800px; // Um pouco mais estreito, focado no cliente
   margin: 0 auto;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-body);
   color: $text-color;
 
   h1 {
     text-align: center;
-    margin-bottom: 3rem;
-    font-size: 2rem;
+    margin-bottom: 2.5rem;
+    font-size: 2.5rem;
+    letter-spacing: 0.05em;
   }
 }
 
 .section {
   margin-bottom: 3rem;
 
+  // Título de bloco: acento + traço de separação, mesmo padrão de seção do site público.
   h2 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+    letter-spacing: 0.06em;
     color: $brand-color;
     margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.6rem;
     border-bottom: 1px solid $border-color;
   }
 }
 
+// Estados de carregamento / erro: mesma caixa de alerta usada no wizard de agendamento,
+// para o usuário não cair numa tela praticamente vazia com uma linha de texto solta.
+.loading {
+  text-align: center;
+  color: $text-muted;
+  padding: 2rem 0;
+}
+
 .error {
   color: $error-color;
+  background: rgba(229, 72, 77, 0.12);
+  border: 1px solid rgba(229, 72, 77, 0.35);
+  border-radius: var(--radius-input);
+  padding: 1rem 1.25rem;
   text-align: center;
   font-weight: 500;
 }
@@ -51,16 +71,21 @@ $error-color: #dc3545;
   color: $text-muted; // Usando variável de cor definida no início
 
   button {
-    background-color: #2a2a2a; // Cor de fundo do input (exemplo)
+    background-color: $input-bg;
     color: $text-color;
     border: 1px solid $border-color;
     padding: 0.5rem 1rem;
-    border-radius: 8px;
+    border-radius: var(--radius-button); // botão de ação (troca de página), não navegação passiva
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, border-color 0.2s;
 
     &:hover:not(:disabled) {
-      background-color: lighten(#2a2a2a, 5%);
+      background-color: color.adjust($input-bg, $lightness: 6%);
+      border-color: $brand-color;
     }
 
     &:disabled {

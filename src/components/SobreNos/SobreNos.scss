@@ -1,85 +1,86 @@
-@import url('https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500;700&display=swap');
-
+/* Seção "Sobre Nós". Passa a usar o mesmo esqueleto de seção da landing (kicker + título
+   grande + traço no acento) e o card padrão do redesign (superfície --card + borda sutil),
+   no lugar do cinza translúcido antigo que destoava do tema dark. */
 #sobre {
-  scroll-margin-top: 200px;
+  scroll-margin-top: 120px;
 }
 
 .SobreNos {
   width: 100%;
-  height: 60vh;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: var(--background);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  padding: 0 clamp(16px, 6vw, 150px);
+  /* padding e altura responsivos migraram para Tailwind (ver SobreNos.tsx) */
 
-  .title {
+  .head {
     width: 100%;
-    height: auto;
-    justify-content: end;
+    max-width: 1200px;
     display: flex;
-    font-family: 'Martian Mono';
-    font-weight: 600;
-    font-size: 64px;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
     text-align: center;
-    margin-top: 30px;
-    margin-bottom: 10px;
-    text-transform: capitalize;
+  }
+
+  .headSubtitle {
+    max-width: 56ch;
+    color: var(--muted-foreground);
+    font-size: 0.95rem;
+    line-height: 1.7;
   }
 
   .container {
+    width: 100%;
+    max-width: 1200px;
     display: flex;
     gap: 24px;
-    justify-content: space-between;
+    justify-content: center;
     flex-wrap: wrap;
     padding-top: 15px;
   }
 
   .card {
-    padding: 20px 16px;
+    padding: 28px 22px;
     width: 100%;
-    max-width: 450px;
+    max-width: 380px;
     height: auto;
-    border-radius: 20px;
-    text-align: center;
-    background-color: #6C6C6CBF;
+    /* radius/borda alinhados aos tokens --radius-card e --border — mesmo card usado em
+       Serviços e Contato depois do merge com a referência Lovable. */
+    border-radius: var(--radius-card);
+    border: 1px solid var(--border);
+    background-color: var(--card);
+    text-align: left;
     will-change: transform, opacity;
+    /* margin-bottom responsivo migrou para Tailwind */
   }
 
   .card h3 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 10px;
+    font-size: 1.4rem;
+    letter-spacing: 0.06em;
+    color: var(--foreground);
+    margin-bottom: 12px;
+    /* font-family/uppercase vêm do @layer base (h3, Bebas Neue). */
   }
 
   .card p {
     font-size: 0.9rem;
-    line-height: 1.4;
+    line-height: 1.7;
+    color: var(--muted-foreground);
   }
 
   .text-bottom {
-    color: #ffffff;
-    font-family: 'Poppins';
-    font-weight: 600;
-    font-size: 36px;
+    color: var(--foreground);
+    font-family: var(--font-display);
     letter-spacing: 0.3em;
     text-align: center;
-    text-shadow: 1px 1px 2px #000000;
-    margin-bottom: 30px;
+    text-transform: uppercase;
     will-change: transform, opacity;
+    /* font-size e display responsivos migraram para Tailwind */
   }
 
-  @media (max-width: 768px) {
-    padding: 25px;
-    height: auto;
-    .title { font-size: 28px; }
-    .text-bottom { font-size: 28px; }
-    .card { margin-bottom: 10px; }
-    .text-bottom {
-      display: none;
-    } 
-  }
+  /* Responsividade (padding, altura, .title/.text-bottom font-size, .card margin-bottom e
+     visibilidade de .text-bottom) migrou para classes utilitárias do Tailwind em
+     SobreNos.tsx. Breakpoint original 768px = md. */
 }

@@ -39,8 +39,9 @@ const Login: React.FC<LoginProps> = ({ onLogin, apiError }) => {
 
   return (
     <div className="login-container">
-      <form onSubmit={handleSubmit} className="login-form">
-        <h2 className='title'>Entrar</h2>
+      <form onSubmit={handleSubmit} className="login-form rounded-card border border-border bg-card">
+        <h2 className='title'>Bem-vindo de volta</h2>
+        <p className='subtitle'>Entre para ver e gerenciar seus agendamentos.</p>
 
         {(apiError || error) && <p className="error" aria-live="polite">{apiError || error}</p>}
 
@@ -53,6 +54,7 @@ const Login: React.FC<LoginProps> = ({ onLogin, apiError }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="username"
+            className="rounded-input"
           />
         </div>
 
@@ -65,6 +67,7 @@ const Login: React.FC<LoginProps> = ({ onLogin, apiError }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoComplete={rememberMe ? 'current-password' : 'off'}
+            className="rounded-input"
           />
         </div>
 
@@ -80,7 +83,7 @@ const Login: React.FC<LoginProps> = ({ onLogin, apiError }) => {
           <Link href="/EsqueciSenha">Esqueceu a senha ?</Link>
         </div>
 
-        <button type="submit" className="btn">
+        <button type="submit" className="btn rounded-button">
           Entrar
         </button>
 

@@ -102,13 +102,13 @@ export default function BarberDashboard() {
   }, [error, setError]);
 
   return (
-    <section className={styles.container}>
+    <section className={`${styles.container} p-[1rem] md:p-[2rem]`}>
       {error && (
-        <div className={`${styles.toast} ${styles.toastError}`}>
+        <div className={`${styles.toast} ${styles.toastError} top-[80px] left-[10px] right-[10px] w-auto md:top-[100px] md:left-auto md:right-[20px]`}>
           {error}
         </div>
       )}
-      <header className={styles.header}>
+      <header className={`${styles.header} flex-col items-start gap-[1.5rem] md:flex-row md:items-center`}>
         <div>
           <h1>
             Dashboard do Barbeiro
@@ -124,18 +124,18 @@ export default function BarberDashboard() {
           </h1>
           <p>{futureAppointments.length} agendamento(s) futuros • {services.length} serviço(s)</p>
         </div>
-        <div>
-          <button className={styles.refreshButton} onClick={refetch}>Recarregar</button>
+        <div className="flex w-full gap-[1rem] md:block md:w-auto">
+          <button className={`${styles.refreshButton} flex-1 md:flex-none`} onClick={refetch}>Recarregar</button>
         </div>
       </header>
 
       {loading && <div className={styles.message}>Carregando dados...</div>}
 
       {!loading && (
-        <div className={styles.content}>
+        <div className={`${styles.content} grid-cols-1 md:grid-cols-[2fr_1fr]`}>
           {/* PAINEL DE CONTROLE DAS VISUALIZAÇÕES */}
           {filter === 'overdue' ? (
-            <div className={styles.filterActive}>
+            <div className={`${styles.filterActive} flex-col items-start gap-[1rem] md:flex-row md:items-center`}>
               <p>Atenção: Mostrando {overdueAppointments.length} agendamento(s) pendente(s).</p>
               <button onClick={() => setFilter('future')}>Ver Próximos</button>
             </div>
@@ -158,7 +158,7 @@ export default function BarberDashboard() {
             deleteAppointment={deleteAppointment}
           />
 
-          <aside className={styles.sidebar}>
+          <aside className={`${styles.sidebar} static top-auto md:sticky md:top-[120px]`}>
             <h3>Serviços</h3>
             <form onSubmit={handleCreateService} className={styles.addServiceForm}>
               <input
@@ -176,7 +176,7 @@ export default function BarberDashboard() {
                 required
               />
               <select
-                className={styles.durationSelect}
+                className={`${styles.durationSelect} basis-full md:basis-auto`}
                 value={duration}
                 onChange={(e) => setDuration(Number(e.target.value))}
               >
@@ -184,7 +184,7 @@ export default function BarberDashboard() {
                 <option value={60}>60 min</option>
                 <option value={90}>90 min</option>
               </select>
-              <button type="submit" className={styles.addButton} disabled={creating}>
+              <button type="submit" className={`${styles.addButton} w-full md:w-[150px]`} disabled={creating}>
                 <span className={styles.buttonText}>{creating ? '...' : 'Adicionar'}</span>
                 <span className={styles.buttonIcon}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" stroke="currentColor" height="24" fill="none" className={styles.svg}>

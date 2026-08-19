@@ -1,16 +1,16 @@
 // src/app/barber/configuracoes/sistema/Sistema.module.scss
 
-$card-bg: #1e1e1e;
-$border-color: #3a3a3a;
-$text-color: #f0f0f0;
-$text-muted: #a0a0a0;
-$brand-color: #f67366;
-$input-bg: #2a2a2a;
+$card-bg: #0f0f0f; // = var(--card) oklch(17% 0 0)
+$border-color: #2b2b2b; // = var(--border) oklch(28% 0 0)
+$text-color: #f5f5f5; // = var(--foreground) oklch(97% 0 0)
+$text-muted: #a4a4a4; // = var(--muted-foreground) oklch(72% 0 0)
+$brand-color: #f5605e; // = var(--primary) oklch(68% .185 25)
+$input-bg: #161616; // = var(--muted) oklch(20% 0 0)
 
 %button-base {
   padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-button);
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.2s ease;
@@ -30,7 +30,7 @@ $input-bg: #2a2a2a;
   padding: 2rem;
   max-width: 900px;
   margin: 0 auto;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-body);
   color: $text-color;
 
   h1 {
@@ -49,11 +49,11 @@ $input-bg: #2a2a2a;
 }
 
 .error {
-  background-color: rgba(#f67366, 0.15);
+  background-color: rgba($brand-color, 0.15);
   border: 1px solid $brand-color;
   color: $brand-color;
   padding: 0.75rem 1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-card);
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -61,7 +61,7 @@ $input-bg: #2a2a2a;
 .section {
   background-color: $card-bg;
   border: 1px solid $border-color;
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   padding: 1.5rem;
   margin-bottom: 2rem;
 
@@ -87,7 +87,7 @@ $input-bg: #2a2a2a;
   input {
     background-color: $input-bg;
     border: 1px solid $border-color;
-    border-radius: 8px;
+    border-radius: var(--radius-input);
     color: $text-color;
     padding: 0.4rem 0.6rem;
     width: 100px;
@@ -163,7 +163,7 @@ $input-bg: #2a2a2a;
   input[type='text'] {
     background-color: $input-bg;
     border: 1px solid $border-color;
-    border-radius: 8px;
+    border-radius: var(--radius-input);
     color: $text-color;
     padding: 0.4rem 0.6rem;
     width: 140px;

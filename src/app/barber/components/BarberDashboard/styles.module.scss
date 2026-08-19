@@ -2,30 +2,30 @@
 @use "sass:color";
 
 // === Variáveis ===
-$brand-color: #f67366;
-$dark-bg: #121212;
-$card-bg: #1e1e1e;
-$text-color: #f0f0f0;
-$text-muted: #a0a0a0;
-$border-color: #3a3a3a;
-$success-color: #28a745;
-$cancelled-color: #dc3545;
-$confirmed-color: #0d6efd;
-$input-bg: #2a2a2a;
+$brand-color: #f5605e; // = var(--primary) oklch(68% .185 25)
+$dark-bg: #070707; // = var(--background) oklch(13% 0 0)
+$card-bg: #0f0f0f; // = var(--card) oklch(17% 0 0)
+$text-color: #f5f5f5; // = var(--foreground) oklch(97% 0 0)
+$text-muted: #a4a4a4; // = var(--muted-foreground) oklch(72% 0 0)
+$border-color: #2b2b2b; // = var(--border) oklch(28% 0 0)
+$success-color: #3fc98c; // = var(--success)
+$cancelled-color: #e5484d; // = var(--destructive)
+$confirmed-color: #4c8dff; // = var(--info)
+$input-bg: #161616; // = var(--muted) oklch(20% 0 0)
 
 // === Layout Principal ===
 .container {
-  padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-body);
+  /* padding responsivo migrou para Tailwind (ver BarberDashboard.tsx) */
 }
 
 .content {
   display: grid;
-  grid-template-columns: 2fr 1fr;
   gap: 2rem;
   align-items: flex-start;
+  /* grid-template-columns responsivo migrou para Tailwind */
 }
 
 // === Lista de Agendamentos ===
@@ -39,9 +39,9 @@ $input-bg: #2a2a2a;
 .appointmentCard {
   background-color: $card-bg;
   border: 1px solid $border-color;
-  border-radius: 12px;
-  padding: 1.5rem;
+  border-radius: var(--radius-card);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  /* padding responsivo migrou para Tailwind (ver AppointmentCard.tsx) */
 
   &:hover {
     transform: translateY(-5px);
@@ -55,6 +55,7 @@ $input-bg: #2a2a2a;
     margin-bottom: 1rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid $border-color;
+    /* flex-direction e gap responsivos migraram para Tailwind */
   }
 
   .clientInfo {
@@ -102,14 +103,14 @@ $input-bg: #2a2a2a;
   .cardFooter {
     display: flex;
     gap: 0.75rem;
-    justify-content: flex-end;
+    /* flex-wrap e justify-content responsivos migraram para Tailwind */
   }
 }
 
 // === Botões de Ação do Card ===
 .actionButton {
   padding: 0.5rem 1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-button);
   border: none;
   font-weight: 600;
   cursor: pointer;
@@ -122,7 +123,7 @@ $input-bg: #2a2a2a;
   color: white;
 
   &:hover {
-    background-color: darken($success-color, 10%);
+    background-color: color.adjust($success-color, $lightness: -10%);
   }
 }
 
@@ -132,40 +133,49 @@ $input-bg: #2a2a2a;
   color: white;
 
   &:hover {
-    background-color: darken($cancelled-color, 10%);
+    background-color: color.adjust($cancelled-color, $lightness: -10%);
   }
 }
 
 // === Status Pills ===
+// Fundo translúcido + texto na própria cor do status (mesmo padrão de /meus-servicos):
+// legível no tema dark e menos "gritante" que os blocos sólidos anteriores.
 .status {
-  padding: 0.3rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
   font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #fff;
+  border: 1px solid transparent;
+  white-space: nowrap;
 }
 
 .statusCONFIRMED {
-  background-color: $confirmed-color;
+  background-color: color.adjust($confirmed-color, $alpha: -0.85);
+  border-color: color.adjust($confirmed-color, $alpha: -0.6);
+  color: $confirmed-color;
 }
 
 .statusCOMPLETED {
-  background-color: $success-color;
+  background-color: color.adjust($success-color, $alpha: -0.85);
+  border-color: color.adjust($success-color, $alpha: -0.6);
+  color: $success-color;
 }
 
 .statusCANCELLED {
-  background-color: $cancelled-color;
+  background-color: color.adjust($cancelled-color, $alpha: -0.85);
+  border-color: color.adjust($cancelled-color, $alpha: -0.6);
+  color: $cancelled-color;
 }
 
 // === Sidebar de Serviços ===
 .sidebar {
   background-color: $card-bg;
   padding: 1.5rem;
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   border: 1px solid $border-color;
-  position: sticky;
-  top: 120px;
+  /* position/top responsivos migraram para Tailwind (ver BarberDashboard.tsx) */
 
   h3 {
     font-size: 1.25rem;
@@ -274,26 +284,28 @@ $input-bg: #2a2a2a;
   color: white;
   border: none;
   padding: 0.6rem 1.2rem;
-  border-radius: 8px;
+  border-radius: var(--radius-button);
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: darken($brand-color, 10%);
+    background-color: color.adjust($brand-color, $lightness: -10%);
   }
 }
 
 // === Botão Animado 'Adicionar' (do uiverse.io) ===
 .addButton {
   position: relative;
-  width: 150px;
   height: 40px;
+  /* width responsivo migrou para Tailwind (ver BarberDashboard.tsx) */
   cursor: pointer;
   display: flex;
   align-items: center;
-  border: 1px solid #34974d;
-  background-color: #3aa856;
+  border: 1px solid $success-color;
+  background-color: color.adjust($success-color, $lightness: -6%);
+  border-radius: var(--radius-button);
+  overflow: hidden;
   transition: all 0.3s;
 
   .buttonText {
@@ -308,7 +320,7 @@ $input-bg: #2a2a2a;
     transform: translateX(109px);
     height: 100%;
     width: 39px;
-    background-color: #34974d;
+    background-color: $success-color;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -321,7 +333,7 @@ $input-bg: #2a2a2a;
   }
 
   &:hover {
-    background: #34974d;
+    background: $success-color;
 
     .buttonText {
       color: transparent;
@@ -334,10 +346,10 @@ $input-bg: #2a2a2a;
   }
 
   &:active {
-    border: 1px solid #2e8644;
+    border: 1px solid color.adjust($success-color, $lightness: -8%);
 
     .buttonIcon {
-      background-color: #2e8644;
+      background-color: color.adjust($success-color, $lightness: -8%);
     }
   }
 }
@@ -354,9 +366,9 @@ $input-bg: #2a2a2a;
     padding: 0.75rem;
     background-color: #2a2a2a;
     border: 1px solid #3a3a3a;
-    border-radius: 8px;
+    border-radius: var(--radius-input);
     color: #f0f0f0;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-body);
     font-size: 0.9rem;
   }
 }
@@ -371,6 +383,7 @@ $input-bg: #2a2a2a;
   background-position: right 0.7rem center;
   background-size: 1em;
   padding-right: 2.5rem; // Espaço para a seta
+  /* flex-basis responsivo (100% <md, auto >=md) migrou para Tailwind (ver BarberDashboard.tsx) */
 }
 
 // ... (final do arquivo styles.module.scss)
@@ -378,11 +391,9 @@ $input-bg: #2a2a2a;
 /* === Estilo da Notificação (Toast) === */
 .toast {
   position: fixed;
-  top: 100px;
-  /* Abaixo da navbar */
-  right: 20px;
+  /* top/right/left/width responsivos migraram para Tailwind (ver BarberDashboard.tsx) */
   padding: 1rem 1.5rem;
-  border-radius: 8px;
+  border-radius: var(--radius-card);
   z-index: 2000;
   font-weight: 600;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
@@ -429,12 +440,12 @@ $input-bg: #2a2a2a;
     color: $text-color;
     border: 1px solid $border-color;
     padding: 0.5rem 1rem;
-    border-radius: 8px;
+    border-radius: var(--radius-button);
     cursor: pointer;
     transition: background-color 0.2s;
 
     &:hover:not(:disabled) {
-      background-color: lighten($input-bg, 5%);
+      background-color: color.adjust($input-bg, $lightness: 5%);
     }
 
     &:disabled {
@@ -463,7 +474,7 @@ $input-bg: #2a2a2a;
 
   // Adiciona um feedback visual quando o filtro está ativo
   &.active {
-    background-color: darken($cancelled-color, 15%);
+    background-color: color.adjust($cancelled-color, $lightness: -15%);
     animation: none; // Pausa a animação de pulso quando ativo
     box-shadow: 0 0 0 3px rgba($cancelled-color, 0.5);
   }
@@ -472,11 +483,11 @@ $input-bg: #2a2a2a;
 .filterActive {
   // O grid-column faz a barra ocupar as duas colunas
   grid-column: 1 / -1;
-  background-color: lighten($card-bg, 5%);
+  background-color: color.adjust($card-bg, $lightness: 5%);
   border: 1px solid $border-color;
   border-left: 4px solid $cancelled-color;
   padding: 1rem 1.5rem;
-  border-radius: 8px;
+  border-radius: var(--radius-card);
   margin-bottom: 2rem;
   display: flex;
   justify-content: space-between;
@@ -492,7 +503,7 @@ $input-bg: #2a2a2a;
     border: 1px solid $text-muted;
     color: $text-muted;
     padding: 0.5rem 1rem;
-    border-radius: 6px;
+    border-radius: var(--radius-button);
     cursor: pointer;
     transition: all 0.2s ease;
 
@@ -535,97 +546,25 @@ $input-bg: #2a2a2a;
 
 .deleteButton {
   @extend .actionButton;
-  background-color: darken($cancelled-color, 15%);
+  background-color: color.adjust($cancelled-color, $lightness: -15%);
   color: white;
 
   &:hover {
-    background-color: darken($cancelled-color, 25%);
+    background-color: color.adjust($cancelled-color, $lightness: -25%);
   }
 }
 
 
 /* ================================================================
-   INÍCIO DAS CORREÇÕES PARA DISPOSITIVOS MÓVEIS
+   RESPONSIVIDADE — migrada para classes utilitárias do Tailwind nos componentes
+   (BarberDashboard.tsx, AppointmentCard.tsx). Breakpoint original 768px = md.
+   Exceção mantida aqui por depender de um elemento `<button>` sem classe própria dentro do
+   wrapper .filterActive (não replicável com uma classe utilitária isolada sem alterar a
+   marcação):
    ================================================================
 */
 @media (max-width: 768px) {
-
-  .container {
-    padding: 1rem; // Menos padding no container geral
-  }
-
-  // 1. Empilha o cabeçalho
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.5rem;
-
-    // Faz os botões do header ocuparem a largura toda
-    div:last-child {
-      display: flex;
-      width: 100%;
-      gap: 1rem;
-
-      .refreshButton {
-        flex: 1; // Faz os botões crescerem igualmente
-      }
-    }
-  }
-
-  // 2. Transforma o grid principal em 1 coluna
-  .content {
-    grid-template-columns: 1fr;
-  }
-
-  // 3. Remove o "position: sticky" da sidebar
-  .sidebar {
-    position: static;
-    top: auto;
-  }
-
-  // 4. Ajusta o formulário de adicionar serviço
-  .addServiceForm {
-
-    // Força o select e o botão a ficarem em linhas separadas
-    .durationSelect {
-      flex-basis: 100%;
-    }
-
-    .addButton {
-      width: 100%; // Botão ocupa a largura total
-    }
-  }
-
-  // 5. Ajusta o card de agendamento
-  .appointmentCard {
-    padding: 1rem;
-
-    .cardHeader {
-      flex-direction: column; // Empilha o nome e o status
-      align-items: flex-start;
-      gap: 0.75rem;
-    }
-
-    .cardFooter {
-      flex-wrap: wrap; // Permite que os botões quebrem a linha
-      justify-content: center; // Centraliza os botões
-    }
-  }
-
-  // 6. Ajusta a notificação (toast)
-  .toast {
-    top: 80px; // Sobe um pouco (navbar de 70px + 10px)
-    left: 10px;
-    right: 10px;
-    width: auto; // Remove largura fixa
-  }
-
-  // 7. Ajusta a barra de filtro (quando "pendentes" está ativo)
   .filterActive {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-
     button {
       width: 100%; // Botão ocupa largura total
     }

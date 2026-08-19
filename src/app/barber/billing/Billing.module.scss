@@ -1,18 +1,17 @@
+@use "sass:color";
 // src/app/barber/billing/Billing.module.scss
 
-$card-bg: #1e1e1e;
-$border-color: #3a3a3a;
-$text-color: #f0f0f0;
-$text-muted: #a0a0a0;
-$brand-color: #f67366;
+$card-bg: #0f0f0f; // = var(--card) oklch(17% 0 0)
+$border-color: #2b2b2b; // = var(--border) oklch(28% 0 0)
+$text-color: #f5f5f5; // = var(--foreground) oklch(97% 0 0)
+$text-muted: #a4a4a4; // = var(--muted-foreground) oklch(72% 0 0)
+$brand-color: #f5605e; // = var(--primary) oklch(68% .185 25)
 
 .billingContainer {
-
-  margin-top: 500px;
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-body);
 
   h1 {
     margin-bottom: 2rem;
@@ -30,19 +29,25 @@ $brand-color: #f67366;
 .metricCard {
   background-color: $card-bg;
   border: 1px solid $border-color;
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   padding: 1.5rem;
   text-align: center;
 
+  // Rótulo do indicador: pequeno, espaçado e apagado — o número é que precisa saltar.
   h2 {
-    font-size: 1.1rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
     color: $text-muted;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
   }
 
+  // Número em Bebas Neue, igual às mini-stats da home: mesma "voz" de dado em todo o app.
   p {
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-family: var(--font-display);
+    font-size: 2.75rem;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.02em;
     color: $brand-color;
   }
 }
@@ -57,7 +62,7 @@ $brand-color: #f67366;
 .tableContainer {
   background-color: $card-bg;
   border: 1px solid $border-color;
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   overflow: hidden;
 
   table {
@@ -71,7 +76,7 @@ $brand-color: #f67366;
     }
 
     thead {
-      background-color: lighten($card-bg, 5%);
+      background-color: color.adjust($card-bg, $lightness: 5%);
 
       th {
         color: $text-muted;
@@ -83,7 +88,7 @@ $brand-color: #f67366;
         border-top: 1px solid $border-color;
 
         &:hover {
-          background-color: lighten($card-bg, 3%);
+          background-color: color.adjust($card-bg, $lightness: 3%);
         }
       }
 

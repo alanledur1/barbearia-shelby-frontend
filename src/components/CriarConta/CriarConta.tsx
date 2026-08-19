@@ -63,8 +63,9 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister, apiError }) => {
 
   return (
     <div className="register-container">
-      <form onSubmit={handleSubmit} className="register-form">
+      <form onSubmit={handleSubmit} className="register-form rounded-card border border-border bg-card">
         <h2 className="title">Criar Conta</h2>
+        <p className="subtitle">Leva menos de um minuto — depois é só escolher o horário.</p>
         {/* Mostra o erro da API se ele existir, senão mostra o erro local */}
         {(apiError || error) && <p className="error" aria-live="polite">{apiError || error}</p>}
 
@@ -77,6 +78,7 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister, apiError }) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             autoComplete="name"
+            className="rounded-input"
           />
         </div>
 
@@ -89,6 +91,7 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister, apiError }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
+            className="rounded-input"
           />
         </div>
 
@@ -107,6 +110,7 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister, apiError }) => {
             inputMode="numeric"
             autoComplete="tel"
             maxLength={11}
+            className="rounded-input"
           />
         </div>
 
@@ -119,6 +123,7 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister, apiError }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="new-password"
+            className="rounded-input"
           />
         </div>
 
@@ -131,10 +136,11 @@ const CriarConta: React.FC<CriarContaProps> = ({ onRegister, apiError }) => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             autoComplete="new-password"
+            className="rounded-input"
           />
         </div>
 
-        <button type="submit" className="btn">
+        <button type="submit" className="btn rounded-button">
           Criar Conta
         </button>
 

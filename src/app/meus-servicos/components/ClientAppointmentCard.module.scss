@@ -1,26 +1,28 @@
+@use "sass:color";
 // src/components/ClientDashboard/ClientAppointmentCard.module.scss
 
 // Importando as mesmas variáveis de cor
-$brand-color: #f67366;
-$card-bg: #1e1e1e;
-$text-color: #f0f0f0;
-$text-muted: #a0a0a0;
-$border-color: #3a3a3a;
-$success-color: #28a745;
-$cancelled-color: #dc3545;
-$confirmed-color: #0d6efd;
+$brand-color: #f5605e; // = var(--primary) oklch(68% .185 25)
+$card-bg: #0f0f0f; // = var(--card) oklch(17% 0 0)
+$text-color: #f5f5f5; // = var(--foreground) oklch(97% 0 0)
+$text-muted: #a4a4a4; // = var(--muted-foreground) oklch(72% 0 0)
+$border-color: #2b2b2b; // = var(--border) oklch(28% 0 0)
+$success-color: #3fc98c; // = var(--success)
+$cancelled-color: #e5484d; // = var(--destructive)
+$confirmed-color: #4c8dff; // = var(--info)
 
 .appointmentCard {
   background-color: $card-bg;
   border: 1px solid $border-color;
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   padding: 1.5rem;
   margin-bottom: 1rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    border-color: color.adjust($brand-color, $alpha: -0.55);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
   }
 }
 
@@ -31,9 +33,14 @@ $confirmed-color: #0d6efd;
   margin-bottom: 1rem;
 }
 
+// Nome do serviço em Bebas Neue — mesmo tratamento dos títulos de card no site público.
 .serviceName {
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   color: $text-color;
 }
 
@@ -63,40 +70,55 @@ $confirmed-color: #0d6efd;
   justify-content: flex-end;
 }
 
+// Cancelar é uma ação destrutiva e secundária: vira botão de contorno, para não competir
+// visualmente com os CTAs sólidos (que no sistema são sempre no acento da marca).
 .cancelButton {
   padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  border: none;
-  font-weight: 600;
+  border-radius: var(--radius-button);
+  border: 1px solid color.adjust($cancelled-color, $alpha: -0.55);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   cursor: pointer;
-  background-color: $cancelled-color;
-  color: white;
-  transition: background-color 0.2s ease;
+  background-color: transparent;
+  color: $cancelled-color;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 
   &:hover {
-    background-color: darken($cancelled-color, 10%);
+    background-color: color.adjust($cancelled-color, $alpha: -0.85);
+    border-color: $cancelled-color;
   }
 }
 
-// Status (Pills)
+// Status (Pills) — fundo translúcido + texto na própria cor do status: legível no tema dark
+// e menos "gritante" que os blocos sólidos anteriores.
 .status {
-  padding: 0.3rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
   font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #fff;
+  border: 1px solid transparent;
+  white-space: nowrap;
 }
 
 .statusCONFIRMED {
-  background-color: $confirmed-color;
+  background-color: color.adjust($confirmed-color, $alpha: -0.85);
+  border-color: color.adjust($confirmed-color, $alpha: -0.6);
+  color: $confirmed-color;
 }
 
 .statusCOMPLETED {
-  background-color: $success-color;
+  background-color: color.adjust($success-color, $alpha: -0.85);
+  border-color: color.adjust($success-color, $alpha: -0.6);
+  color: $success-color;
 }
 
 .statusCANCELLED {
-  background-color: $cancelled-color;
+  background-color: color.adjust($cancelled-color, $alpha: -0.85);
+  border-color: color.adjust($cancelled-color, $alpha: -0.6);
+  color: $cancelled-color;
 }
 

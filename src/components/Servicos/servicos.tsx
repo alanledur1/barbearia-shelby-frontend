@@ -25,6 +25,24 @@ function useHasHover() {
   return hasHover;
 }
 
+// Cabeçalho da seção (kicker + título + subtítulo), no mesmo padrão das demais seções da
+// landing. Fica aqui para aparecer também nos estados de loading/erro/vazio.
+function SectionHead() {
+  return (
+    <div className={styles.head}>
+      <span className="section-kicker">O que fazemos</span>
+      <h2 className="section-title">
+        Nossos <span className="accent">Serviços</span>
+      </h2>
+      <span className="section-rule" />
+      <p className={styles.headSubtitle}>
+        Do corte clássico ao acabamento na navalha — escolha o serviço e reserve o seu horário
+        em menos de um minuto.
+      </p>
+    </div>
+  );
+}
+
 export default function Servicos() {
   const [active, setActive] = useState<number | null>(null);
   const hasHover = useHasHover();
@@ -54,6 +72,7 @@ export default function Servicos() {
   if (loading) {
     return (
       <section className={styles.servicos}>
+        <SectionHead />
         <p className={styles.status}>Carregando serviços...</p>
       </section>
     );
@@ -62,6 +81,7 @@ export default function Servicos() {
   if (error) {
     return (
       <section className={styles.servicos}>
+        <SectionHead />
         <p className={styles.status}>{error}</p>
       </section>
     );
@@ -70,6 +90,7 @@ export default function Servicos() {
   if (servicos.length === 0) {
     return (
       <section className={styles.servicos}>
+        <SectionHead />
         <p className={styles.status}>Nenhum serviço disponível no momento.</p>
       </section>
     );
@@ -77,6 +98,7 @@ export default function Servicos() {
 
   return (
     <section className={styles.servicos}>
+      <SectionHead />
       <div className={styles.grid}>
         {servicos.map((service, idx) => {
           const isOpen = active === idx;

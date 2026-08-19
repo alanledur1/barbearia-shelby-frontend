@@ -60,21 +60,23 @@ export const HomePage_2 = () => {
 
       <div className="background-overlay" />
 
-      <div className="title-1 title-anim">
+      <div className="title-1 title-anim text-[30px] px-[clamp(1.5rem,6vw,150px)] sm:text-[44px] sm:px-0 md:text-[56px]">
         <AnimatedText />
 
-        <div className="description">
+        <div className="description text-[13px] px-[clamp(1.5rem,6vw,150px)] sm:text-[15px] sm:px-0">
           Na barbearia Shelby, Cada Detalhe É Feito Para Você.
         </div>
 
         <br /><br />
 
-        <div className="title-2" ref={title2Ref}>
+        {/* Bebas Neue tem peso único (400): o "bold" vem do tamanho/condensação, por isso
+            aqui não há font-bold — só uppercase e um tracking levemente aberto. */}
+        <div className="title-2 uppercase text-[30px] px-[clamp(1.5rem,6vw,150px)] sm:text-[44px] sm:px-0 md:text-[56px]" ref={title2Ref}>
           Na <span className="red">Shelby</span>, Cada <span className="red">Corte</span> É <br />
           Mais Do Que Um <br />
           <span className="red">Simples</span> Serviço
 
-          <div className="description">
+          <div className="description text-[13px] px-[clamp(1.5rem,6vw,150px)] sm:text-[15px] sm:px-0">
             A Arte De Cortar. A Precisão De Um Shelby.
           </div>
         </div>

@@ -1,9 +1,32 @@
+/* Rodapé do site público. Segue os tokens do redesign: fundo no mesmo preto do site (com
+   uma borda superior sutil no lugar do "degrau" de cor que existia antes), títulos de coluna
+   em Bebas Neue e acento apenas nos estados de hover/marca. */
 .footer {
-  background-color: #000000;
-  color: #f1f1f1;
-  padding: 50px 20px;
-  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--background);
+  border-top: 1px solid var(--border);
+  color: var(--muted-foreground);
+  font-family: var(--font-body);
+  /* padding responsivo migrou para Tailwind (ver Footer.jsx) */
 
+  &__brand {
+    max-width: 320px;
+
+    .footer__brandName {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      line-height: 1;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--foreground);
+    }
+
+    p {
+      margin-top: 12px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--muted-foreground);
+    }
+  }
 
   &__content {
     display: flex;
@@ -11,20 +34,25 @@
     justify-content: space-between;
     max-width: 1200px;
     margin: 0 auto;
-    gap: 20px;
+    /* gap e text-align responsivos migraram para Tailwind (ver Footer.jsx). Obs.: a regra
+       original também tinha um `grid-template-columns` em @media(min-width:1100px) e
+       @media(max-width:768px) que era inerte (footer__content usa display:flex, não grid) —
+       removida por não ter efeito visual algum. */
   }
 
   &__column {
     flex: 1 1 200px;
-    min-width: 200px;
     transform-origin: center;
     opacity: 0;
     transform: translateY(50px);
+    /* min-width responsivo migrou para Tailwind (ver Footer.jsx) */
 
     h4 {
-      font-size: 18px;
-      margin-bottom: 10px;
-      color: #ec5f49;
+      margin-bottom: 14px;
+      color: var(--foreground);
+      font-family: var(--font-display);
+      letter-spacing: 0.12em;
+      /* font-size responsivo migrou para Tailwind (ver Footer.jsx) */
     }
 
     p {
@@ -37,12 +65,14 @@
       padding: 0;
 
       li {
-        margin: 8px 0;
+        margin: 10px 0;
         cursor: pointer;
-        transition: color 0.3s;
+        color: var(--muted-foreground);
+        transition: color 0.25s ease;
+        /* font-size responsivo migrou para Tailwind (ver Footer.jsx) */
 
         &:hover {
-          color: #ec5f49;
+          color: var(--primary);
         }
       }
     }
@@ -50,106 +80,44 @@
 
   &__social-icons {
     display: flex;
-    gap: 15px;
-    margin-top: 10px;
+    gap: 12px;
+    /* margin-top e justify-content responsivos migraram para Tailwind (ver Footer.jsx) */
 
-    .icon {
-      font-size: 20px;
-      color: #f1f1f1;
-      transition: transform 0.3s, color 0.3s;
-      cursor: pointer;
+    a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-input);
+      transition: border-color 0.25s ease, background-color 0.25s ease;
 
       &:hover {
-        color: #ec5f49;
-        transform: scale(1.2);
+        border-color: var(--primary);
+        background-color: color-mix(in oklab, var(--primary) 12%, transparent);
       }
+    }
+
+    .icon {
+      color: var(--muted-foreground);
+      transition: color 0.25s ease;
+      cursor: pointer;
+      /* font-size responsivo migrou para Tailwind (ver Footer.jsx) */
+    }
+
+    a:hover .icon {
+      color: var(--primary);
     }
   }
 
   &__bottom {
+    max-width: 1200px;
+    margin: 0 auto;
     text-align: center;
-    padding-top: 30px;
-    font-size: 14px;
-    color: #ccc;
-  }
-}
-
-/* Larger screens: set explicit columns if desired */
-@media (min-width: 1100px) {
-  .footer__content {
-    grid-template-columns: 1fr 1fr 1fr 1fr; /* quatro colunas equilibradas */
-  }
-}
-
-/* Tablet */
-@media (max-width: 1024px) {
-  .footer {
-    padding: 40px 18px;
-  }
-
-  .footer__content {
-    gap: 22px;
-  }
-
-  .footer__column h4 {
-    font-size: 17px;
-  }
-
-  .footer__column p,
-  .footer__column ul li {
-    font-size: 15px;
-  }
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  .footer {
-    padding: 28px 16px;
-  }
-
-  .footer__content {
-    grid-template-columns: 1fr;
-    gap: 18px;
-    text-align: center;
-  }
-
-  .footer__column {
-    min-width: 0;
-  }
-
-  .footer__social-icons {
-    justify-content: center;
-    margin-top: 6px;
-  }
-
-  .footer__bottom {
-    padding-top: 22px;
-    font-size: 13px;
-  }
-}
-
-/* Small phones */
-@media (max-width: 420px) {
-  .footer {
-    padding: 20px 12px;
-  }
-
-  .footer__column h4 {
-    font-size: 16px;
-  }
-
-  .footer__column p,
-  .footer__column ul li {
-    padding: 5px;
-    font-size: 13px;
-  }
-
-  .footer__social-icons .icon {
-    font-size: 15px;
-  }
-
-  .footer__social-icons {
-    text-align: center;
+    color: var(--muted-foreground);
+    border-top: 1px solid var(--border);
+    /* padding-top e font-size responsivos migraram para Tailwind (ver Footer.jsx) */
   }
 }
 

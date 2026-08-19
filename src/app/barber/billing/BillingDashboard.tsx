@@ -20,15 +20,15 @@ export default function BillingDashboard() {
             <h1>Resumo de Faturamento</h1>
 
             <div className={styles.metricsGrid}>
-                <div className={styles.metricsCard}>
+                <div className={styles.metricCard}>
                     <h2>Faturamento Total</h2>
                     <p>R$ {billingSummary.totalRevenue.toFixed(2)}</p>
                 </div>
-                <div className={styles.metricsCard}>
+                <div className={styles.metricCard}>
                     <h2>Serviços Concluídos</h2>
                     <p>{billingSummary.totalAppointments}</p>
                 </div>
-                <div className={styles.metricsCard}>
+                <div className={styles.metricCard}>
                     <h2>Ticket Médio</h2>
                     <p>R$ {billingSummary.averageTicket.toFixed(2)}</p>
                 </div>

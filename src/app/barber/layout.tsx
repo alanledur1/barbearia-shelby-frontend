@@ -7,7 +7,7 @@ export default function BarberLayout({ children }: { children: React.ReactNode }
   return (
     <ProtectedRoute allowedUserType={['barbeiro', 'dono', 'admin']}>
       <Sidebar />
-      <div className={styles.content}>{children}</div>
+      <div className={`${styles.content} ml-0 mb-16 md:ml-[72px] md:mb-0`}>{children}</div>
     </ProtectedRoute>
   );
 }

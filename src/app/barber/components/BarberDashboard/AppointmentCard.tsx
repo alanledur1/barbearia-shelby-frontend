@@ -59,8 +59,8 @@ export default function AppointmentCard({ appointment, service, updateAppointmen
 
   return (
     <>
-      <article className={styles.appointmentCard}>
-        <div className={styles.cardHeader}>
+      <article className={`${styles.appointmentCard} p-[1rem] md:p-[1.5rem]`}>
+        <div className={`${styles.cardHeader} flex-col items-start gap-[0.75rem] md:flex-row md:gap-0`}>
           <div>
             <div className={styles.clientInfo}>{displayName}</div>
             <small className={styles.clientContact}>
@@ -93,7 +93,7 @@ export default function AppointmentCard({ appointment, service, updateAppointmen
         </div>
 
         {status === 'CONFIRMED' && (
-          <div className={styles.cardFooter}>
+          <div className={`${styles.cardFooter} flex-wrap justify-center md:flex-nowrap md:justify-end`}>
             <button
               className={`${styles.actionButton} ${styles.completeButton}`}
               onClick={() => handleOpenConfirm('COMPLETED')}

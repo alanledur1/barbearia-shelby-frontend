@@ -18,6 +18,9 @@ export const Navbar = () => {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  // Navbar transparente sobre a hero; vira faixa escura com blur depois do primeiro scroll
+  // (ver `.navbar--scrolled` em Navbar.scss).
+  const [scrolled, setScrolled] = useState(false);
 
   // Fecha dropdown ao clicar fora
   useEffect(() => {
@@ -34,10 +37,18 @@ export const Navbar = () => {
     setIsMounted(true);
   }, []);
 
+  // Estado "rolado" da navbar (fundo escuro + blur + borda inferior).
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   useEffect(() => {
     if (pathname !== '/') return;
 
-    const sectionIds = ['topo', 'sobre', 'contato'];
+    const sectionIds = ['topo', 'servicos', 'sobre', 'contato'];
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -95,7 +106,7 @@ export const Navbar = () => {
   return (
     <header>
       <nav
-        className={`navbar${isStaffOnSite ? ' navbar--withSidebar' : ''}`}
+        className={`navbar py-[12px] px-[20px] h-[70px] md:py-[15px] md:px-[clamp(16px,6vw,150px)] md:h-[90px]${scrolled ? ' navbar--scrolled' : ''}${isStaffOnSite ? ' navbar--withSidebar md:left-[72px] md:w-[calc(100%-72px)]' : ''}`}
         role="navigation"
         aria-label="Menu principal"
       >
@@ -105,12 +116,12 @@ export const Navbar = () => {
             <span>SHELBY</span>
           </Link>
         </div>
-        <ul className="navbar__links">
+        <ul className="navbar__links hidden md:flex">
           <li className={isActive('/') ? 'active' : ''}>
             <Link href="/">Home</Link>
           </li>
-          <li className={isActive('/Servicos') ? 'active' : ''}>
-            <Link href="/Servicos">Serviços</Link>
+          <li className={isActive('/#servicos') ? 'active' : ''}>
+            <Link href="/#servicos">Serviços</Link>
           </li>
           <li className={isActive('/#sobre') ? 'active' : ''}>
             <Link href="/#sobre">Sobre Nós</Link>
@@ -119,10 +130,18 @@ export const Navbar = () => {
             <Link href="/#contato">Contato</Link>
           </li>
         </ul>
-        <div className="navbar__containerButton">
+        <div className="navbar__containerButton gap-[8px] md:gap-0">
           {/* Mostra opções diferentes dependendo do estado de autenticação */}
           {isMounted && auth && auth.isAuthenticated ? (
-            <div className="navbar__user" ref={dropdownRef}>
+            <>
+              {/* Cliente logado também tem o CTA à mão — agendar é a ação principal do site. */}
+              {!isAdmin && (
+                <Link href="/agendamento" className="navbar__cta mr-[14px] hidden md:inline-flex">
+                  Agendar
+                  <FaArrowRight />
+                </Link>
+              )}
+              <div className="navbar__user" ref={dropdownRef}>
               <button className="navbar__avatarButton" onClick={() => setOpen(v => !v)} aria-haspopup="true" aria-expanded={open}>
                 {/* Avatar: primeira letra do nome */}
                 <span className="navbar__avatar">{auth.user?.name ? auth.user.name.charAt(0).toUpperCase() : 'U'}</span>
@@ -130,7 +149,7 @@ export const Navbar = () => {
               <AnimatePresence>
                 {open && (
                   <motion.div
-                    className="navbar__dropdown"
+                    className="navbar__dropdown right-[6px] top-[calc(100%+6px)] min-w-[140px] md:right-0 md:top-[calc(100%+8px)] md:min-w-[260px]"
                     role="menu"
                     initial={{ opacity: 0, y: -6 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -150,30 +169,29 @@ export const Navbar = () => {
                       <Link href="/meus-servicos" className="navbar__dropdownItemDash" onClick={() => setOpen(false)}>Meus Serviços</Link>
                     )}
                     <Link href="/" className="navbar__dropdownItemDash" onClick={() => setOpen(false)}>Home</Link>
-                    <Link href="/Servicos" className="navbar__dropdownItemDash" onClick={() => setOpen(false)}>Serviços</Link>
+                    <Link href="/#servicos" className="navbar__dropdownItemDash" onClick={() => setOpen(false)}>Serviços</Link>
                     <Link href="/#sobre" className="navbar__dropdownItemDash" onClick={() => setOpen(false)}>Sobre Nós</Link>
                     <Link href="/#contato" className="navbar__dropdownItemDash" onClick={() => setOpen(false)}>Contato</Link>
                     <button className="navbar__dropdownItem" onClick={() => { auth.logout(); setOpen(false); }}>Sair</button>
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
+              </div>
+            </>
           ) : (
             <>
-              <button className="navbar__hamburger" onClick={() => setMobileOpen(v => !v)} aria-label="Abrir menu">
+              <button className="navbar__hamburger block order-1 mr-[8px] z-[1400] md:hidden" onClick={() => setMobileOpen(v => !v)} aria-label="Abrir menu">
                 <span className={`hamburger ${mobileOpen ? 'is-open' : ''}`}></span>
               </button>
 
-              <Link href="/Login" className="navbar__login">Entrar</Link>
+              <Link href="/Login" className="navbar__login hidden md:inline">Entrar</Link>
 
-              <div className='container'>
-                <button className='cssbuttons-io-button'>
-                  <Link href="/CriarConta" className="navbar__signup">Crie uma conta</Link>
-                  <div className='icon'>
-                    <Link className='icon' href="/CriarConta"><FaArrowRight /></Link>
-                  </div>
-                </button>
-              </div>
+              {/* CTA único da navbar, igual à referência: "Agendar" no acento. Criar conta
+                  continua acessível pelo menu mobile e pelo rodapé do formulário de login. */}
+              <Link href="/agendamento" className="navbar__cta hidden md:inline-flex">
+                Agendar
+                <FaArrowRight />
+              </Link>
 
               <AnimatePresence>
                 {mobileOpen && (
@@ -186,11 +204,12 @@ export const Navbar = () => {
                   >
                     <ul>
                       <li><Link href="/" onClick={() => setMobileOpen(false)}>Home</Link></li>
-                      <li><Link href="/Servicos" onClick={() => setMobileOpen(false)}>Serviços</Link></li>
+                      <li><Link href="/#servicos" onClick={() => setMobileOpen(false)}>Serviços</Link></li>
                       <li><Link href="/#sobre" onClick={() => setMobileOpen(false)}>Sobre Nós</Link></li>
                       <li><Link href="/#contato" onClick={() => setMobileOpen(false)}>Contato</Link></li>
                       <li><Link href="/Login" onClick={() => setMobileOpen(false)}>Entrar</Link></li>
                       <li><Link href="/CriarConta" onClick={() => setMobileOpen(false)}>Criar Conta</Link></li>
+                      <li className="navbar__mobileCta"><Link href="/agendamento" onClick={() => setMobileOpen(false)}>Agendar</Link></li>
                     </ul>
                   </motion.nav>
                 )}

@@ -42,12 +42,24 @@ export default function ClientDashboard() { // Renomeie a função se necessári
     historyCurrentPage * itemsPerPage
   );
 
+  // Estados de carregamento/erro mantêm o título da página: assim o usuário continua sabendo
+  // onde está em vez de ver só uma linha de texto no meio do vazio.
   if (loading) {
-    return <div className={styles.container}><p>Carregando seus agendamentos...</p></div>;
+    return (
+      <div className={styles.container}>
+        <h1>Meus Agendamentos</h1>
+        <p className={styles.loading}>Carregando seus agendamentos...</p>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className={styles.container}><p className={styles.error}>{error}</p></div>;
+    return (
+      <div className={styles.container}>
+        <h1>Meus Agendamentos</h1>
+        <p className={styles.error} role="alert">{error}</p>
+      </div>
+    );
   }
 
   // O JSX que estava na página agora fica aqui

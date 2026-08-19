@@ -1,11 +1,12 @@
+@use "sass:color";
 /* src/components/Agendamento/AgendamentoForm.module.scss */
 
-$brand-color: #f67366;
-$text-color: #f0f0f0;
-$text-muted: #a0a0a0;
-$input-bg: #2a2a2a;
-$border-color: #3a3a3a;
-$error-color: #dc3545;
+$brand-color: #f5605e; // = var(--primary) oklch(68% .185 25)
+$text-color: #f5f5f5; // = var(--foreground) oklch(97% 0 0)
+$text-muted: #a4a4a4; // = var(--muted-foreground) oklch(72% 0 0)
+$input-bg: #161616; // = var(--muted) oklch(20% 0 0)
+$border-color: #2b2b2b; // = var(--border) oklch(28% 0 0)
+$error-color: #e5484d; // = var(--destructive)
 
 .form {
   display: flex;
@@ -23,7 +24,7 @@ $error-color: #dc3545;
     border: 1px solid $border-color;
     color: $text-color;
     padding: 1.2rem 1rem 0.6rem;
-    border-radius: 12px;
+    border-radius: var(--radius-input);
     font-size: 0.95rem;
     transition: all 0.25s ease;
 
@@ -84,23 +85,28 @@ $error-color: #dc3545;
 
 .primaryButton {
   width: 100%;
-  font-weight: 600;
-  font-size: 1rem;
-  padding: 0.9rem;
-  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.95rem;
+  border-radius: var(--radius-button);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.25s ease, transform 0.25s ease;
   background: $brand-color;
   color: #fff;
   border: none;
   margin-top: 1rem;
 
   &:hover {
-    background: darken($brand-color, 10%);
+    background: color.adjust($brand-color, $lightness: -10%);
+    transform: translateY(-2px);
   }
 
   &:disabled {
-    background-color: #555;
+    background-color: $input-bg;
+    color: $text-muted;
     cursor: not-allowed;
+    transform: none;
   }
 }

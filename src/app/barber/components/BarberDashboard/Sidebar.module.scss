@@ -1,10 +1,11 @@
+@use "sass:color";
 // Variáveis replicadas de styles.module.scss (mesmo padrão já usado em cada .module.scss
 // de subpágina do projeto — não há arquivo central de tokens hoje).
-$brand-color: #f67366;
-$card-bg: #1e1e1e;
-$text-color: #f0f0f0;
-$text-muted: #a0a0a0;
-$border-color: #3a3a3a;
+$brand-color: #f5605e; // = var(--primary) oklch(68% .185 25)
+$card-bg: #0f0f0f; // = var(--card) oklch(17% 0 0)
+$text-color: #f5f5f5; // = var(--foreground) oklch(97% 0 0)
+$text-muted: #a4a4a4; // = var(--muted-foreground) oklch(72% 0 0)
+$border-color: #2b2b2b; // = var(--border) oklch(28% 0 0)
 
 $navbar-height: 90px; // altura do Navbar global fixo (globals.css) — Navbar começa depois da
                       // sidebar em telas largas (ver Navbar.scss), não fica por cima dela.
@@ -13,39 +14,34 @@ $sidebar-height-mobile: 64px;
 
 .sidebar {
   position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: $sidebar-width;
   background-color: $card-bg;
-  border-right: 1px solid $border-color;
   z-index: 1100; // acima do Navbar (1000) — a sidebar cobre toda a altura da tela, o Navbar
                  // ocupa só a faixa superior à direita dela.
   display: flex;
-  flex-direction: column;
   // Sem overflow: auto/hidden em qualquer eixo aqui de propósito — um valor não-"visible" em
   // overflow-y forçaria o navegador a computar overflow-x também como não-"visible" (regra do
   // spec de CSS Overflow), o que cortaria o .tooltip (ele é posicionado fora da largura de
   // 72px da sidebar de propósito, via left: calc(100% + 10px)).
+  // Posicionamento (top/left/right/bottom/width/height), flex-direction/align-items e a borda
+  // (right no desktop, top no mobile) responsivos migraram para Tailwind (ver Sidebar.tsx).
+  // Cor da borda replicada como valor literal (--border-color: #{$border-color}) para não
+  // depender de import de variável Sass em classe utilitária.
 }
 
 .list {
   list-style: none;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  padding: 1.5rem 0;
   margin: 0;
   flex: 1;
+  /* flex-direction, justify-content, gap e padding responsivos migraram para Tailwind */
 }
 
 .profile {
   position: relative;
   display: flex;
   justify-content: center;
-  padding: 1rem 0 1.5rem;
-  border-top: 1px solid $border-color;
+  /* padding e border-top responsivos migraram para Tailwind */
 }
 
 .avatarButton {
@@ -67,30 +63,34 @@ $sidebar-height-mobile: 64px;
   }
 }
 
+// Menu de perfil da sidebar: era o único bloco claro (fundo branco) dentro de uma dashboard
+// toda escura. Agora usa a mesma superfície/borda dos demais cards e do dropdown do Navbar.
 .profileMenu {
   position: absolute;
-  left: calc(100% + 10px);
-  bottom: 0;
-  background: #fff;
-  color: #000;
-  border-radius: 8px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  background: $card-bg;
+  color: $text-color;
+  border: 1px solid $border-color;
+  border-radius: var(--radius-card);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
   padding: 8px 0;
   min-width: 220px;
   z-index: 1200;
+  overflow: hidden;
+  /* left/right/bottom responsivos migraram para Tailwind (ver Sidebar.tsx) */
 
   .profileHeader {
-    padding: 10px 16px 8px;
-    border-bottom: 1px solid #eee;
+    padding: 12px 16px 10px;
+    border-bottom: 1px solid $border-color;
     margin-bottom: 4px;
 
     .profileName {
       font-weight: 700;
+      font-size: 0.9375rem;
     }
 
     .profileEmail {
       font-size: 12px;
-      color: #666;
+      color: $text-muted;
     }
   }
 
@@ -99,16 +99,21 @@ $sidebar-height-mobile: 64px;
     display: block;
     width: 100%;
     text-align: left;
-    padding: 8px 16px;
+    padding: 10px 16px;
     background: none;
     border: none;
-    color: inherit;
+    color: $text-muted;
     text-decoration: none;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease, color 0.2s ease;
 
     &:hover {
-      background: #f1f1f1;
+      background: color.adjust($card-bg, $lightness: 8%);
+      color: $text-color;
     }
   }
 }
@@ -121,15 +126,14 @@ $sidebar-height-mobile: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   color: $text-muted;
   transition: background-color 0.2s ease, color 0.2s ease;
+  /* width/height responsivos migraram para Tailwind (ver Sidebar.tsx) */
 
   &:hover,
   &:focus-visible {
-    background-color: #2a2a2a;
+    background-color: color.adjust($card-bg, $lightness: 8%);
     color: $text-color;
   }
 
@@ -149,7 +153,8 @@ $sidebar-height-mobile: 64px;
   left: calc(100% + 10px);
   top: 50%;
   transform: translateY(-50%) translateX(-6px);
-  background-color: #000;
+  background-color: color.adjust($card-bg, $lightness: 10%);
+  border: 1px solid $border-color;
   color: $text-color;
   padding: 0.4rem 0.75rem;
   border-radius: 6px;
@@ -169,37 +174,12 @@ $sidebar-height-mobile: 64px;
   transform: translateY(-50%) translateX(0);
 }
 
+/* Layout responsivo de .sidebar, .list, .link (largura/altura), .profile e .profileMenu
+   migrou para classes utilitárias do Tailwind em Sidebar.tsx (breakpoint 768px = md).
+   .tooltip permanece em Sass: sua posição está acoplada ao alvo do `transform` usado na
+   transição de hover/focus (.link:hover .tooltip), então separar a parte "responsiva" da
+   "animação" quebraria a transição — mantido como exceção pragmática. */
 @media (max-width: 768px) {
-  .sidebar {
-    top: auto;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: $sidebar-height-mobile;
-    border-right: none;
-    border-top: 1px solid $border-color;
-    // Vira barra horizontal — .list (ícones) e .profile (avatar) precisam ficar lado a lado,
-    // não empilhados como na coluna do desktop.
-    flex-direction: row;
-    align-items: center;
-    // Mesmo motivo do comentário acima: nenhum overflow não-"visible" aqui, para o .tooltip
-    // (que nesse breakpoint escapa para cima, fora da altura de 64px da barra) não ser cortado.
-  }
-
-  .list {
-    flex-direction: row;
-    justify-content: space-around;
-    padding: 0 0.5rem;
-    height: 100%;
-    gap: 0.25rem;
-  }
-
-  .link {
-    width: 40px;
-    height: 40px;
-  }
-
   .tooltip {
     left: 50%;
     top: auto;
@@ -210,21 +190,5 @@ $sidebar-height-mobile: 64px;
   .link:hover .tooltip,
   .link:focus-visible .tooltip {
     transform: translateX(-50%) translateY(0);
-  }
-
-  .profile {
-    border-top: none;
-    padding: 0;
-  }
-
-  .avatarButton {
-    width: 40px;
-    height: 40px;
-  }
-
-  .profileMenu {
-    left: auto;
-    right: 0;
-    bottom: calc(100% + 10px);
   }
 }

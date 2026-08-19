@@ -22,7 +22,7 @@ export const Preloader = ({ onComplete }: { onComplete: () => void }) => {
 
   return (
     <div className="preloader__overlay">
-      <div className="preloader__text">SHELBY</div>
+      <div className="preloader__text text-[1.6rem] tracking-[1px] sm:text-[2rem] sm:tracking-[2px] md:text-[2.4rem] md:tracking-[3px] lg:text-[35px] lg:tracking-[4px]">SHELBY</div>
     </div>
   );
 };

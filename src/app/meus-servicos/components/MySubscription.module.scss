@@ -1,21 +1,23 @@
 // src/app/meus-servicos/components/MySubscription.module.scss
 
-$brand-color: #f67366;
-$card-bg: #1e1e1e;
-$text-color: #f0f0f0;
-$text-muted: #a0a0a0;
-$border-color: #3a3a3a;
-$error-color: #dc3545;
-$success-color: #4caf82;
+$brand-color: #f5605e; // = var(--primary) oklch(68% .185 25)
+$card-bg: #0f0f0f; // = var(--card) oklch(17% 0 0)
+$text-color: #f5f5f5; // = var(--foreground) oklch(97% 0 0)
+$text-muted: #a4a4a4; // = var(--muted-foreground) oklch(72% 0 0)
+$border-color: #2b2b2b; // = var(--border) oklch(28% 0 0)
+$error-color: #e5484d; // = var(--destructive)
+$success-color: #3fc98c; // = var(--success)
 
 .section {
   margin-bottom: 3rem;
 
+  // Mesmo título de bloco usado no ClientDashboard: acento + traço de separação.
   h2 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+    letter-spacing: 0.06em;
     color: $brand-color;
     margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.6rem;
     border-bottom: 1px solid $border-color;
   }
 }
@@ -30,12 +32,14 @@ $success-color: #4caf82;
 .currentPlan, .planCard {
   background-color: $card-bg;
   border: 1px solid $border-color;
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   padding: 1.5rem;
 
   h3 {
     color: $text-color;
-    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
   }
 
   p {
@@ -62,32 +66,39 @@ $success-color: #4caf82;
   gap: 1rem;
 }
 
-.cancelButton {
+// Assinar é a ação principal (sólida, no acento da marca); cancelar é destrutiva e
+// secundária (contorno) — mesma hierarquia usada no card de agendamento.
+.cancelButton,
+.subscribeButton {
   margin-top: 1rem;
-  padding: 0.6rem 1.25rem;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
+  padding: 0.7rem 1.35rem;
+  border-radius: var(--radius-button);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   cursor: pointer;
-  background-color: $error-color;
-  color: white;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.cancelButton {
+  border: 1px solid rgba(229, 72, 77, 0.45);
+  background-color: transparent;
+  color: $error-color;
 
   &:hover {
-    opacity: 0.9;
+    background-color: rgba(229, 72, 77, 0.15);
+    border-color: $error-color;
   }
 }
 
 .subscribeButton {
-  margin-top: 1rem;
-  padding: 0.6rem 1.25rem;
   border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  background-color: $success-color;
-  color: white;
+  background-color: $brand-color;
+  color: #fff;
 
   &:hover {
-    opacity: 0.9;
+    background-color: rgba(245, 96, 94, 0.85);
+    transform: translateY(-2px);
   }
 }

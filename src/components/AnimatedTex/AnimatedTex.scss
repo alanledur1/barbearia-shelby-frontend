@@ -1,15 +1,18 @@
 .animated-title {
-  font-size: clamp(1.1rem, 4vw + 0.5rem, 3rem);
-  font-weight: 700;
-  color: #fff;
+  /* Frase de impacto do bloco de vídeo: mesma família display do resto dos títulos
+     (Bebas Neue), com o destaque no acento da marca. */
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--foreground);
   text-align: center;
   margin: 0 auto;
-  padding: 0 1rem;
-  line-height: 1.3;
-  max-width: 90%;
   white-space: normal;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  /* font-size, line-height, padding e max-width responsivos migraram para Tailwind
+     (ver AnimatedTex.tsx) */
 
   span {
     display: inline-block;
@@ -19,20 +22,7 @@
   }
 
   .red {
-    color: #e63946;
-  }
-
-  @media (max-width: 768px) {
-    font-size: clamp(1rem, 3vw + 0.5rem, 1.6rem);
-    line-height: 1.35;
-    max-width: 95%;
-  }
-
-  @media (max-width: 480px) {
-    font-size: clamp(0.9rem, 3vw + 0.5rem, 1.3rem);
-    line-height: 1.4;
-    padding: 0 0.75rem;
-    max-width: 100%;
+    color: var(--primary);
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -1,173 +1,160 @@
+/* Tela de login. Mesma linguagem do site público (fundo quase preto com um brilho quente do
+   acento, card escuro com borda sutil, título em Bebas Neue), mas com a sobriedade de uma
+   tela de formulário: sem imagem de fundo, sem animação de brilho, foco na leitura.
+   Cores 100% em tokens de globals.css. */
 .login-container {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #b46e6e, #332424, #141212);
-}
-
-.title {
-  color: #fff;
-  margin-bottom: 30px;
+  padding: 90px 20px 60px;
+  background:
+    radial-gradient(
+      60% 60% at 50% 0%,
+      color-mix(in oklab, var(--primary) 16%, transparent) 0%,
+      transparent 70%
+    ),
+    var(--background);
 }
 
 .login-form {
+  /* background, border e border-radius migraram para classes Tailwind
+     (`rounded-card border border-border bg-card`, ver login.tsx) — precisam sair
+     do Sass por completo, senão essa regra não-layered vence incondicionalmente
+     as utilities do Tailwind v4 (mesmo motivo documentado em HomePage.scss). */
   position: relative;
-  background: #9b9797;
-  padding: 50px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 20px;
-  width: 380px;
-  max-width: 380px;
-  box-shadow: 0 25px 45px #c55f5f66;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 25px 60px oklch(0% 0 0 / 0.55);
   text-align: center;
-  backdrop-filter: blur(15px);
-  overflow: hidden;
-
-  .login-form::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.5);
-    transform: skewX(-15deg);
-    transition: 0.5s;
-    pointer-events: none;
-  }
-
-  &:hover:hover:before {
-    left: 120%;
-  }
 
   .title {
-    color: #fff;
-    margin-bottom: 30px;
-    font-weight: 600;
-    text-align: center;
-    letter-spacing: 1px;
-    font-size: 28px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    color: var(--foreground);
+    margin-bottom: 8px;
+    font-size: 2.25rem;
+    letter-spacing: 0.08em;
+    /* font-family/uppercase vêm do @layer base (h2, Bebas Neue). */
   }
 
+  .subtitle {
+    color: var(--muted-foreground);
+    font-size: 0.9rem;
+    margin-bottom: 28px;
+  }
 
   .error {
-    color: #e63946;
-    font-size: 0.9rem;
-    margin-bottom: 35px;
-    margin-top: -10px;
+    color: var(--destructive);
+    background: color-mix(in oklab, var(--destructive) 12%, transparent);
+    border: 1px solid color-mix(in oklab, var(--destructive) 35%, transparent);
+    border-radius: var(--radius-input);
+    padding: 10px 12px;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+    text-align: left;
   }
 
   .input-group {
     position: relative;
-    margin-bottom: 35px;
-  }
-
-  .input-group input {
-    width: 100%;
-    padding: 10px 15px;
-    background: rgba(255, 255, 255, 0.377);
-    border: none;
-    outline: none;
-    border-radius: 35px;
-    font-size: 16px;
-    color: #fff;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-  }
-
-  .input-group input::placeholder {
-    color: rgba(255, 255, 255, 0.7);
-  }
-
-  .input-group input:focus {
-    background: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 20px rgba(58, 123, 213, 0.1);
+    margin-bottom: 20px;
+    text-align: left;
   }
 
   .input-group label {
-    position: absolute;
-    top: -30%;
-    left: 20px;
-    transform: translateY(-50%);
-    color: #fff;
-    font-size: 16px;
-    pointer-events: none;
-    transition: all 0.3s ease;
+    display: block;
+    margin-bottom: 6px;
+    color: var(--muted-foreground);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
 
-  .input-group input:focus+label,
-  .input-group input:valid+label {
-    top: 0px;
-    left: 15px;
-    font-size: 12px;
-    background: rgba(255, 255, 255, 0.3);
-    padding: 2px 8px;
-    border-radius: 10px;
-    color: #fff;
+  .input-group input {
+    /* border-radius migrou para a classe Tailwind `rounded-input` (ver login.tsx),
+       mesmo motivo do .login-form acima — não pode ficar declarado aqui. */
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--muted);
+    border: 1px solid var(--border);
+    outline: none;
+    font-size: 0.95rem;
+    color: var(--foreground);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  }
+
+  .input-group input::placeholder {
+    color: var(--muted-foreground);
+  }
+
+  .input-group input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 22%, transparent);
   }
 
   .remember-forgot {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 25px;
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.8);
+    gap: 12px;
+    margin-bottom: 24px;
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
   }
 
   .remember-forgot input {
-    margin-right: 3px;
-    accent-color: #fff;
+    margin-right: 6px;
+    accent-color: var(--primary);
   }
 
   .remember-forgot a {
-    color: #fff;
+    color: var(--muted-foreground);
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: color 0.2s ease;
   }
 
   .remember-forgot a:hover {
-    text-decoration: underline;
+    color: var(--primary);
   }
 
   .btn {
+    /* border-radius migrou para a classe Tailwind `rounded-button` (ver login.tsx). */
     width: 100%;
-    padding: 15px;
-    background: #3a7bd5;
+    padding: 14px;
+    background: var(--primary);
     border: none;
     outline: none;
-    border-radius: 35px;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 600;
+    color: var(--primary-foreground);
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
 
   .btn:hover {
-    background: #2a5bbf;
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-accent);
   }
 
   .register-link {
-    margin-top: 25px;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.8);
+    margin-top: 24px;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
     text-align: center;
   }
 
   .register-link a {
-    color: #fff;
+    color: var(--primary);
     text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
+    font-weight: 700;
+    transition: color 0.2s ease;
   }
 
   .register-link a:hover {
+    color: var(--primary-hover);
     text-decoration: underline;
   }
 }

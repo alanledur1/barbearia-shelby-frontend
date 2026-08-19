@@ -7,7 +7,7 @@
   inset: 0; /* substitui top, left, width, height */
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, #000 60%, #111 100%);
+  background: radial-gradient(circle at center, var(--background) 55%, oklch(0% 0 0) 100%);
   z-index: 9999;
   display: flex;
   flex-direction: column;
@@ -33,18 +33,17 @@
 
 /* ===== Texto ===== */
 .preloader__text {
-  color: #fff;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 600;
-  letter-spacing: 4px;
+  color: var(--foreground);
+  font-family: var(--font-display);
+  font-weight: 400; /* Bebas Neue tem peso único — evita negrito sintético */
   animation: blink 1.2s infinite ease-in-out;
   text-transform: uppercase;
   text-align: center;
   user-select: none;
   transition: font-size 0.3s ease;
-  font-size: 35px;
   margin: 0; /* garante centralização perfeita */
   line-height: 1.2;
+  /* font-size e letter-spacing responsivos migraram para Tailwind (ver Preloader.tsx) */
 }
 
 @keyframes blink {
@@ -80,45 +79,24 @@
 /* ============================== */
 /*        RESPONSIVIDADE          */
 /* ============================== */
-
-/* 1024px ↓ (notebooks/tablets) */
+/* font-size/letter-spacing de .preloader__text migraram para Tailwind (ver Preloader.tsx).
+   Regras de .preloader__spinner permanecem aqui apesar de o spinner estar comentado/não
+   usado no JSX atual — mantidas como estavam para não alterar comportamento se reativado. */
 @media (max-width: 1024px) {
-  .preloader__text {
-    font-size: 2.4rem;
-    letter-spacing: 3px;
-  }
-
   .preloader__spinner {
     width: 55px;
     height: 55px;
   }
 }
 
-/* 768px ↓ (tablets verticais) */
 @media (max-width: 768px) {
-  .preloader__text {
-    font-size: 2rem;
-    letter-spacing: 2px;
-  }
-
   .preloader__spinner {
     width: 48px;
     height: 48px;
   }
 }
 
-/* 480px ↓ (celulares pequenos, incluindo 420px) */
 @media (max-width: 480px) {
-  .preloader__overlay {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .preloader__text {
-    font-size: 1.6rem;
-    letter-spacing: 1px;
-  }
-
   .preloader__spinner {
     width: 30px;
     height: 30px;

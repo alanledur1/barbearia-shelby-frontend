@@ -31,8 +31,8 @@ const NovaSenha: React.FC<NovaSenhaProps> = ({ email, onSubmit, apiError }) => {
 
   return (
     <div className={styles.recuperacaoContainer}>
-      <form className={styles.recuperacaoForm} onSubmit={handleSubmit}>
-        <h2 className={styles.titleN}>Definir Nova Senha</h2>
+      <form className={`${styles.recuperacaoForm} rounded-card border border-border bg-card`} onSubmit={handleSubmit}>
+        <h2 className={`${styles.titleN}`}>Definir Nova Senha</h2>
 
         {(apiError || error) && <p className={styles.error} aria-live="polite">{apiError || error}</p>}
 
@@ -44,6 +44,7 @@ const NovaSenha: React.FC<NovaSenhaProps> = ({ email, onSubmit, apiError }) => {
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
             required
+            className="rounded-input"
           />
         </div>
         <div className={styles.inputGroup}>
@@ -54,9 +55,10 @@ const NovaSenha: React.FC<NovaSenhaProps> = ({ email, onSubmit, apiError }) => {
             value={confirmar}
             onChange={(e) => setConfirmar(e.target.value)}
             required
+            className="rounded-input"
           />
         </div>
-        <button type="submit" className={styles.btn}>Alterar Senha</button>
+        <button type="submit" className={`${styles.btn} rounded-button`}>Alterar Senha</button>
       </form>
     </div>
   );

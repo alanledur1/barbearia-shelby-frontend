@@ -33,8 +33,8 @@ const OtpVerification: React.FC<OtpProps> = ({ email, onVerify, onResend, apiErr
 
   return (
     <div className={styles.recuperacaoContainer}>
-      <form className={styles.recuperacaoForm} onSubmit={handleSubmit}>
-        <h2 className={styles.title}>Verificação de Código</h2>
+      <form className={`${styles.recuperacaoForm} rounded-card border border-border bg-card`} onSubmit={handleSubmit}>
+        <h2 className={`${styles.title}`}>Verificação de Código</h2>
         <div className={styles.infoText}>
           <p>Digite o código de 6 dígitos enviado para {email}.</p>
         </div>
@@ -56,10 +56,16 @@ const OtpVerification: React.FC<OtpProps> = ({ email, onVerify, onResend, apiErr
           ))}
         </div>
         <div className={styles.infoTextB}>
-          <p>Não recebeu o codigo ?</p>
-          <a href="#" onClick={(e) => { e.preventDefault(); onResend(); }}>Reenviar</a>
+          <p>Não recebeu o código?</p>
+          <a
+            href="#"
+            className="font-bold uppercase tracking-[0.12em] text-primary hover:underline"
+            onClick={(e) => { e.preventDefault(); onResend(); }}
+          >
+            Reenviar
+          </a>
         </div>
-        <button type="submit" className={styles.btn}>Confirmar</button>
+        <button type="submit" className={`${styles.btn} rounded-button`}>Confirmar</button>
       </form>
     </div>
   );

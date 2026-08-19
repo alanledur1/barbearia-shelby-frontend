@@ -4,8 +4,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { Preloader } from '../Preloader/Preloader';
 import './HomePage.scss';
-import { FaClock, FaMapMarkerAlt, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaWhatsapp } from 'react-icons/fa';
 import Link from 'next/link';
+
+// Mini-stats da hero (mesma ideia da referência Lovable): três provas rápidas de confiança
+// logo abaixo dos CTAs, em Bebas + label pequena em caixa alta.
+const HERO_STATS = [
+  { value: '2022', label: 'Desde' },
+  { value: '100%', label: 'Hora marcada' },
+  { value: '5 min', label: 'Sem espera' },
+];
 
 export const HomePage = () => {
   const homeRef = useRef<HTMLDivElement>(null);
@@ -35,28 +43,50 @@ export const HomePage = () => {
   return (
     <>
       {loading && <Preloader onComplete={() => setLoading(false)} />}
-      <div className={`HomePage ${loading ? 'hidden' : 'visible'}`} ref={homeRef}>
-        <h1 className="h1 animate-left">SHELBY<br />BARBEARIA</h1>
+      <div
+        className={`HomePage ${loading ? 'hidden' : 'visible'} p-[1.5rem] items-center text-center sm:p-[2rem] sm:items-center sm:text-center md:px-[60px] md:py-0 md:items-start md:text-left lg:px-[100px] lg:py-0 xl:px-[150px] xl:py-0`}
+        ref={homeRef}
+      >
+        <p className="animate-left section-kicker mb-[14px]">
+          Rua Esperanto 203 · Quilombo
+        </p>
 
-        {/* Info Box adicionada aqui */}
-        <div className="info-box animate-left">
-          <h4><FaClock style={{ marginRight: '8px' }} />Horários</h4>
-          <p>Ter a Sex: 9h - 20h<br />Sáb: 9h - 14h</p>
+        <h1 className="hero-title animate-left text-[48px] max-w-[90%] sm:text-[60px] md:text-[80px] md:max-w-[640px] lg:text-[96px] lg:max-w-[820px] xl:text-[104px]">
+          <span className="block">Barbearia</span>
+          <span className="block text-accent-brand">Shelby</span>
+        </h1>
 
-          <h4><FaMapMarkerAlt style={{ marginRight: '8px' }} />Localização</h4>
-          <p>Rua Esperanto, 203 - Quilombo</p>
+        <p className="hero-lead animate-left mt-[18px] max-w-[520px] text-[14px] sm:text-[15px] md:text-[16px]">
+          Corte, barba e acabamento com hora marcada. Você chega, senta e sai pronto —
+          sem fila, sem enrolação.
+        </p>
 
-          <a href="https://www.google.com/maps/place/29%C2%B035'41.4%22S+51%C2%B022'19.9%22W/@-29.5948367,-51.3722015,19z/data=!4m4!3m3!8m2!3d-29.5948333!4d-51.3721944?hl=pt-BR&entry=ttu&g_ep=EgoyMDI1MDcwOS4wIKXMDSoASAFQAw%3D%3D">
-            Ver no mapa <FaExternalLinkAlt style={{ marginLeft: '6px' }} />
+        <div className="animate-left mt-[28px] flex flex-wrap items-center justify-center gap-[12px] md:justify-start">
+          <Link href="/agendamento" className="btn-accent">
+            Agendar horário
+          </Link>
+          <a
+            href="https://wa.me/5551998177919?text=Ol%C3%A1,%20gostaria%20de%20agendar%20um%20hor%C3%A1rio"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-outline"
+          >
+            <FaWhatsapp aria-hidden />
+            WhatsApp
           </a>
         </div>
 
-        <Link href="/agendamento">
-          <button className="button animate-left">Agendar Horário</button>
-        </Link>
+        <ul className="hero-stats animate-left mt-[36px] flex flex-wrap justify-center gap-x-[32px] gap-y-[16px] md:justify-start md:gap-x-[48px]">
+          {HERO_STATS.map(({ value, label }) => (
+            <li key={label}>
+              <div className="stat-value">{value}</div>
+              <div className="stat-label">{label}</div>
+            </li>
+          ))}
+        </ul>
 
         <div
-          className="scroll-down-indicator"
+          className="scroll-down-indicator hidden text-[2.2rem] sm:block md:text-[3rem]"
           onClick={scrollToNextSection}
           // Atributos de Acessibilidade:
           role="button" // Informa que o elemento age como um botão

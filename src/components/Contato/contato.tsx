@@ -9,40 +9,51 @@ import { TbMapShare } from "react-icons/tb";
 
 export const Contato = () => {
   return (
-    <div className='contato' id='contato'>
+    <div className='contato p-[20px] md:p-[40px] lg:py-[60px] lg:px-[80px]' id='contato'>
       <motion.div
-        className='title animate-title'
-        initial={{ x: 100, opacity: 0 }}
-        whileInView={{ x: 0, opacity: 1 }}
+        className='head animate-title'
+        initial={{ y: 40, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
         viewport={{ once: true, amount: 0.4 }}
-        transition={{ duration: 1.2, ease: 'easeOut' }}
+        transition={{ duration: 0.9, ease: 'easeOut' }}
       >
-        CONTATO
+        <span className="section-kicker">Fale com a gente</span>
+        <h2 className="section-title">
+          <span className="accent">Contato</span>
+        </h2>
+        <span className="section-rule" />
+        <p className="headSubtitle">
+          Prefere resolver na conversa? Chama no WhatsApp, manda um e-mail ou aparece na
+          Rua Esperanto, 203.
+        </p>
       </motion.div>
 
-      <div className='container'>
+      <div className='container gap-[18px] md:gap-[24px] md:justify-center lg:gap-[48px] lg:flex-nowrap'>
         {[
           {
             icon: <FaPhone className='icon' />,
             title: '(51) 99817-7919',
             text: 'Atendimento rápido e sem enrolação. Agende agora pelo WhatsApp.',
+            href: 'https://wa.me/5551998177919?text=Ol%C3%A1,%20gostaria%20de%20agendar%20um%20hor%C3%A1rio',
             delay: 0
           },
           {
             icon: <SlEnvolopeLetter className='icon' />,
             title: 'borgeselias876@gmail.com',
             text: 'Envie dúvidas, sugestões ou propostas comerciais.',
+            href: 'mailto:borgeselias876@gmail.com',
             delay: 0.2
           },
           {
             icon: <TbMapShare className='icon' />,
             title: 'Rua Esperanto 203',
             text: 'Chega junto pra renovar o corte com estilo!',
+            href: 'https://www.google.com/maps/place/29%C2%B035\'41.4%22S+51%C2%B022\'19.9%22W/@-29.5948367,-51.3722015,19z?hl=pt-BR',
             delay: 0.4
           }
-        ].map(({ icon, title, text, delay }, index) => (
+        ].map(({ icon, title, text, href, delay }, index) => (
           <motion.div
-            className='card'
+            className='card mt-[12px] mb-[12px] max-w-[450px] h-auto md:mt-[30px] md:mb-0 lg:max-w-[500px] lg:flex-1'
             key={index}
             initial={{ y: 60, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
@@ -50,13 +61,17 @@ export const Contato = () => {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 1.2, ease: 'easeOut', delay }}
           >
-            <h3>{icon} {title}</h3>
-            <p>{text}</p>
+            {/* Cada card de contato virou ação direta (WhatsApp / e-mail / mapa) em vez de
+                texto estático — mesma informação, um toque a menos para o cliente. */}
+            <a href={href} target="_blank" rel="noopener noreferrer">
+              <h3>{icon} {title}</h3>
+              <p>{text}</p>
+            </a>
           </motion.div>
         ))}
       </div>
 
-      <div className='contato-conteudo'>
+      <div className='contato-conteudo py-[20px] md:py-[40px]'>
         <motion.div
           className='bloco-titulo'
           initial={{ x: -100, opacity: 0 }}
@@ -64,12 +79,12 @@ export const Contato = () => {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 1.2, ease: 'easeOut' }}
         >
-          <h1>Localização</h1>
+          <h2>Localização</h2>
         </motion.div>
 
-        <div className='conteudo-horizontal'>
+        <div className='conteudo-horizontal flex-wrap gap-[12px] md:flex-col md:items-center md:gap-[20px] lg:flex-row lg:flex-nowrap lg:justify-around lg:gap-[40px]'>
           <motion.div
-            className='localizacao'
+            className='localizacao max-w-full md:max-w-[90%] lg:w-[90%] lg:max-w-[600px]'
             initial={{ y: 60, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -83,17 +98,17 @@ export const Contato = () => {
           </motion.div>
 
           <motion.div
-            className='formulario'
+            className='formulario max-w-full md:max-w-[90%] lg:w-[90%] lg:max-w-[600px]'
             initial={{ y: 60, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 1.2, ease: 'easeOut', delay: 0.2 }}
           >
             <form className='form' action="">
-              <input type="text" placeholder='Nome' />
-              <input type="text" placeholder='Email' />
-              <textarea cols={30} rows={10} placeholder='Mensagem'></textarea>
-              <button type="submit">Enviar</button>
+              <input type="text" placeholder='Nome' aria-label='Nome' />
+              <input type="email" placeholder='E-mail' aria-label='E-mail' />
+              <textarea rows={6} placeholder='Mensagem' aria-label='Mensagem'></textarea>
+              <button type="submit">Enviar mensagem</button>
             </form>
           </motion.div>
         </div>

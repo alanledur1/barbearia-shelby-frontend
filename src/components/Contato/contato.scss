@@ -1,104 +1,155 @@
+/* Seção "Contato". Mesma gramática das demais seções: foto de fundo com véu escuro derivado
+   do token --background, kicker + título grande, cards de contato com ícone no acento e um
+   bloco final com mapa + formulário — agora em superfície escura (--card), no lugar do card
+   branco que quebrava o tema dark. */
 .contato {
+  position: relative;
   width: 100%;
   height: auto;
-  padding: 20px 40px;
   background-image: url(../../images/Imagem-contato.jpg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: scroll;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  scroll-margin-top: 120px;
+  /* padding responsivo migrou para Tailwind (ver contato.tsx) */
 
-  .title {
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--background) 92%, transparent) 0%,
+      color-mix(in oklab, var(--background) 80%, transparent) 50%,
+      color-mix(in oklab, var(--background) 95%, transparent) 100%
+    );
+    pointer-events: none;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .head {
     width: 100%;
-    justify-content: end;
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
-    font-family: 'Martian Mono';
-    font-weight: 600;
-    font-size: 48px;
-    line-height: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
     text-align: center;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    text-transform: capitalize;
+  }
+
+  .headSubtitle {
+    max-width: 52ch;
+    color: var(--muted-foreground);
+    font-size: 0.95rem;
+    line-height: 1.7;
   }
 
   .container {
     display: flex;
-    gap: 32px;
-    justify-content: space-between;
+    justify-content: center;
     flex-wrap: wrap;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
     padding-top: 15px;
+    /* gap, justify-content (md/lg) e flex-wrap (lg) responsivos migraram para Tailwind */
   }
 
   .card {
-    padding: 30px 20px;
+    padding: 28px 22px;
     width: 100%;
-    max-width: 450px;
-    height: auto;
-    border-radius: 30px;
-    text-align: center;
-    margin-top: 30px;
-    background-color: #6c6c6cbf;
+    /* radius/borda/superfície alinhados aos tokens do redesign — mesmo card usado em
+       Serviços e Sobre Nós. */
+    border-radius: var(--radius-card);
+    border: 1px solid var(--border);
+    background-color: var(--card);
+    text-align: left;
+    /* max-width, height, margin-top e flex responsivos migraram para Tailwind */
   }
 
   .card h3 {
-    font-size: 1.2rem;
-    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.25rem;
+    letter-spacing: 0.05em;
+    color: var(--foreground);
     margin-bottom: 10px;
+    word-break: break-word;
+    /* font-family/uppercase vêm do @layer base (h3, Bebas Neue). */
   }
 
   .card p {
     font-size: 0.9rem;
-    line-height: 1.4;
-    margin-top: 35px;
+    line-height: 1.7;
+    color: var(--muted-foreground);
+    margin-top: 12px;
   }
 
   .contato-conteudo {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 40px;
     width: 100%;
-    padding: 40px 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 40px;
+    /* padding responsivo migrou para Tailwind */
   }
 
   .bloco-titulo {
     width: 100%;
     margin-bottom: 20px;
     text-align: center;
+
+    h2 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      letter-spacing: 0.05em;
+      color: var(--foreground);
+    }
   }
 
   .conteudo-horizontal {
     display: flex;
-    gap: 24px;
     width: 100%;
     justify-content: space-between;
-    flex-wrap: wrap;
+    /* gap, flex-direction, align-items e flex-wrap responsivos migraram para Tailwind */
   }
 
   .localizacao {
     width: 100%;
-    max-width: 560px;
-    height: 320px;
+    height: 340px;
+    /* max-width responsivo migrou para Tailwind */
 
     iframe {
       width: 100%;
       height: 100%;
       border: none;
-      border-radius: 10px;
+      border-radius: var(--radius-card);
+      /* Mapa do Google é claro por natureza; a borda + leve dessaturação amarram ele
+         ao tema escuro sem prejudicar a leitura. */
+      border: 1px solid var(--border);
+      filter: saturate(0.85) brightness(0.92);
     }
   }
 
   .formulario {
     width: 100%;
-    max-width: 560px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 15px;
-    padding: 24px 16px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: 28px 22px;
+    /* max-width responsivo migrou para Tailwind */
   }
 
   .form {
@@ -108,155 +159,90 @@
     width: 100%;
   }
 
+  .form label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+    margin-bottom: 6px;
+    display: block;
+  }
+
   .form input,
   .form textarea {
-    background-color: #e6e6e6;
-    border: none;
-    border-radius: 15px;
+    background-color: var(--muted);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-input);
     padding: 12px;
-    font-size: 1rem;
+    font-size: 0.95rem;
     width: 100%;
-    box-sizing: border-box;
     outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .form input:focus,
+  .form textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 22%, transparent);
+  }
+
+  .form textarea {
+    resize: vertical;
+    min-height: 140px;
   }
 
   .form button {
-    background-color: black;
-    color: white;
+    /* CTA no mesmo botão sólido do resto do site (ver .btn-accent em globals.css). */
+    background: var(--primary);
+    color: var(--primary-foreground);
     border: none;
-    padding: 12px;
-    border-radius: 15px;
-    font-weight: bold;
+    padding: 14px;
+    border-radius: var(--radius-button);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     cursor: pointer;
-    transition: background 0.3s;
-    margin-top: 20px;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 8px;
   }
 
   .form button:hover {
-    background-color: #333;
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-accent);
   }
 
   input::placeholder,
   textarea::placeholder {
-    color: #807979;
-    font-family: 'Poppins';
+    color: var(--muted-foreground);
+    font-family: var(--font-body);
     font-weight: 400;
-    font-size: 14px;
-    line-height: 24px;
+    font-size: 0.9rem;
   }
 
   .icon {
     font-size: 20px;
-    color: #f1f1f1;
-    margin-right: 5px;
+    color: var(--primary);
+    flex-shrink: 0;
   }
 }
 
-/* ----------------------------
-   📱 MOBILE (até 768px)
------------------------------ */
-@media (max-width: 768px) {
-  .contato {
-    padding: 20px;
-
-    .title {
-      font-size: 32px;
-    }
-
-    .container {
-      gap: 18px;
-    }
-
-    .contato-conteudo {
-      padding: 20px 0;
-    }
-
-    .conteudo-horizontal {
-      gap: 12px;
-    }
-
-    .card {
-      margin: 12px 0;
-    }
-
-    .localizacao,
-    .formulario {
-      max-width: 100%;
-    }
-  }
-}
-
-/* ----------------------------
-   💻 TABLET / NOTEBOOK (769px - 1023px)
------------------------------ */
-@media (min-width: 769px) and (max-width: 1023px) {
-  .contato {
-    padding: 40px;
-
-    .title {
-      font-size: 40px;
-    }
-
-    .container {
-      gap: 24px;
-      justify-content: center;
-    }
-
-    .conteudo-horizontal {
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .localizacao,
-    .formulario {
-      max-width: 90%;
-    }
-  }
-}
-
-/* ----------------------------
-   🖥️ DESKTOP (a partir de 1024px)
------------------------------ */
+/* Responsividade de padding/gap/font-size/max-width/flex-direction/flex-wrap migrou para
+   classes utilitárias do Tailwind em contato.tsx. Breakpoints originais: mobile <=768 ~
+   unprefixed, tablet 769-1023 ~ md (768-1024), desktop >=1024 ~ lg. O efeito de hover do
+   .card (translateY + borda no acento), por não ser puramente responsivo/layout, permanece
+   aqui restrito à faixa desktop. */
 @media (min-width: 1024px) {
-  .contato {
-    padding: 60px 80px;
+  .contato .card {
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
 
-    .title {
-      font-size: 74px;
-      text-align: left;
-      justify-content: flex-start;
-
-    }
-
-    .container {
-      flex-wrap: nowrap;
-      justify-content: center;
-      gap: 48px;
-    }
-
-    .card {
-      flex: 1;
-      max-width: 500px;
-      height: 250px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.2);
-    }
-
-    .conteudo-horizontal {
-      flex-wrap: nowrap;
-      justify-content: space-around;
-      gap: 40px;
-    }
-
-    .localizacao,
-    .formulario {
-      width: 90%;
-      max-width: 600px; 
-    }
+  .contato .card:hover {
+    transform: translateY(-8px);
+    border-color: color-mix(in oklab, var(--primary) 45%, transparent);
+    box-shadow: 0 20px 45px oklch(0% 0 0 / 0.55);
   }
 }

@@ -1,13 +1,2 @@
-$sidebar-width: 72px;
-$sidebar-height-mobile: 64px;
-
-.content {
-  margin-left: $sidebar-width;
-}
-
-@media (max-width: 768px) {
-  .content {
-    margin-left: 0;
-    margin-bottom: $sidebar-height-mobile;
-  }
-}
+/* margin-left/margin-bottom responsivos migraram para Tailwind (ver layout.tsx).
+   Breakpoint original 768px = md. Sidebar: 72px (desktop) / 64px de altura (barra mobile). */

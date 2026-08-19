@@ -1,22 +1,17 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-import Servicos from '@/components/Servicos/servicos';
-import styles from './servicos.module.css';
-
+// Serviços deixou de ser uma página própria e virou seção âncora da landing page única
+// (ver src/app/page.tsx e a referência de design em CLAUDE.md). Esta rota fica só como
+// redirecionamento pra não quebrar links/favoritos antigos apontando pra /Servicos.
 export default function Page() {
-  return (
-    <div className={styles['servicos-container']}>
+  const router = useRouter();
 
-      <motion.div
-        className={styles['servicos-header']}
-      >
-        <h1 className={styles['servicos-title']}>Serviços</h1>
-      </motion.div>
+  useEffect(() => {
+    router.replace('/#servicos');
+  }, [router]);
 
-      <Servicos />
-    </div>
-  );
+  return null;
 }

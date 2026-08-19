@@ -60,13 +60,16 @@ export default function Sidebar() {
   );
 
   return (
-    <nav className={styles.sidebar} aria-label="Navegação da área do barbeiro">
-      <ul className={styles.list}>
+    <nav
+      className={`${styles.sidebar} inset-x-0 bottom-0 top-auto w-full h-16 flex-row items-center border-t border-t-[#3a3a3a] md:inset-x-auto md:left-0 md:top-0 md:bottom-0 md:w-[72px] md:h-auto md:flex-col md:items-stretch md:border-t-0 md:border-r md:border-r-[#3a3a3a]`}
+      aria-label="Navegação da área do barbeiro"
+    >
+      <ul className={`${styles.list} flex-row justify-around px-[0.5rem] py-0 h-full gap-[0.25rem] md:flex-col md:justify-start md:px-0 md:py-[1.5rem] md:h-auto md:gap-[0.5rem]`}>
         {visibleItems.map(({ href, label, icon: Icon }) => (
           <li key={href} className={styles.item}>
             <Link
               href={href}
-              className={`${styles.link} ${isItemActive(pathname, href) ? styles.active : ''}`}
+              className={`${styles.link} w-[40px] h-[40px] md:w-[48px] md:h-[48px] ${isItemActive(pathname, href) ? styles.active : ''}`}
               aria-label={label}
             >
               <Icon className={styles.icon} aria-hidden="true" />
@@ -76,7 +79,7 @@ export default function Sidebar() {
         ))}
       </ul>
 
-      <div className={styles.profile} ref={profileRef}>
+      <div className={`${styles.profile} p-0 border-t-0 md:pt-[1rem] md:pb-[1.5rem] md:border-t md:border-t-[#3a3a3a]`} ref={profileRef}>
         <button
           className={styles.avatarButton}
           onClick={() => setProfileOpen((v) => !v)}
@@ -88,7 +91,10 @@ export default function Sidebar() {
         </button>
 
         {profileOpen && (
-          <div className={styles.profileMenu} role="menu">
+          <div
+            className={`${styles.profileMenu} left-auto right-0 bottom-[calc(100%+10px)] md:left-[calc(100%+10px)] md:right-auto md:bottom-0`}
+            role="menu"
+          >
             <div className={styles.profileHeader}>
               <div className={styles.profileName}>{auth.user?.name}</div>
               <div className={styles.profileEmail}>{auth.user?.email || ''}</div>

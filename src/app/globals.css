@@ -1,96 +1,459 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   DESIGN TOKENS — Barbearia Shelby
+   Linguagem visual derivada da landing de referência (protótipo Lovable):
+   tema dark quase-preto, um único acento vermelho/coral quente, tipografia
+   condensada e editorial (Bebas Neue) para títulos + Barlow para corpo.
+
+   Regra de ouro deste arquivo: TUDO que for genérico entra em @layer base /
+   @layer components / @layer utilities. No Tailwind v4, qualquer CSS fora de
+   @layer vence incondicionalmente as utilities (independente de especificidade
+   ou ordem), o que silenciosamente descarta classes utilitárias do projeto
+   inteiro (bug real já encontrado aqui: padding zerado no site todo).
+   ============================================================================ */
+
+/* Escala de breakpoints padronizada do app inteiro (ver CLAUDE.md / relatório de migração).
+   Substitui a escala default do Tailwind (sm 640/md 768/lg 1024/xl 1280) pelos pontos de
+   quebra visuais que já existiam espalhados pelo Sass do projeto, agora centralizados aqui:
+   sm=480 (celulares pequenos), md=768 (tablets verticais / mobile-menu), lg=1024 (notebooks/
+   tablets horizontais), xl=1440 (telas grandes). 2xl mantém o default do Tailwind (1536px). */
+@theme {
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1440px;
+
+  /* Escala de radius do redesign (ver CLAUDE.md / merge com referência Lovable).
+     Gera as classes utilitárias `rounded-card` e `rounded-button` automaticamente
+     (Tailwind v4 cria `.rounded-{nome}` para cada chave `--radius-*` do @theme).
+     card/input ~12px (entre rounded-lg e rounded-xl do Tailwind), botão CTA ~14px
+     (um pouco maior que os cards, sem virar pill — igual à referência). */
+  --radius-card: 0.75rem;   /* 12px */
+  --radius-button: 0.875rem; /* 14px */
+  /* Rodada 3 (sistema inteiro): input/select/textarea de formulário. Hoje varia de 8px
+     (dashboard /barber) a 35px/pill (Login, CriarConta, EsqueciSenha) — padroniza em 8px,
+     sem pill, alinhado à referência e ao que a maior parte do dashboard já usa. */
+  --radius-input: 0.5rem;   /* 8px */
+
+  /* Dupla tipográfica da referência: Bebas Neue (display, condensada, sempre em caixa alta)
+     para títulos + Barlow para corpo. As variáveis --font-bebas/--font-barlow são geradas
+     pelo next/font em layout.tsx.
+
+     ATENÇÃO: precisa ser `@theme` normal, NÃO `@theme inline`. Com `inline` o Tailwind só
+     inlina o valor dentro das utilities e não deixa `--font-display`/`--font-body` acessíveis
+     como custom property — e o Sass de cada componente (além do @layer base aqui embaixo)
+     consome `var(--font-display)` / `var(--font-body)` diretamente. Com `inline`, essas
+     variáveis ficam indefinidas e TODO título cai silenciosamente para a fonte do body
+     (bug real pego na validação em navegador: h1 da home computando "Barlow", não Bebas).
+     Também não pode ser auto-referência (`--font-display: var(--font-display)`): isso gera
+     uma declaração circular que o navegador descarta. */
+  --font-display: var(--font-bebas), "Bebas Neue", Impact, "Arial Narrow", sans-serif;
+  --font-body: var(--font-barlow), Barlow, system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-barlow), Barlow, system-ui, -apple-system, sans-serif;
+}
+
+/* Paleta em oklch, medida na referência. Fica em :root (não no @theme) para poder ser
+   consumida tanto pelas utilities do Tailwind (via @theme inline abaixo) quanto pelo Sass
+   dos componentes legados, que usa `var(--token)` direto. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+
+  --background: oklch(13% 0 0);          /* quase preto — fundo do site */
+  --foreground: oklch(97% 0 0);          /* quase branco — texto padrão */
+
+  --card: oklch(17% 0 0);                /* superfície elevada (cards, modais) */
+  --card-foreground: oklch(97% 0 0);
+  --popover: oklch(17% 0 0);
+  --popover-foreground: oklch(97% 0 0);
+
+  --primary: oklch(68% 0.185 25);        /* vermelho/coral quente — acento único */
+  --primary-foreground: oklch(98% 0 0);
+  --primary-hover: oklch(61% 0.185 25);  /* estado :hover dos CTAs sólidos */
+  --accent: oklch(68% 0.185 25);
+  --accent-foreground: oklch(98% 0 0);
+
+  --secondary: oklch(22% 0 0);           /* botões secundários / chips */
+  --secondary-foreground: oklch(97% 0 0);
+
+  --muted: oklch(20% 0 0);               /* inputs, faixas sutis */
+  --muted-foreground: oklch(72% 0 0);    /* texto de apoio */
+
+  --border: oklch(28% 0 0);
+  --input: oklch(28% 0 0);
+  --ring: oklch(68% 0.185 25);
+
+  /* Semânticos de estado (dashboard/agendamento) — mesma família de saturação do acento
+     para não destoar: um verde, um azul e um vermelho ligeiramente mais escuro que o acento
+     (para "cancelado/erro" não competir com o CTA). */
+  --success: oklch(72% 0.15 155);
+  --warning: oklch(80% 0.15 80);
+  --destructive: oklch(58% 0.2 25);
+  --info: oklch(62% 0.17 255);
+
+  /* Superfícies auxiliares derivadas (hover de linha de tabela, faixas alternadas). */
+  --surface-hover: oklch(23% 0 0);
+  --overlay: oklch(0% 0 0 / 0.72);
+
+  /* Gradiente do CTA principal — mesmo acento, um pouco mais escuro no fim. */
+  --gradient-primary: linear-gradient(90deg, oklch(70% 0.185 25) 0%, oklch(52% 0.14 25) 100%);
+  --shadow-accent: 0 8px 24px oklch(68% 0.185 25 / 0.28);
 }
 
-:root {
-  --background: #0b0b0b;
-  --foreground: #ffffff;
-}
-/* Reset básico e box-sizing */
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+/* Mapeia os tokens acima para o sistema de cores/fontes do Tailwind v4, habilitando
+   `bg-background`, `text-foreground`, `bg-primary`, `border-border`, `text-muted-foreground`,
+   `font-display`, `font-body`, etc. `inline` faz a utility referenciar o var() diretamente. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-destructive: var(--destructive);
+  --color-info: var(--info);
 }
 
-/* ================================================================
-   A CORREÇÃO ESTÁ AQUI
-   Trocamos '100vw' por '100%' e aplicamos em ambos (html e body)
-   para "cortar" qualquer conteúdo que tente "vazar" para os lados.
-   ================================================================
-*/
-html, body {
-  max-width: 100%;
-  overflow-x: hidden;
-}
+/* ============================================================================
+   BASE
+   ============================================================================ */
+@layer base {
+  /* Reset básico e box-sizing.
+     IMPORTANTE: precisa estar dentro de @layer base (não solto), senão essa regra vence
+     incondicionalmente qualquer utility do Tailwind (padding-*, margin-*, gap-*, etc.) —
+     no Tailwind v4, CSS fora de @layer sempre tem prioridade sobre @layer utilities,
+     independente de especificidade ou ordem no arquivo. Isso zerava silenciosamente TODO
+     padding/margin aplicado via classes Tailwind no site inteiro (bug real encontrado na
+     validação: HomePage com padding 0 mesmo com `xl:px-[150px]` presente). */
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
 
-/* Regras para o HTML */
-html {
-  /* max-width: 100vw; */  /* <-- REMOVA ESTA LINHA */
-  /* overflow-x: hidden; */ /* <-- REMOVA ESTA LINHA */
-  scroll-behavior: smooth;
-}
-/* ================================================================
-   FIM DA CORREÇÃO
-   ================================================================
-*/
+  /* Evita scroll horizontal acidental (seções full-bleed, vídeo de fundo, animações GSAP
+     que deslocam elementos no eixo X antes de entrar na viewport). */
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
 
-@media (prefers-color-scheme: dark) {
   html {
-    color-scheme: dark;
+    scroll-behavior: smooth;
+    /* Âncoras da landing (#servicos, #sobre, #contato) não podem parar embaixo da navbar fixa. */
+    scroll-padding-top: 110px;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    color: var(--foreground);
+    background: var(--background);
+    font-family: var(--font-body);
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Títulos: Bebas Neue, caixa alta e um leve tracking — a assinatura visual da referência.
+     Bebas só tem um peso (400); o "bold" vem do tamanho e da condensação, não do weight.
+     Componentes que precisem de um título em Barlow podem sobrescrever com `font-body`. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  /* Escala default dos títulos. Bebas é condensada: no mesmo font-size ela "pesa" menos que
+     uma grotesca, por isso a escala é um pouco mais generosa que a do navegador. Qualquer
+     componente pode sobrescrever (Sass e utilities do Tailwind vencem @layer base). */
+  h1 {
+    font-size: clamp(2.25rem, 5vw, 3rem);
+  }
+
+  h2 {
+    font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+  }
+
+  h3 {
+    font-size: 1.375rem;
+  }
+
+  h4 {
+    font-size: 1.125rem;
+    letter-spacing: 0.06em;
+  }
+
+  h5,
+  h6 {
+    font-family: var(--font-body);
+    font-weight: 600;
+  }
+
+  /* Faz o conteúdo principal (onde as páginas são renderizadas) crescer e empurrar o footer
+     para baixo. O padding-top reserva o espaço da navbar fixa. */
+  main {
+    flex-grow: 1;
+    padding-top: 90px;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Foco visível e consistente em todo o app (acessibilidade): anel no acento. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  /* Placeholders e controles nativos seguem a paleta dark. */
+  input,
+  select,
+  textarea,
+  button {
+    font-family: inherit;
+  }
+
+  ::placeholder {
+    color: var(--muted-foreground);
+    opacity: 1;
+  }
+
+  /* Tipografia responsiva simples (mantida do layout anterior). */
+  @media (max-width: 1024px) {
+    html {
+      font-size: 15px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    html {
+      font-size: 14px;
+      scroll-padding-top: 96px;
+    }
+
+    main {
+      padding-top: 80px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    html {
+      font-size: 13px;
+    }
+
+    main {
+      padding-top: 72px;
+    }
   }
 }
 
-/* Regras para o BODY e o layout principal */
-body {
-  min-height: 100vh; /* Garante que o body ocupe no mínimo toda a altura da tela */
-  display: flex;
-  flex-direction: column;
+/* ============================================================================
+   COMPONENTES COMPARTILHADOS
+   Blocos de UI que se repetem em várias páginas (seções da landing, botões,
+   cards, cabeçalhos de dashboard). Ficam em @layer components para continuarem
+   sobrescrevíveis por utilities do Tailwind no ponto de uso.
+   ============================================================================ */
+@layer components {
+  /* --- Estrutura de seção da landing --------------------------------------- */
 
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* "Kicker": rótulo curto em caixa alta e no acento, acima do título da seção. */
+  .section-kicker {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--primary);
+  }
+
+  /* Título de seção: Bebas grande. O destaque em outra cor sai com <span class="accent">. */
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 6vw, 4rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--foreground);
+  }
+
+  .section-title .accent,
+  .text-accent-brand {
+    color: var(--primary);
+  }
+
+  .section-subtitle {
+    max-width: 60ch;
+    color: var(--muted-foreground);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  /* Traço curto no acento usado abaixo dos títulos de seção. */
+  .section-rule {
+    display: block;
+    width: 64px;
+    height: 3px;
+    border-radius: 999px;
+    background: var(--primary);
+  }
+
+  /* --- Botões -------------------------------------------------------------- */
+
+  .btn-accent,
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-button);
+    padding: 0.875rem 1.75rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease,
+      border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .btn-accent {
+    border: 1px solid transparent;
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  .btn-accent:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-accent);
+  }
+
+  .btn-outline {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--foreground);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-2px);
+  }
+
+  .btn-accent:disabled,
+  .btn-outline:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* --- Cards --------------------------------------------------------------- */
+
+  /* Card padrão: superfície um passo acima do fundo + borda sutil (sem sombra pesada). */
+  .surface-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    color: var(--card-foreground);
+  }
+
+  .surface-card--hover {
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .surface-card--hover:hover {
+    transform: translateY(-6px);
+    border-color: color-mix(in oklab, var(--primary) 45%, transparent);
+    box-shadow: 0 20px 45px oklch(0% 0 0 / 0.55);
+  }
+
+  /* Mini-stat da hero ("DESDE 2022", "SEM ESPERA 5MIN", ...). */
+  .stat-value {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1;
+    color: var(--primary);
+  }
+
+  .stat-label {
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+
+  /* --- Cabeçalho de página interna (dashboard, meus-serviços, agendamento) --- */
+  .page-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--foreground);
+  }
+
+  .page-subtitle {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    color: var(--muted-foreground);
+  }
 }
 
-/* Faz o conteúdo principal (onde as páginas são renderizadas) crescer e empurrar o footer para baixo */
-/* Espaço para a navbar fixa: garante que o conteúdo não fique abaixo da navbar */
-main {
-  flex-grow: 1;
-  padding-top: 90px; /* ajuste conforme altura da navbar */
-}
+/* ============================================================================
+   UTILITÁRIOS
+   ============================================================================ */
+@layer utilities {
+  /* Layout responsivo básico (legado — ainda usado por algumas páginas). */
+  .container-fluid {
+    width: 100%;
+    padding: 0 16px;
+    margin: 0 auto;
+  }
 
-/* Estilos para links */
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* Layout responsivo básico */
-.container-fluid {
-  width: 100%;
-  padding: 0 16px;
-  margin: 0 auto;
-  box-sizing: border-box;
-}
-
-/* Imagens e vídeos responsivos */
-img, video {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Tipografia responsiva simples */
-@media (max-width: 1024px) {
-  html { font-size: 15px; }
-}
-@media (max-width: 768px) {
-  html { font-size: 14px; }
-  main { padding-top: 80px; }
-}
-@media (max-width: 480px) {
-  html { font-size: 13px; }
-  main { padding-top: 72px; }
+  /* Faixa de conteúdo com o mesmo respiro lateral da hero em todos os breakpoints. */
+  .shell-x {
+    padding-inline: clamp(1.5rem, 6vw, 150px);
+  }
 }

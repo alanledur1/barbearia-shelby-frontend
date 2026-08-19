@@ -328,7 +328,7 @@ export default function PaginaAgendamento() {
               <motion.div key="step1" variants={motionVariants} initial="hidden" animate="visible" exit="exit">
                 <h2 className={styles.stepTitle}>1. Escolha um Serviço</h2>
                 {isLoading && <p>Carregando serviços...</p>}
-                {error && <p style={{ color: '#f67366' }}>{error}</p>}
+                {error && <p className={styles.stepError} role="alert">{error}</p>}
                 <div className={styles.serviceGrid}>
                   {services.map(service => (
                     <div key={service.id} className={styles.serviceCard} onClick={() => handleServiceSelect(service)}>
@@ -344,7 +344,7 @@ export default function PaginaAgendamento() {
             {step === 2 && selectedService && (
               <motion.div key="step2" variants={motionVariants} initial="hidden" animate="visible" exit="exit">
                 <h2 className={styles.stepTitle}>2. Escolha o Barbeiro</h2>
-                {error && <p style={{ color: '#f67366' }}>{error}</p>}
+                {error && <p className={styles.stepError} role="alert">{error}</p>}
                 {barbers.length === 0 ? (
                   <p>Nenhum barbeiro disponível no momento.</p>
                 ) : (
@@ -398,7 +398,7 @@ export default function PaginaAgendamento() {
             {step === 4 && selectedService && selectedDate && selectedSlot && (
               <motion.div key="step4" variants={motionVariants} initial="hidden" animate="visible" exit="exit">
                 <h2 className={styles.stepTitle}>4. Confirme Seus Dados</h2>
-                {error && <p style={{ color: '#f67366', textAlign: 'center', marginBottom: '1rem' }}>{error}</p>}
+                {error && <p className={styles.stepError} role="alert">{error}</p>}
                 <div className={styles.summary}>
                   <p><strong>Serviço:</strong> {selectedService.name}</p>
                   {selectedBarber && <p><strong>Barbeiro:</strong> {selectedBarber.name}</p>}

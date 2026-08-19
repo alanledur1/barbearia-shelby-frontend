@@ -1,18 +1,18 @@
-$brand-color: #f67366;
-$card-bg: #1e1e1e;
-$border-color: #3a3a3a;
-$text-color: #f0f0f0;
-$text-muted: #a0a0a0;
-$input-bg: #2a2a2a;
-$confirmed-color: #0d6efd;
-$success-color: #28a745;
-$cancelled-color: #dc3545;
+$brand-color: #f5605e; // = var(--primary) oklch(68% .185 25)
+$card-bg: #0f0f0f; // = var(--card) oklch(17% 0 0)
+$border-color: #2b2b2b; // = var(--border) oklch(28% 0 0)
+$text-color: #f5f5f5; // = var(--foreground) oklch(97% 0 0)
+$text-muted: #a4a4a4; // = var(--muted-foreground) oklch(72% 0 0)
+$input-bg: #161616; // = var(--muted) oklch(20% 0 0)
+$confirmed-color: #4c8dff; // = var(--info)
+$success-color: #3fc98c; // = var(--success)
+$cancelled-color: #e5484d; // = var(--destructive)
 
 .container {
   padding: 2rem;
   max-width: 1000px;
   margin: 0 auto;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-body);
   color: $text-color;
 
   h1 {
@@ -29,7 +29,7 @@ $cancelled-color: #dc3545;
   gap: 1rem;
   background-color: $card-bg;
   border: 1px solid $border-color;
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   padding: 1rem 1.25rem;
   margin-bottom: 1.5rem;
 }
@@ -43,7 +43,7 @@ $cancelled-color: #dc3545;
   button {
     background-color: $input-bg;
     border: 1px solid $border-color;
-    border-radius: 8px;
+    border-radius: var(--radius-button);
     color: $text-color;
     padding: 0.4rem 0.75rem;
     cursor: pointer;
@@ -61,7 +61,7 @@ $cancelled-color: #dc3545;
   input[type='date'] {
     background-color: $input-bg;
     border: 1px solid $border-color;
-    border-radius: 8px;
+    border-radius: var(--radius-input);
     color: $text-color;
     padding: 0.4rem 0.6rem;
   }
@@ -80,7 +80,7 @@ $cancelled-color: #dc3545;
   select {
     background-color: $input-bg;
     border: 1px solid $border-color;
-    border-radius: 8px;
+    border-radius: var(--radius-input);
     color: $text-color;
     padding: 0.4rem 0.6rem;
   }
@@ -91,7 +91,7 @@ $cancelled-color: #dc3545;
   border: 1px solid $brand-color;
   color: $brand-color;
   padding: 0.75rem 1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-card);
   margin-bottom: 1rem;
   text-align: center;
 }
@@ -107,7 +107,7 @@ $cancelled-color: #dc3545;
   position: relative;
   background-color: $card-bg;
   border: 1px solid $border-color;
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   padding: 1rem 1rem 1rem 4.5rem;
   overflow-y: auto;
   max-height: 70vh;
@@ -118,7 +118,7 @@ $cancelled-color: #dc3545;
   border: 1px solid $cancelled-color;
   color: $text-color;
   padding: 0.75rem 1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-card);
   margin-bottom: 1rem;
   text-align: center;
   font-weight: 600;
@@ -166,7 +166,7 @@ $cancelled-color: #dc3545;
   left: 4px;
   right: 4px;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-button);
   padding: 0.3rem 0.5rem;
   color: #fff;
   text-align: left;
@@ -207,7 +207,7 @@ $cancelled-color: #dc3545;
   margin-top: 1.5rem;
   background-color: $input-bg;
   border: 1px solid $border-color;
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   padding: 1.25rem;
 
   p {

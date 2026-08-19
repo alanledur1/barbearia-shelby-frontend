@@ -1,14 +1,18 @@
 @use "sass:color";
+/* Wizard de agendamento. Mesma paleta/tipografia do site público, mas com a sobriedade de
+   uma tela de tarefa: um único card escuro, stepper no topo, acento reservado para o passo
+   ativo, o horário selecionado e o CTA. As variáveis Sass abaixo são os equivalentes em hex
+   dos tokens oklch de globals.css — precisam ser literais porque passam por darken()/rgba(). */
 /* === Variáveis de Cores === */
-$brand-color: #f67366;
-$dark-bg: #121212;
-$card-bg: #1e1e1e;
-$text-color: #f0f0f0;
-$text-muted: #a0a0a0;
-$input-bg: #2a2a2a;
-$border-color: #3a3a3a;
-$success-color: #28a745;
-$error-color: #dc3545;
+$brand-color: #f5605e; // = var(--primary) oklch(68% .185 25)
+$dark-bg: #070707; // = var(--background) oklch(13% 0 0)
+$card-bg: #0f0f0f; // = var(--card) oklch(17% 0 0)
+$text-color: #f5f5f5; // = var(--foreground) oklch(97% 0 0)
+$text-muted: #a4a4a4; // = var(--muted-foreground) oklch(72% 0 0)
+$input-bg: #161616; // = var(--muted) oklch(20% 0 0)
+$border-color: #2b2b2b; // = var(--border) oklch(28% 0 0)
+$success-color: #3fc98c; // = var(--success)
+$error-color: #e5484d; // = var(--destructive)
 
 /* === Layout Principal === */
 .mainContainer {
@@ -16,18 +20,20 @@ $error-color: #dc3545;
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
-  padding: 8rem 2rem 4rem;
-  background-color: $dark-bg;
-  font-family: 'Poppins', sans-serif;
+  padding: 6rem 1.25rem 4rem;
+  background:
+    radial-gradient(70% 45% at 50% 0%, rgba($brand-color, 0.12) 0%, transparent 70%),
+    $dark-bg;
+  font-family: var(--font-body);
 }
 
 .container {
   width: 100%;
-  max-width: 600px;
+  max-width: 640px;
   background-color: $card-bg;
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   border: 1px solid $border-color;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
   color: $text-color;
   overflow: hidden;
 }
@@ -36,7 +42,7 @@ $error-color: #dc3545;
 .stepper {
   display: flex;
   background-color: $input-bg;
-  padding: 1rem 1.5rem;
+  padding: 1rem 1.25rem;
   border-bottom: 1px solid $border-color;
 }
 
@@ -44,10 +50,13 @@ $error-color: #dc3545;
   flex: 1;
   text-align: center;
   color: $text-muted;
-  font-weight: 500;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   padding-bottom: 0.5rem;
-  border-bottom: 3px solid transparent;
-  transition: all 0.3s ease;
+  border-bottom: 2px solid transparent;
+  transition: color 0.3s ease, border-color 0.3s ease;
 
   &.active {
     color: $brand-color;
@@ -56,56 +65,68 @@ $error-color: #dc3545;
 }
 
 .content {
-  padding: 2.5rem;
+  padding: 2rem 1.75rem 2.25rem;
   min-height: 450px; /* Altura mínima para evitar "pulos" de layout */
   display: flex;
   flex-direction: column;
 }
 
 .stepTitle {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 2rem;
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 1.75rem;
   text-align: center;
+  color: $text-color;
 }
 
 /* === Card de Serviço === */
 .serviceGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
 }
 
 .serviceCard {
   background-color: $input-bg;
   border: 1px solid $border-color;
-  border-radius: 8px;
+  border-radius: var(--radius-card);
   padding: 1.5rem 1rem;
   text-align: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 
   h3 {
-    font-size: 1.1rem;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     margin-bottom: 0.5rem;
     color: $text-color;
   }
-  
+
   p {
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     color: $text-muted;
     margin: 0.25rem 0;
+
+    strong {
+      color: $brand-color;
+      font-weight: 700;
+    }
   }
 
   &:hover {
     transform: translateY(-5px);
     border-color: $brand-color;
-    box-shadow: 0 4px 15px rgba($brand-color, 0.1);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
   }
 }
 
 /* === Seção de Data e Hora === */
-/* === Seção de Data e Hora (ATUALIZADO) === */
 .dateTimePicker {
   display: flex;
   flex-direction: column; /* Organiza o calendário e os horários em coluna */
@@ -114,7 +135,6 @@ $error-color: #dc3545;
 }
 
 .dayPickerContainer {
-  /* O container do calendário não precisa de muitas regras agora */
   width: 100%;
   display: flex;
   justify-content: center;
@@ -125,81 +145,66 @@ $error-color: #dc3545;
   display: flex; /* Usamos flexbox para alinhar os horários */
   flex-wrap: wrap; /* Permite que os horários quebrem a linha */
   justify-content: center; /* Centraliza os horários */
-  gap: 0.75rem; /* Espaço entre os botões de horário */
+  gap: 0.6rem; /* Espaço entre os botões de horário */
 }
 
-/* O estilo do .timeSlot (botão individual de horário) não precisa mudar */
 .timeSlot {
-  width: 100px; /* Largura fixa para cada botão de horário */
-  padding: 0.75rem;
+  min-width: 90px;
+  padding: 0.7rem;
   background-color: $input-bg;
   border: 1px solid $border-color;
   color: $text-color;
-  border-radius: 6px;
+  border-radius: var(--radius-input);
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   text-align: center;
 
   &:hover:not(:disabled) {
-    background-color: $brand-color;
-    color: #fff;
+    background-color: rgba($brand-color, 0.15);
+    color: $brand-color;
     border-color: $brand-color;
   }
 
   &:disabled {
     background-color: transparent;
     color: $text-muted;
-    opacity: 0.5;
+    opacity: 0.45;
     cursor: not-allowed;
     text-decoration: line-through;
   }
 }
 
-.timeSlot {
-  padding: 0.75rem;
-  background-color: $input-bg;
-  border: 1px solid $border-color;
-  color: $text-color;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: center;
-
-  &:hover:not(:disabled) {
-    background-color: $brand-color;
-    color: #fff;
-    border-color: $brand-color;
-  }
-
-  &:disabled {
-    background-color: transparent;
-    color: $text-muted;
-    opacity: 0.5;
-    cursor: not-allowed;
-    text-decoration: line-through;
-  }
-}
 .timeSlotSelected {
   background-color: $brand-color;
   color: #fff;
   border-color: $brand-color;
-  font-weight: 600;
+  font-weight: 700;
+
+  &:hover:not(:disabled) {
+    background-color: $brand-color;
+    color: #fff;
+  }
 }
 
 /* === Seção de Confirmação e Formulário === */
 .summary {
   background-color: $input-bg;
   padding: 1.25rem;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-  border-left: 4px solid $brand-color;
+  border-radius: var(--radius-card);
+  margin-bottom: 1.75rem;
+  border-left: 3px solid $brand-color;
+
   p {
     margin: 0.5rem 0;
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: $text-muted;
+
     strong {
       color: $text-color;
-      font-weight: 600;
+      font-weight: 700;
     }
   }
 }
@@ -215,25 +220,36 @@ $error-color: #dc3545;
   flex-grow: 1;
 
   h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     color: $success-color;
-    font-size: 1.8rem;
+    font-size: 2.2rem;
     margin-bottom: 1rem;
   }
+
   p {
     color: $text-muted;
     margin-bottom: 2rem;
+    max-width: 42ch;
+    line-height: 1.7;
   }
 }
 
 /* === Botões === */
-.primaryButton, .backButton {
+.primaryButton,
+.backButton {
   width: 100%;
-  font-weight: 600;
-  font-size: 1rem;
-  padding: 0.9rem;
-  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.95rem;
+  border-radius: var(--radius-button);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+    transform 0.25s ease;
 }
 
 .primaryButton {
@@ -241,12 +257,17 @@ $error-color: #dc3545;
   color: #fff;
   border: none;
   margin-top: 1rem;
+
   &:hover {
-    background: darken($brand-color, 10%);
+    background: color.adjust($brand-color, $lightness: -10%);
+    transform: translateY(-2px);
   }
+
   &:disabled {
-    background-color: #555;
+    background-color: $input-bg;
+    color: $text-muted;
     cursor: not-allowed;
+    transform: none;
   }
 }
 
@@ -254,12 +275,14 @@ $error-color: #dc3545;
   background: transparent;
   color: $text-muted;
   border: 1px solid $border-color;
-  margin-top: 1rem;
+  margin-top: 0.75rem;
+
   &:hover {
-    background-color: $input-bg;
+    border-color: $text-muted;
     color: $text-color;
   }
 }
+
 /* Estilos de Validacao */
 .inputGroup {
   position: relative;
@@ -267,6 +290,7 @@ $error-color: #dc3545;
 
   input.error {
     border-color: $error-color;
+
     &:focus {
       box-shadow: 0 0 0 3px rgba($error-color, 0.25);
     }
@@ -281,17 +305,81 @@ $error-color: #dc3545;
   left: 5px;
 }
 
-// Agora o :global está "ancorado" dentro da classe local .dayPickerContainer
-.dayPickerContainer :global(.rdp-day_disabled) {
-  color: #ff4d4d !important;
-  text-decoration: line-through !important;
-  opacity: 0.8 !important;
-  cursor: not-allowed !important;
-  background-color: transparent !important;
+// Erro de topo de passo (falha de carregamento/envio). Antes era um style inline com o hex
+// da marca — agora é um alerta de verdade, na cor semântica de erro.
+.stepError {
+  color: $error-color;
+  background: rgba($error-color, 0.12);
+  border: 1px solid rgba($error-color, 0.35);
+  border-radius: var(--radius-input);
+  padding: 0.75rem 0.9rem;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
 
-  &:hover {
-    background-color: transparent !important;
-  }
+/* === Calendário (react-day-picker v9) ===
+   O CSS que vem no pacote é claro por padrão; aqui ele é reescrito para o tema dark do app
+   via as variáveis públicas do componente + alguns overrides pontuais. Tudo ancorado dentro
+   de .dayPickerContainer para não vazar para outras telas. */
+.dayPickerContainer :global(.rdp-root) {
+  --rdp-accent-color: #{$brand-color};
+  --rdp-accent-background-color: #{rgba($brand-color, 0.18)};
+  --rdp-today-color: #{$brand-color};
+  --rdp-disabled-opacity: 0.35;
+  --rdp-outside-opacity: 0.4;
+  --rdp-day_button-border-radius: 8px;
+  --rdp-day_button-border: 1px solid transparent;
+  --rdp-selected-border: 1px solid #{$brand-color};
+  --rdp-range_middle-background-color: #{rgba($brand-color, 0.18)};
+
+  color: $text-color;
+  background: transparent;
+  font-family: var(--font-body);
+}
+
+.dayPickerContainer :global(.rdp-month_caption) {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: $text-color;
+}
+
+.dayPickerContainer :global(.rdp-weekday) {
+  color: $text-muted;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.dayPickerContainer :global(.rdp-chevron) {
+  fill: $text-muted;
+}
+
+.dayPickerContainer :global(.rdp-button_next:hover .rdp-chevron),
+.dayPickerContainer :global(.rdp-button_previous:hover .rdp-chevron) {
+  fill: $brand-color;
+}
+
+.dayPickerContainer :global(.rdp-day_button:hover:not([disabled])) {
+  background-color: rgba($brand-color, 0.15);
+  border-color: rgba($brand-color, 0.5);
+}
+
+.dayPickerContainer :global(.rdp-selected .rdp-day_button) {
+  background-color: $brand-color;
+  color: #fff;
+  font-weight: 700;
+}
+
+// Dias indisponíveis (fechado/feriado/passado): riscados e apagados, sem o vermelho forte
+// de antes — o acento fica reservado para o que o usuário PODE escolher.
+.dayPickerContainer :global(.rdp-disabled) {
+  color: $text-muted;
+  text-decoration: line-through;
+  cursor: not-allowed;
 }
 
 .planToggle {
