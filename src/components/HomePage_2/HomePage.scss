@@ -39,6 +39,34 @@
     );
   }
 
+  /* Camadas atmosféricas com parallax (ver src/hooks/useParallaxScope.ts). Ficam acima do
+     véu do vídeo (z-index 1) e abaixo dos títulos (z-index 2). O inset vertical negativo é
+     a sobra que a camada consome ao deslizar, para nunca revelar a borda. */
+  .story-bg {
+    position: absolute;
+    inset: -25% 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .story-bg .sweep {
+    position: absolute;
+    inset: -10% -20%;
+    background:
+      radial-gradient(60% 50% at 20% 30%, color-mix(in oklab, var(--primary) 16%, transparent) 0%, transparent 70%),
+      radial-gradient(50% 40% at 85% 70%, color-mix(in oklab, var(--primary) 10%, transparent) 0%, transparent 70%);
+    will-change: transform;
+  }
+
+  .story-bg .dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(oklch(97% 0 0 / 0.14) 1.5px, transparent 1.5px);
+    background-size: 34px 34px;
+    opacity: 0.35;
+    will-change: transform;
+  }
+
   .red {
     color: var(--primary);
   }

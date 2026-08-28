@@ -1,0 +1,101 @@
+/* Seção "Depoimentos" — prova social validada no canvas de design. Fica logo depois de
+   Serviços (antes de Sobre Nós): a auditoria de conversão real apontou que a prova social
+   longe da oferta (depois do bloco institucional) reduz conversão — proof deve ficar perto
+   do preço/oferta. Mesmo card padrão do redesign (--card / --border / --radius-card). */
+.depoimentos {
+  position: relative;
+  /* Ver comentário equivalente em servicos.module.scss: contenção do SectionGlow. */
+  overflow: hidden;
+  isolation: isolate;
+  width: 100%;
+  padding: 4rem 1.5rem 5rem;
+  background: var(--background);
+}
+
+.head {
+  max-width: 1200px;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.headSubtitle {
+  max-width: 52ch;
+  color: var(--muted-foreground);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in oklab, var(--primary) 45%, transparent);
+}
+
+.stars {
+  display: flex;
+  gap: 3px;
+  color: var(--primary);
+}
+
+.quote {
+  font-size: 0.9rem;
+  color: var(--foreground);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.author {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+
+.ratingLine {
+  text-align: center;
+  margin-top: 1.75rem;
+  font-size: 0.95rem;
+  color: var(--foreground);
+}
+
+.ratingLine strong {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.4rem;
+  color: var(--primary);
+}
+
+.sampleNote {
+  text-align: center;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+.ctaRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 2.5rem;
+}

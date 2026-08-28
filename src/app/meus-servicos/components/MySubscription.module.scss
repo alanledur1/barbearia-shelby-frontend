@@ -60,6 +60,25 @@ $success-color: #3fc98c; // = var(--success)
   font-size: 0.9rem;
 }
 
+// Barra de cortes restantes (validada no canvas de design) — transform:scaleX em vez de
+// width pra não causar layout thrash (mesmo achado de performance já corrigido na landing).
+.cutsTrack {
+  height: 8px;
+  border-radius: 999px;
+  background: $border-color;
+  overflow: hidden;
+  margin: 0.75rem 0;
+}
+
+.cutsFill {
+  height: 100%;
+  width: 100%;
+  background: $brand-color;
+  border-radius: 999px;
+  transform-origin: left;
+  transition: transform 0.6s ease;
+}
+
 .availablePlans {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));

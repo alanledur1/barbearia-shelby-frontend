@@ -98,6 +98,11 @@ $error-color: #e5484d; // = var(--destructive)
   cursor: pointer;
   transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 
+  &:focus-visible {
+    outline: 2px solid $text-color;
+    outline-offset: 2px;
+  }
+
   h3 {
     font-family: var(--font-display);
     font-size: 1.3rem;
@@ -123,6 +128,41 @@ $error-color: #e5484d; // = var(--destructive)
     transform: translateY(-5px);
     border-color: $brand-color;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* Badge circular do ícone de serviço (validado no canvas de design) — gira/preenche de
+   acento no hover do card. */
+.iconBadge {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: $input-bg;
+  border: 1px solid $border-color;
+  color: $brand-color;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.serviceCard:hover .iconBadge {
+  background-color: $brand-color;
+  border-color: $brand-color;
+  color: #fff;
+  transform: rotate(-12deg) scale(1.12);
+}
+
+.backLink {
+  display: block;
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.8125rem;
+  color: $text-muted;
+
+  &:hover {
+    color: $text-color;
   }
 }
 
@@ -159,8 +199,17 @@ $error-color: #e5484d; // = var(--destructive)
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   text-align: center;
+
+  &:focus-visible {
+    outline: 2px solid $text-color;
+    outline-offset: 2px;
+  }
 
   &:hover:not(:disabled) {
     background-color: rgba($brand-color, 0.15);
@@ -189,6 +238,33 @@ $error-color: #e5484d; // = var(--destructive)
   }
 }
 
+/* Check animado ao selecionar horário (validado no canvas de design) — desenha o traço em
+   vez de só aparecer, reforça que a seleção "colou". */
+.slotCheck {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+
+  path {
+    stroke-dasharray: 20;
+    stroke-dashoffset: 20;
+    animation: slotCheckDraw 0.35s ease forwards;
+  }
+}
+
+@keyframes slotCheckDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slotCheck path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
 /* === Seção de Confirmação e Formulário === */
 .summary {
   background-color: $input-bg;
@@ -210,6 +286,41 @@ $error-color: #e5484d; // = var(--destructive)
 }
 
 /* === Sucesso === */
+
+/* Selo circular com o "check" se desenhando (validado no canvas de design). O traço usa
+   stroke-dasharray/offset: uma única propriedade animada, no próprio <path> — nada disputa
+   o transform do selo. */
+.successIcon {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba($success-color, 0.16);
+  color: $success-color;
+
+  path {
+    stroke-dasharray: 40;
+    stroke-dashoffset: 40;
+    animation: successCheckDraw 0.6s 0.1s ease forwards;
+  }
+}
+
+@keyframes successCheckDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .successIcon path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
 .successMessage {
   text-align: center;
   padding: 2rem 0;

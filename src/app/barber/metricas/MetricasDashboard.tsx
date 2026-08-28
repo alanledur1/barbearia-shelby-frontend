@@ -30,6 +30,29 @@ export default function MetricasDashboard() {
         </div>
       </div>
 
+      {barbers.length > 0 && (
+        <div className={styles.chartCard}>
+          {/* O gráfico estava sem título — o painel só mostrava barras soltas, sem dizer
+              qual grandeza estavam medindo (o canvas de design nomeia o painel). */}
+          <h2 className={styles.chartTitle}>Faturamento por Barbeiro</h2>
+          {(() => {
+            const maxRevenue = Math.max(...barbers.map((b) => b.totalRevenue), 1);
+            return barbers.map((b) => (
+              <div className={styles.chartRow} key={b.adminId ?? 'unassigned'}>
+                <span>{b.name}</span>
+                <div className={styles.chartTrack}>
+                  <div
+                    className={styles.chartFill}
+                    style={{ transform: `scaleX(${b.totalRevenue / maxRevenue})` }}
+                  />
+                </div>
+                <span className={styles.chartValue}>R$ {b.totalRevenue.toFixed(2)}</span>
+              </div>
+            ));
+          })()}
+        </div>
+      )}
+
       <div className={styles.breakdownSection}>
         <h2>Performance por Barbeiro</h2>
         <div className={styles.tableContainer}>

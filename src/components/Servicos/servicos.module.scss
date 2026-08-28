@@ -2,6 +2,11 @@
    depois um grid de cards escuros (ícone no acento, nome do serviço, preço/duração e uma
    descrição que aparece no hover/toque). Cores 100% em tokens de globals.css. */
 .servicos {
+  position: relative;
+  /* Segura o brilho de fundo (SectionGlow), que estoura a caixa de propósito. `isolation`
+     mantém o `z-index: -1` dele dentro desta seção: atrás do conteúdo, à frente do fundo. */
+  overflow: hidden;
+  isolation: isolate;
   width: 100%;
   padding: 4rem 1.5rem 5rem;
   background: var(--background);
@@ -84,9 +89,25 @@
   }
 }
 
-.icon {
-  font-size: 2rem;
+/* Badge circular do ícone: mesmo tratamento validado no canvas de design — cada serviço
+   ganha um ícone próprio (ver iconForService em servicos.tsx) e o badge gira/preenche de
+   acento no hover do card, em vez do ícone estático de antes (mesma tesoura pra tudo). */
+.iconBadge {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 10%, transparent);
   color: var(--primary);
+  transition: background 0.3s ease, color 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover .iconBadge {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  transform: rotate(-12deg) scale(1.12);
 }
 
 .meta {

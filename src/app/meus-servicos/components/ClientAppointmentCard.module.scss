@@ -94,6 +94,9 @@ $confirmed-color: #4c8dff; // = var(--info)
 // Status (Pills) — fundo translúcido + texto na própria cor do status: legível no tema dark
 // e menos "gritante" que os blocos sólidos anteriores.
 .status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
   padding: 0.3rem 0.7rem;
   border-radius: 999px;
   font-size: 0.6875rem;
@@ -102,6 +105,27 @@ $confirmed-color: #4c8dff; // = var(--info)
   text-transform: uppercase;
   border: 1px solid transparent;
   white-space: nowrap;
+
+  svg {
+    animation: statusPopIn 0.35s ease;
+  }
+}
+
+@keyframes statusPopIn {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status svg {
+    animation: none;
+  }
 }
 
 .statusCONFIRMED {

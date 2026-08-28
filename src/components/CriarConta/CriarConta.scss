@@ -69,16 +69,51 @@
         text-transform: uppercase;
     }
 
+    /* Wrapper do input com ícone (validado no canvas de design) — mesmo padrão do Login. */
+    .input-row {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .input-row .input-icon {
+        position: absolute;
+        left: 12px;
+        color: var(--muted-foreground);
+        pointer-events: none;
+    }
+
+    .input-row .toggle-password {
+        position: absolute;
+        right: 10px;
+        left: auto;
+        pointer-events: auto;
+        display: flex;
+        background: none;
+        border: none;
+        padding: 4px;
+        color: var(--muted-foreground);
+        cursor: pointer;
+
+        &:hover {
+            color: var(--foreground);
+        }
+    }
+
     .input-group input {
         /* border-radius migrou para a classe Tailwind `rounded-input` (ver CriarConta.tsx). */
         width: 100%;
-        padding: 12px 14px;
+        padding: 12px 14px 12px 38px;
         background: var(--muted);
         border: 1px solid var(--border);
         outline: none;
         font-size: 0.95rem;
         color: var(--foreground);
         transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .input-row:has(.toggle-password) input {
+        padding-right: 40px;
     }
 
     .input-group input::placeholder {

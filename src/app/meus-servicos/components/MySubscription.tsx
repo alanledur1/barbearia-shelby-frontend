@@ -39,6 +39,17 @@ export default function MySubscription() {
           <h3>{subscription.plan.name}</h3>
           {subscription.plan.description && <p>{subscription.plan.description}</p>}
           {subscription.plan.benefits && <p className={styles.benefits}>{subscription.plan.benefits}</p>}
+          <div className={styles.cutsTrack}>
+            <div
+              className={styles.cutsFill}
+              style={{
+                transform: `scaleX(${subscription.plan.cutsPerCycle > 0
+                  ? subscription.cutsRemaining / subscription.plan.cutsPerCycle
+                  : 0
+                  })`,
+              }}
+            />
+          </div>
           <p>
             <strong>{subscription.cutsRemaining}</strong> de <strong>{subscription.plan.cutsPerCycle}</strong> cortes
             disponíveis neste ciclo.

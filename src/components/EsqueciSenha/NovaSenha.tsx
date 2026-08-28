@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import Link from 'next/link';
 import styles from '../../app/EsqueciSenha/EsqueciSenha.module.css';
 
 interface NovaSenhaProps {
@@ -32,6 +33,9 @@ const NovaSenha: React.FC<NovaSenhaProps> = ({ email, onSubmit, apiError }) => {
   return (
     <div className={styles.recuperacaoContainer}>
       <form className={`${styles.recuperacaoForm} rounded-card border border-border bg-card`} onSubmit={handleSubmit}>
+        <Link href="/Login" className="block mb-4 text-sm text-muted-foreground hover:text-foreground">
+          ← Cancelar e voltar ao login
+        </Link>
         <h2 className={`${styles.titleN}`}>Definir Nova Senha</h2>
 
         {(apiError || error) && <p className={styles.error} aria-live="polite">{apiError || error}</p>}

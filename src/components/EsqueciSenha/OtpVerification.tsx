@@ -6,10 +6,11 @@ interface OtpProps {
   email: string;
   onVerify: (code: string) => void;
   onResend: () => void;
+  onBack: () => void;
   apiError?: string;
 }
 
-const OtpVerification: React.FC<OtpProps> = ({ email, onVerify, onResend, apiError }) => {
+const OtpVerification: React.FC<OtpProps> = ({ email, onVerify, onResend, onBack, apiError }) => {
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
 
   const handleChange = (value: string, index: number) => {
@@ -26,6 +27,15 @@ const OtpVerification: React.FC<OtpProps> = ({ email, onVerify, onResend, apiErr
     }
   };
 
+  // Backspace num campo vazio volta o foco pro dígito anterior — o avanço pra frente já
+  // existia, faltava só o caminho de volta (achado real na validação no canvas de design).
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      const prevInput = document.getElementById(`otp-${index - 1}`);
+      if (prevInput) (prevInput as HTMLInputElement).focus();
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onVerify(otp.join(""));
@@ -34,6 +44,13 @@ const OtpVerification: React.FC<OtpProps> = ({ email, onVerify, onResend, apiErr
   return (
     <div className={styles.recuperacaoContainer}>
       <form className={`${styles.recuperacaoForm} rounded-card border border-border bg-card`} onSubmit={handleSubmit}>
+        <button
+          type="button"
+          onClick={onBack}
+          className="block mb-4 text-sm text-muted-foreground hover:text-foreground bg-transparent border-none cursor-pointer p-0"
+        >
+          ← Voltar
+        </button>
         <h2 className={`${styles.title}`}>Verificação de Código</h2>
         <div className={styles.infoText}>
           <p>Digite o código de 6 dígitos enviado para {email}.</p>
@@ -51,6 +68,7 @@ const OtpVerification: React.FC<OtpProps> = ({ email, onVerify, onResend, apiErr
               maxLength={1}
               value={digit}
               onChange={(e) => handleChange(e.target.value, index)}
+              onKeyDown={(e) => handleKeyDown(e, index)}
               className={styles.otpInput}
             />
           ))}

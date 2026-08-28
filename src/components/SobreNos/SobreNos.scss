@@ -6,6 +6,10 @@
 }
 
 .SobreNos {
+  position: relative;
+  /* Ver comentário equivalente em servicos.module.scss: contenção do SectionGlow. */
+  overflow: hidden;
+  isolation: isolate;
   width: 100%;
   background: var(--background);
   display: flex;
@@ -54,6 +58,27 @@
     text-align: left;
     will-change: transform, opacity;
     /* margin-bottom responsivo migrou para Tailwind */
+  }
+
+  /* Ícone temático por card (validado no canvas de design) — mesmo badge circular usado em
+     Serviços, com hover girando/preenchendo de acento. */
+  .iconBadge {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--foreground) 10%, transparent);
+    color: var(--primary);
+    margin-bottom: 14px;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card:hover .iconBadge {
+    background: var(--primary);
+    color: var(--primary-foreground);
+    transform: rotate(-12deg) scale(1.12);
   }
 
   .card h3 {

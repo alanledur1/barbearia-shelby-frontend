@@ -10,6 +10,30 @@ type Props = {
   onCancel: (id: number) => Promise<void>;
 };
 
+// Rótulo em PT-BR pro status (antes mostrava o valor cru do banco: "CONFIRMED"/"COMPLETED"/
+// "CANCELLED" direto na tela) — achado real na validação no canvas de design.
+const STATUS_LABELS: Record<string, string> = {
+  CONFIRMED: 'Confirmado',
+  COMPLETED: 'Concluído',
+  CANCELLED: 'Cancelado',
+};
+
+function StatusIcon({ status }: { status: string }) {
+  if (status === 'CANCELLED') {
+    return (
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    );
+  }
+  return (
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 12l6 6L20 6" />
+    </svg>
+  );
+}
+
 export default function ClientAppointmentCard({ appointment, service, onCancel }: Props) {
   const formatDate = (iso?: string) => {
     if (!iso) return 'Data não definida';
@@ -39,7 +63,8 @@ export default function ClientAppointmentCard({ appointment, service, onCancel }
           </small>
         </div>
         <span className={`${styles.status} ${styles[`status${status}`]}`}>
-          {status}
+          <StatusIcon status={status} />
+          {STATUS_LABELS[status] || status}
         </span>
       </div>
 

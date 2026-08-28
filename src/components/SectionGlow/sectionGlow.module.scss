@@ -1,0 +1,45 @@
+/* Camada de brilho de fundo das seções da landing (ver SectionGlow.tsx). Espelha o
+   `.section-bg > .glow` do canvas de design. */
+
+.sectionBg {
+  position: absolute;
+  /* Sobra vertical: o brilho desliza dentro dela sem nunca revelar a borda do gradiente. */
+  inset: -20% 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(2px);
+  will-change: transform;
+}
+
+.topLeft {
+  top: -15%;
+  left: -10%;
+  width: min(50vw, 600px);
+  height: min(50vw, 600px);
+}
+
+.topRight {
+  top: -10%;
+  right: -15%;
+  width: min(55vw, 650px);
+  height: min(55vw, 650px);
+}
+
+.bottomRight {
+  bottom: -10%;
+  right: -10%;
+  width: min(55vw, 650px);
+  height: min(55vw, 650px);
+}
+
+.topCenter {
+  top: -10%;
+  left: 30%;
+  width: min(60vw, 700px);
+  height: min(60vw, 700px);
+}

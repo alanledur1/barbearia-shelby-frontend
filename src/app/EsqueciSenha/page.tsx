@@ -86,6 +86,7 @@ const EsqueciSenhaPage: React.FC = () => {
           email={email}
           onVerify={handleCodigoVerificado}
           onResend={handleResendCode}
+          onBack={() => setStep('email')}
           apiError={error || undefined}
         />
       )}
@@ -93,12 +94,12 @@ const EsqueciSenhaPage: React.FC = () => {
         <NovaSenha email={email} onSubmit={handleNovaSenha} apiError={error || undefined} />
       )}
       {loading && (
-        <div style={{ position: 'fixed', top: 90, right: 20, background: '#2a2a2a', color: '#f0f0f0', padding: '12px 18px', borderRadius: 8, zIndex: 1200 }}>
+        <div style={{ position: 'fixed', top: 90, right: 20, background: 'var(--card)', color: 'var(--card-foreground)', border: '1px solid var(--border)', padding: '12px 18px', borderRadius: 8, zIndex: 1200 }}>
           Processando...
         </div>
       )}
       {successMessage && (
-        <div style={{ position: 'fixed', top: 90, right: 20, background: '#d4edda', color: '#155724', padding: '12px 18px', borderRadius: 8, zIndex: 1200 }}>
+        <div style={{ position: 'fixed', top: 90, right: 20, background: 'var(--card)', color: 'var(--success)', border: '1px solid var(--success)', padding: '12px 18px', borderRadius: 8, zIndex: 1200 }}>
           {successMessage}
         </div>
       )}

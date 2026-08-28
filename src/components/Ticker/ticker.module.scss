@@ -1,0 +1,70 @@
+/* Faixa de serviços em scroll infinito (validado no canvas de design). Puramente decorativa
+   e redundante com a lista real em Serviços logo abaixo — por isso aria-hidden no componente
+   e pausa em prefers-reduced-motion. */
+.ticker {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in oklab, var(--background) 90%, black);
+  padding: 16px 0;
+  // Fade nas bordas pra esconder o corte abrupto de texto no meio de uma palavra (marquee
+  // sem isso fica com a primeira/última entrada visivelmente cortada em vez de sumindo).
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.ticker::before,
+.ticker::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(45deg, var(--primary) 0 8px, transparent 8px 16px);
+  opacity: 0.55;
+}
+.ticker::before {
+  top: 0;
+}
+.ticker::after {
+  bottom: 0;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  gap: 40px;
+  animation: scroll 32s linear infinite;
+}
+
+.track span {
+  display: inline-flex;
+  align-items: center;
+  gap: 40px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: clamp(14px, 2.4vw, 18px);
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+
+.dot {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+}

@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import styles from './servicos.module.scss';
-import { RiScissors2Fill } from 'react-icons/ri';
 import api from '@/services/api';
+import { ServiceIcon } from '@/components/ServiceIcon/ServiceIcon';
+import { SectionGlow } from '@/components/SectionGlow/SectionGlow';
 
 type Service = {
   id: number;
@@ -72,6 +73,7 @@ export default function Servicos() {
   if (loading) {
     return (
       <section className={styles.servicos}>
+        <SectionGlow position="topLeft" intensity={14} />
         <SectionHead />
         <p className={styles.status}>Carregando serviços...</p>
       </section>
@@ -81,6 +83,7 @@ export default function Servicos() {
   if (error) {
     return (
       <section className={styles.servicos}>
+        <SectionGlow position="topLeft" intensity={14} />
         <SectionHead />
         <p className={styles.status}>{error}</p>
       </section>
@@ -90,6 +93,7 @@ export default function Servicos() {
   if (servicos.length === 0) {
     return (
       <section className={styles.servicos}>
+        <SectionGlow position="topLeft" intensity={14} />
         <SectionHead />
         <p className={styles.status}>Nenhum serviço disponível no momento.</p>
       </section>
@@ -98,6 +102,9 @@ export default function Servicos() {
 
   return (
     <section className={styles.servicos}>
+      {/* Brilho de fundo com parallax — devolve a atmosfera do canvas às seções de fundo
+          opaco, onde a camada global `.page-ambient` (fixed, atrás de tudo) não aparece. */}
+      <SectionGlow position="topLeft" intensity={14} />
       <SectionHead />
       <div className={styles.grid}>
         {servicos.map((service, idx) => {
@@ -118,7 +125,9 @@ export default function Servicos() {
               }}
             >
               <div className={styles.header}>
-                <RiScissors2Fill className={styles.icon} />
+                <div className={styles.iconBadge}>
+                  <ServiceIcon name={service.name} />
+                </div>
                 <h3>{service.name}</h3>
               </div>
 

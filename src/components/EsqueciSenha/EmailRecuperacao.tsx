@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import Link from 'next/link';
 import styles from '../../app/EsqueciSenha/EsqueciSenha.module.css';
 
 interface EmailRecuperacaoProps {
@@ -18,6 +19,9 @@ const EmailRecuperacao: React.FC<EmailRecuperacaoProps> = ({ onNext }) => {
     <div className={styles.recuperacaoContainer}>
       <form className={`${styles.recuperacaoForm} rounded-card border border-border bg-card`} onSubmit={handleSubmit}>
 
+        <Link href="/Login" className="block mb-4 text-sm text-muted-foreground hover:text-foreground">
+          ← Voltar para o login
+        </Link>
         <h2 className={`${styles.title}`}>Recuperar Senha</h2>
         <div className={styles.infoText}><p>Insira o seu email e enviaremos um link para você voltar a acessar a sua conta.</p></div>
         <div className={styles.inputGroup}>

@@ -13,6 +13,19 @@ import AgendamentoForm from '@/components/Agendamento/AgendamentoForm';
 import styles from './agendamento-moderno.module.scss';
 import api from '@/services/api';
 import { type BookingFormData } from '@/schemas/agendamentoSchema';
+import { ServiceIcon } from '@/components/ServiceIcon/ServiceIcon';
+import Link from 'next/link';
+
+// Ativa a seleção pelo teclado (Enter/Espaço) nos cards clicáveis — eram só onClick antes,
+// sem equivalente de teclado (achado real na validação no canvas de design).
+function onEnterOrSpace(fn: () => void) {
+  return (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      fn();
+    }
+  };
+}
 
 type Service = { id: number; name: string; duration: number; price: number; };
 type Barber = { id: number; name: string; };
@@ -331,13 +344,27 @@ export default function PaginaAgendamento() {
                 {error && <p className={styles.stepError} role="alert">{error}</p>}
                 <div className={styles.serviceGrid}>
                   {services.map(service => (
-                    <div key={service.id} className={styles.serviceCard} onClick={() => handleServiceSelect(service)}>
+                    <div
+                      key={service.id}
+                      className={styles.serviceCard}
+                      onClick={() => handleServiceSelect(service)}
+                      onKeyDown={onEnterOrSpace(() => handleServiceSelect(service))}
+                      role="button"
+                      tabIndex={0}
+                    >
+                      <div className={styles.iconBadge}>
+                        <ServiceIcon name={service.name} />
+                      </div>
                       <h3>{service.name}</h3>
                       <p>{service.duration} min</p>
                       <p><strong>R$ {service.price.toFixed(2).replace('.', ',')}</strong></p>
                     </div>
                   ))}
                 </div>
+
+                <Link href="/" className={styles.backLink}>
+                  ← Voltar ao site
+                </Link>
               </motion.div>
             )}
 
@@ -350,7 +377,23 @@ export default function PaginaAgendamento() {
                 ) : (
                   <div className={styles.serviceGrid}>
                     {barbers.map(barber => (
-                      <div key={barber.id} className={styles.serviceCard} onClick={() => handleBarberSelect(barber)}>
+                      <div
+                        key={barber.id}
+                        className={styles.serviceCard}
+                        onClick={() => handleBarberSelect(barber)}
+                        onKeyDown={onEnterOrSpace(() => handleBarberSelect(barber))}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        {/* Avatar do barbeiro (validado no canvas de design): o card do
+                            passo 2 era só o nome solto, sem o mesmo peso visual do card de
+                            serviço do passo 1. */}
+                        <div className={styles.iconBadge}>
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                          </svg>
+                        </div>
                         <h3>{barber.name}</h3>
                       </div>
                     ))}
@@ -385,6 +428,11 @@ export default function PaginaAgendamento() {
                       <button key={slot.time} className={`${styles.timeSlot} ${selectedSlot === slot.time ? styles.timeSlotSelected : ''
                         }`} disabled={!slot.available} onClick={() => handleSlotSelect(slot.time)}>
                         {slot.time}
+                        {selectedSlot === slot.time && (
+                          <svg className={styles.slotCheck} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M4 12l6 6L20 6" />
+                          </svg>
+                        )}
                       </button>
                     ))}
                   </div>
@@ -437,6 +485,15 @@ export default function PaginaAgendamento() {
                 exit="exit"
                 className={styles.successMessage}
               >
+                {/* Selo de confirmação com o traço do "check" desenhando (validado no canvas
+                    de design). A tela de sucesso era só texto — sem nenhum sinal visual de
+                    que deu certo. */}
+                <div className={styles.successIcon} aria-hidden="true">
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 12l6 6L20 6" />
+                  </svg>
+                </div>
+
                 <h2>Agendamento Confirmado!</h2>
                 <p>
                   Seu horário foi reservado com sucesso.

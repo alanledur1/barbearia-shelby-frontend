@@ -3,10 +3,15 @@ import React, { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import './HomePage.scss';
 import { AnimatedText } from '@/components/AnimatedTex/AnimatedTex';
+import { useParallaxScope } from '@/hooks/useParallaxScope';
 
 export const HomePage_2 = () => {
   const container = useRef<HTMLDivElement>(null);
   const title2Ref = useRef<HTMLDivElement>(null);
+
+  // Parallax das camadas de fundo desta seção (varredura de luz + malha de pontos), no
+  // mesmo GSAP que já anima os títulos aqui — nada de um segundo listener de scroll.
+  useParallaxScope(container);
 
   useEffect(() => {
     if (!container.current) return;
@@ -59,6 +64,15 @@ export const HomePage_2 = () => {
       </video>
 
       <div className="background-overlay" />
+
+      {/* Camadas atmosféricas com parallax (validadas no canvas de design): uma varredura
+          de luz quente e uma malha de pontos que deslizam em ritmos diferentes conforme a
+          página rola, entre o véu do vídeo e os títulos. Nenhuma delas tem animação CSS de
+          transform, então o GSAP é o único dono desse `transform`. */}
+      <div className="story-bg" aria-hidden="true">
+        <div className="sweep" data-parallax="0.1" />
+        <div className="dots" data-parallax="0.22" />
+      </div>
 
       <div className="title-1 title-anim text-[30px] px-[clamp(1.5rem,6vw,150px)] sm:text-[44px] sm:px-0 md:text-[56px]">
         <AnimatedText />

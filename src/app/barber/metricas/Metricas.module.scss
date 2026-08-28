@@ -61,6 +61,57 @@ $brand-color: #f5605e; // = var(--primary) oklch(68% .185 25)
   }
 }
 
+// Gráfico de faturamento por barbeiro (validado no canvas de design — era o maior gap
+// apontado na auditoria: painel inteiro só com número cru, sem visualização nenhuma).
+.chartCard {
+  background-color: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: var(--radius-card);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.chartTitle {
+  margin-bottom: 0.35rem;
+  font-size: 1.15rem;
+}
+
+.chartRow {
+  display: grid;
+  grid-template-columns: 110px 1fr 100px;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.875rem;
+  color: $text-color;
+}
+
+.chartTrack {
+  height: 18px;
+  background-color: color.adjust($card-bg, $lightness: 8%);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+// transform:scaleX em vez de width — evita layout thrash (mesmo achado de performance já
+// corrigido na landing).
+.chartFill {
+  height: 100%;
+  width: 100%;
+  background: $brand-color;
+  border-radius: 4px;
+  transform-origin: left;
+  transition: transform 0.6s ease;
+}
+
+.chartValue {
+  text-align: right;
+  color: $text-muted;
+  font-variant-numeric: tabular-nums;
+}
+
 .tableContainer {
   background-color: $card-bg;
   border: 1px solid $border-color;
